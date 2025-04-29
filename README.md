@@ -1,2 +1,2 @@
 # Sumaj_Code
-plataforma educativa e interactiva para el aprendisaje de programacion :D
+plataforma educativa e interactiva para el aprendizaje de programacion :D

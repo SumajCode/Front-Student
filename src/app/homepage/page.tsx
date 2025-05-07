@@ -1,17 +1,27 @@
+import Image from "next/image";
+
 export default function Homepage() {
   return (
     <div className="min-h-screen bg-gray-100 text-gray-800">
       {/* Header */}
       <header className="bg-white shadow p-4 flex justify-between items-center">
-        <div className="text-xl font-bold">Logo</div>
+        {/* Logo y Título */}
+        <div className="flex items-center space-x-2">
+          <Image src="/logo.png" alt="Logo" width={40} height={40} />
+          <span className="text-xl font-bold">Mi Proyecto</span>
+        </div>
+
+        {/* Barra de Navegación */}
         <nav>
-          <ul className="flex space-x-4">
+          <ul className="flex space-x-6">
             <li className="hover:text-blue-500 cursor-pointer">Cursos</li>
             <li className="hover:text-blue-500 cursor-pointer">Categorías</li>
             <li className="hover:text-blue-500 cursor-pointer">Recursos</li>
           </ul>
         </nav>
-        <div className="text-2xl">👤</div>
+
+        {/* Icono de Perfil */}
+        <div className="text-2xl cursor-pointer hover:text-blue-500">👤</div>
       </header>
 
       {/* Main Content */}
@@ -44,7 +54,9 @@ export default function Homepage() {
               <h3 className="text-xl font-bold">
                 Curso React y Next.js: Aprende Frontend
               </h3>
-              <p className="text-gray-600">1. Introducción al curso de React y Next</p>
+              <p className="text-gray-600">
+                1. Introducción al curso de React y Next
+              </p>
               <p className="text-sm text-gray-500">Lectura • 1 min</p>
             </div>
           </div>

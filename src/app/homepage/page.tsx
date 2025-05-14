@@ -1,4 +1,6 @@
 import Image from "next/image";
+import CourseCard from "../components/CourseCard";
+import { courses } from "../data/courses";
 
 export default function Homepage() {
   return (
@@ -47,31 +49,12 @@ export default function Homepage() {
         </section>
 
         {/* Courses Section */}
-        <section className="bg-white shadow rounded-lg p-6">
-          <div className="flex items-center space-x-4">
-            <div className="text-4xl">🎥</div>
-            <div>
-              <h3 className="text-xl font-bold">
-                Curso React y Next.js: Aprende Frontend
-              </h3>
-              <p className="text-gray-600">
-                1. Introducción al curso de React y Next
-              </p>
-              <p className="text-sm text-gray-500">Lectura • 1 min</p>
-            </div>
-          </div>
-          <div className="mt-4 flex space-x-2">
-            <button className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
-              Recomendar
-            </button>
-            <button className="bg-gray-200 px-4 py-2 rounded hover:bg-gray-300">
-              Compartir en MS Teams
-            </button>
-            <button className="bg-gray-200 px-4 py-2 rounded hover:bg-gray-300">
-              Añadir a vía de aprendizaje
-            </button>
-          </div>
-        </section>
+          <section className="space-y-6">
+            {courses.map((course) => (
+              <CourseCard key={course.id} {...course} />
+            ))}
+          </section>
+
       </main>
     </div>
   );

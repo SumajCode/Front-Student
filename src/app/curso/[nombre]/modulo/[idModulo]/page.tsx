@@ -44,7 +44,7 @@ export default function CoursePage() {
       <main className={styles.mainContent}>
         <div className={styles.contentWrapper}>
           <section className={styles.courseSection}>
-            <h1 className={styles.courseTitle}>{curso.nombre}</h1>
+            <h1 className={`${styles.courseTitle} ${styles.slideInLeft}`}>{curso.nombre}</h1>
             <h2 className={styles.sectionTitle}>
               Módulo {modulo.id}: {modulo.titulo}
             </h2>

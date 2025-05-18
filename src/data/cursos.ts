@@ -5,18 +5,19 @@ export const cursos = {
       {
         id: 1,
         titulo: 'Introducción al curso',
-        contenido: 'Bienvenido al curso. En este módulo aprenderás los fundamentos de React y cómo se estructura una aplicación básica.'
-      },
+        contenido: 'Bienvenido al curso. En este módulo aprenderás los fundamentos de React y cómo se estructura una aplicación básica.',
+        video: 'https://www.youtube.com/embed/sl4GO6pgRas',
+     },
       {
         id: 2,
         titulo: 'Configuración del entorno',
-        contenido: 'Aquí configuraremos nuestro entorno de desarrollo: Node, VSCode, y crearemos nuestro primer proyecto con Next.js.'
-      },
+        contenido: 'Aquí configuraremos nuestro entorno de desarrollo: Node, VSCode, y crearemos nuestro primer proyecto con Next.js.',
+        video: 'https://www.youtube.com/embed/sl4GO6pgRas',      },
       {
         id: 3,
         titulo: 'Componentes y Props en React',
-        contenido: 'Aprenderás qué son los componentes, cómo se crean y cómo funcionan las Props para pasar datos entre ellos.'
-      }
+        contenido: 'Aprenderás qué son los componentes, cómo se crean y cómo funcionan las Props para pasar datos entre ellos.',
+        video: 'https://www.youtube.com/embed/sl4GO6pgRas',      },
       // Puedes añadir más módulos aquí
     ]
   }

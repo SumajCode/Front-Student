@@ -4,13 +4,7 @@ import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import { cursos } from '@/data/cursos';
 import styles from '@/styles/page.module.css';
-import styled from 'styled-components';
-
-const VideoFrame = styled.iframe`
-  width: 100%;
-  height: 100%;
-  border: none;
-`;
+import { useEffect } from 'react';
 
 export default function CoursePage() {
   const params = useParams();
@@ -20,10 +14,17 @@ export default function CoursePage() {
   const idModulo = parseInt(idModuloStr);
 
   const curso = cursos[nombreCurso as keyof typeof cursos];
+  if (!curso) return <div>❌ Curso no encontrado</div>;
 
-  if (!curso) return <div>Curso no encontrado</div>;
   const modulo = curso.modulos.find((m) => m.id === idModulo);
-  if (!modulo) return <div>Módulo no encontrado</div>;
+  if (!modulo) return <div>❌ Módulo no encontrado</div>;
+
+  useEffect(() => {
+    localStorage.setItem(nombreCurso, idModulo.toString());
+  }, [nombreCurso, idModulo]);
+
+  const indexActual = curso.modulos.findIndex((m) => m.id === idModulo);
+  const siguienteModulo = curso.modulos[indexActual + 1];
 
   return (
     <div className={styles.mainContainer}>
@@ -41,57 +42,66 @@ export default function CoursePage() {
 
       {/* Main Content */}
       <main className={styles.mainContent}>
-        {/* Course Section */}
-        <section className={styles.courseSection}>
-          {/* Video */}
-          <div className={styles.videoContainer}>
-            <VideoFrame
-              src="https://www.youtube.com/embed/dQw4w9WgXcQ"
-              title={modulo.titulo}
-              allowFullScreen
-            />
-          </div>
+        <div className={styles.contentWrapper}>
+          <section className={styles.courseSection}>
+            <h1 className={styles.courseTitle}>{curso.nombre}</h1>
+            <h2 className={styles.sectionTitle}>
+              Módulo {modulo.id}: {modulo.titulo}
+            </h2>
+            <p className={styles.courseDesc}>{modulo.contenido}</p>
 
-          {/* Título y descripción */}
-          <h1 className={styles.courseTitle}>{curso.nombre}</h1>
-          <p className={styles.courseDesc}>{modulo.contenido}</p>
+            {/* Video */}
+            {modulo.video ? (
+              <div className={styles.videoWrapper}>
+                <iframe
+                  className={styles.videoIframe}
+                  src={modulo.video}
+                  title={modulo.titulo}
+                  allowFullScreen
+                />
+              </div>
+            ) : (
+              <p style={{ color: 'gray' }}>⚠️ Este módulo no tiene video.</p>
+            )}
 
-          {/* Contenido del curso */}
-          <h2 className={styles.sectionTitle}>Contenido del curso</h2>
-          <ul className={styles.courseContentList}>
-            {curso.modulos.map((m) => (
-              <li key={m.id} className={styles.itemContenido}>
-                Módulo {m.id}: {m.titulo}
-              </li>
-            ))}
-          </ul>
-        </section>
+            {/* Contenido del curso */}
+            <h2 className={styles.sectionTitle}>Contenido del curso</h2>
+            <ul className={styles.courseContentList}>
+              {curso.modulos.map((m) => (
+                <li key={m.id} className={styles.itemContenido}>
+                  <Link href={`/curso/${nombreCurso}/modulo/${m.id}`}>
+                    Módulo {m.id}: {m.titulo}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </section>
 
-        {/* Sidebar */}
-        <aside className={styles.sidebar}>
-          <h2 className={styles.sidebarTitle}>Información del curso</h2>
-          <ul className={styles.sidebarList}>
-            <li><strong>Instructor:</strong> Kevin Verduguez</li>
-            <li><strong>Duración:</strong> {curso.modulos.length * 1} horas</li>
-            <li><strong>Nivel:</strong> Intermedio</li>
-            <li><strong>Idioma:</strong> Español</li>
-            <li><strong>Progreso:</strong> {Math.round((idModulo / curso.modulos.length) * 100)}%</li>
-            <li><strong>Finalización estimada:</strong> 25 de mayo</li>
-          </ul>
-          <div className={styles.progressBar}>
-            <div
-              className={styles.progressFill}
-              style={{ width: `${(idModulo / curso.modulos.length) * 100}%` }}
-            ></div>
-          </div>
+          {/* Sidebar */}
+          <aside className={styles.sidebar}>
+            <h2 className={styles.sidebarTitle}>Información del curso</h2>
+            <ul className={styles.sidebarList}>
+              <li><strong>Instructor:</strong> Kevin Verduguez</li>
+              <li><strong>Duración:</strong> {curso.modulos.length} horas</li>
+              <li><strong>Nivel:</strong> Intermedio</li>
+              <li><strong>Idioma:</strong> Español</li>
+              <li><strong>Progreso:</strong> {Math.round((idModulo / curso.modulos.length) * 100)}%</li>
+            </ul>
 
-          {/* Botón continuar */}
-          {curso.modulos.length > idModulo && (
-            <Link href={`/curso/${nombreCurso}/modulo/${idModulo + 1}`}>
-              <button className={styles.botonPrincipal}>Continuar Curso →</button>
-            </Link>
-          )}
-        </aside>
+            <div className={styles.progressBar}>
+              <div
+                className={styles.progressFill}
+                style={{ width: `${(idModulo / curso.modulos.length) * 100}%` }}
+              ></div>
+            </div>
+
+            {siguienteModulo && (
+              <Link href={`/curso/${nombreCurso}/modulo/${siguienteModulo.id}`}>
+                <button className={styles.botonPrincipal}>Continuar Curso →</button>
+              </Link>
+            )}
+          </aside>
+        </div>
       </main>
     </div>
   );

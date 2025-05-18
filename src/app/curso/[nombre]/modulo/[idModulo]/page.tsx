@@ -95,10 +95,14 @@ export default function CoursePage() {
               ></div>
             </div>
 
-            {siguienteModulo && (
-              <Link href={`/curso/${nombreCurso}/modulo/${siguienteModulo.id}`}>
+            {siguienteModulo ? (
+            <Link href={`/curso/${nombreCurso}/modulo/${siguienteModulo.id}`}>
                 <button className={styles.botonPrincipal}>Continuar Curso →</button>
-              </Link>
+            </Link>
+            ) : (
+            <Link href="/homepage">
+                <button className={styles.botonPrincipal}>Finalizar Curso ✅</button>
+            </Link>
             )}
           </aside>
         </div>

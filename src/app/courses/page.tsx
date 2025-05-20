@@ -53,53 +53,41 @@ const CoursesPage = () => {
   });
 
   return (
-    <div style={{ padding: "2rem", backgroundColor: "#f9f9f9" }}>
+    <div className="p-8 bg-gray-100">
       {/* Banner de bienvenida */}
-      <section style={{ textAlign: "center", marginBottom: "3rem" }}>
-        <h2 style={{ fontSize: "2.5rem", marginBottom: "0.5rem", color: "#111" }}>
+      <section className="text-center mb-12">
+        <h2 className="text-4xl mb-2 text-gray-900">
           Encuentra el curso perfecto para ti
         </h2>
-        <p style={{ fontSize: "1.2rem", color: "#555" }}>
+        <p className="text-xl text-gray-600">
           Cursos en desarrollo web, programación y más. Filtra y encuentra el que más te interese.
         </p>
       </section>
 
       {/* Barra de búsqueda */}
-      <section style={{ marginBottom: "2rem", textAlign: "center" }}>
+      <section className="mb-8 text-center">
         <input
           type="text"
           placeholder="Buscar curso..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          style={{
-            padding: "0.5rem 1rem",
-            borderRadius: "25px",
-            border: "2px solid #0070f3",
-            backgroundColor: "#f9fafb",
-            color: "#333",
-            width: "300px",
-            fontSize: "1rem",
-          }}
+          className="py-2 px-4 rounded-full border-2 border-blue-500 bg-gray-50 text-gray-800 w-72 text-base"
         />
       </section>
 
       {/* Filtros de cursos */}
-      <section style={{ marginBottom: "2rem", textAlign: "center" }}>
-        <h3 style={{ fontSize: "1.8rem", color: "#333" }}>Filtrar por categoría</h3>
-        <div style={{ display: "flex", gap: "1rem", justifyContent: "center", marginTop: "1rem" }}>
+      <section className="mb-8 text-center">
+        <h3 className="text-2xl text-gray-800">Filtrar por categoría</h3>
+        <div className="flex gap-4 justify-center mt-4">
           {["Todos", "JavaScript", "Python", "React", "Java"].map((category) => (
             <button
               key={category}
               onClick={() => setSelectedCategory(category)}
-              style={{
-                padding: "0.5rem 1rem",
-                backgroundColor: selectedCategory === category ? "#0070f3" : "#f0f0f0",
-                color: selectedCategory === category ? "#fff" : "#333",
-                border: "none",
-                borderRadius: "5px",
-                cursor: "pointer",
-                fontSize: "1rem",
-              }}
+              className={`py-2 px-4 rounded ${
+                selectedCategory === category 
+                  ? "bg-blue-500 text-white" 
+                  : "bg-gray-200 text-gray-800"
+              } border-none cursor-pointer text-base`}
             >
               {category}
             </button>
@@ -108,61 +96,41 @@ const CoursesPage = () => {
       </section>
 
       {/* Lista de cursos */}
-      <section
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))",
-          gap: "1.5rem",
-        }}
-      >
+      <section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {filteredCourses.map((course, index) => (
           <div
             key={index}
-            style={{
-              backgroundColor: "#fff",
-              borderRadius: "10px",
-              padding: "1rem",
-              boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-              textAlign: "center",
-            }}
+            className="bg-white rounded-lg p-4 shadow-md text-center"
           >
-            <h3 style={{ fontSize: "1.3rem", color: "#222" }}>{course.title}</h3>
-            <p style={{ color: "#666" }}>{course.description}</p>
-            <p style={{ color: "#0070f3", fontWeight: "bold" }}>
+            <h3 className="text-xl text-gray-900">{course.title}</h3>
+            <p className="text-gray-600">{course.description}</p>
+            <p className="text-blue-500 font-bold">
               Categoría: {course.category}
             </p>
-            <p style={{ color: "#0070f3", fontWeight: "bold" }}>
+            <p className="text-blue-500 font-bold">
               Nivel: {course.level}
             </p>
             <a
               href={course.link}
-              style={{
-                display: "inline-block",
-                backgroundColor: "#0070f3",
-                color: "#fff",
-                padding: "0.5rem 1rem",
-                borderRadius: "5px",
-                marginTop: "1rem",
-                textDecoration: "none",
-              }}
+              className="inline-block bg-blue-500 text-white py-2 px-4 rounded mt-4 no-underline"
             >
               Ir al curso
             </a>
-            <div style={{ marginTop: "1rem" }}>
-              <span style={{ color: "#f39c12" }}>★ {course.rating}</span>
+            <div className="mt-4">
+              <span className="text-yellow-500">★ {course.rating}</span>
             </div>
           </div>
         ))}
       </section>
 
       {/* Enlaces externos */}
-      <section style={{ marginTop: "3rem", textAlign: "center" }}>
-        <h3 style={{ fontSize: "1.8rem", color: "#333" }}>Enlaces Externos Útiles</h3>
-        <div style={{ marginTop: "1rem" }}>
+      <section className="mt-12 text-center">
+        <h3 className="text-2xl text-gray-800">Enlaces Externos Útiles</h3>
+        <div className="mt-4">
           <a
             href="https://www.youtube.com"
             target="_blank"
-            style={{ color: "#0070f3", textDecoration: "none" }}
+            className="text-blue-500 no-underline"
           >
             YouTube
           </a>{" "}
@@ -170,7 +138,7 @@ const CoursesPage = () => {
           <a
             href="https://www.coursera.org"
             target="_blank"
-            style={{ color: "#0070f3", textDecoration: "none" }}
+            className="text-blue-500 no-underline"
           >
             Coursera
           </a>{" "}
@@ -178,13 +146,12 @@ const CoursesPage = () => {
           <a
             href="https://github.com"
             target="_blank"
-            style={{ color: "#0070f3", textDecoration: "none" }}
+            className="text-blue-500 no-underline"
           >
             GitHub
           </a>
         </div>
       </section>
-
     </div>
   );
 };

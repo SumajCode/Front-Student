@@ -4,53 +4,29 @@ import { FaSearch, FaUserCircle } from "react-icons/fa";
 
 const Header = () => {
   return (
-    <header style={{
-      display: 'flex',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      padding: '1rem 2rem',
-      backgroundColor: '#ffffff',
-      borderBottom: '2px solid #f1f1f1',
-      boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-    }}>
+    <header className="flex justify-between items-center px-8 py-4 bg-white border-b-2 border-gray-100 shadow-md">
       {/* Logo */}
-      <h1 style={{ fontSize: '1.8rem', fontWeight: 'bold', color: '#0070f3' }}>
+      <h1 className="text-2xl font-bold text-blue-500">
         <Link href="/">MiPlataformaCursos</Link>
       </h1>
       
       {/* Navegación */}
-      <nav style={{ display: 'flex', gap: '2rem', color: '#333', fontSize: '1rem' }}>
-        <Link href="/courses">Cursos</Link>  {/* Enlace a la página de Cursos */}
-        <Link href="/resources">Recursos</Link>  {/* Enlace a la página de Recursos */}
+      <nav className="flex gap-8 text-gray-800 text-base">
+        <Link href="/courses">Cursos</Link>
+        <Link href="/resources">Recursos</Link>
       </nav>
       
       {/* Perfil y búsqueda */}
-      <div style={{ display: 'flex', gap: '1rem' }}>
-        <div style={{ display: 'flex', alignItems: 'center' }}>
+      <div className="flex gap-4">
+        <div className="flex items-center">
           <input
             type="text"
             placeholder="Buscar..."
-            style={{
-              padding: '0.5rem',
-              borderRadius: '25px',
-              border: '2px solid #0070f3',
-              backgroundColor: '#f9fafb',
-              color: '#333',
-              width: '200px',
-            }}
+            className="py-2 px-4 rounded-full border-2 border-blue-500 bg-gray-50 text-gray-800 w-52"
           />
         </div>
-        <button style={{
-          backgroundColor: '#0070f3',
-          color: '#fff',
-          border: 'none',
-          borderRadius: '50px',
-          padding: '0.5rem 1rem',
-          cursor: 'pointer',
-          display: 'flex',
-          alignItems: 'center',
-        }}>
-          <FaUserCircle style={{ marginRight: '0.5rem' }} />
+        <button className="bg-blue-500 text-white border-none rounded-full py-2 px-4 cursor-pointer flex items-center">
+          <FaUserCircle className="mr-2" />
           Perfil
         </button>
       </div>

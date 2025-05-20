@@ -9,58 +9,35 @@ export default function HomePage() {
   ];
 
   return (
-    <div style={{ padding: '2rem', backgroundColor: '#f9fafb' }}>
+    <div className="p-8 bg-gray-50">
       {/* HERO SECTION */}
-      <section style={{ textAlign: 'center', marginBottom: '3rem' }}>
-        <h2 style={{ fontSize: '2.5rem', marginBottom: '0.5rem', color: '#111' }}>
+      <section className="text-center mb-12">
+        <h2 className="text-4xl mb-2 text-gray-900">
           Aprende lo que quieras, cuando quieras
         </h2>
-        <p style={{ fontSize: '1.2rem', color: '#555' }}>
+        <p className="text-xl text-gray-600">
           Accede a cientos de cursos online dictados por expertos del sector.
         </p>
       </section>
 
       {/* CURSOS */}
-      <section
-        style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))',
-          gap: '1.5rem',
-        }}
-      >
+      <section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {cursos.map((curso, index) => (
           <div
             key={index}
-            style={{
-              backgroundColor: '#fff',
-              borderRadius: '10px',
-              padding: '1rem',
-              boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)', // Sombra sutil
-              transition: 'transform 0.3s',
-              textAlign: 'center',
-            }}
+            className="bg-white rounded-lg p-4 shadow-md transition-transform duration-300 text-center"
           >
             <img
               src={curso.image}
               alt={curso.title}
-              style={{ width: '100%', borderRadius: '8px', marginBottom: '1rem' }}
+              className="w-full rounded-lg mb-4"
             />
-            <h3 style={{ fontSize: '1.3rem', margin: '0.5rem 0', color: '#222' }}>
+            <h3 className="text-xl my-2 text-gray-900">
               {curso.title}
             </h3>
-            <p style={{ color: '#666', marginBottom: '0.5rem' }}>Instructor experto</p>
+            <p className="text-gray-600 mb-2">Instructor experto</p>
             <button
-              style={{
-                backgroundColor: '#0070f3',
-                color: '#fff',
-                border: 'none',
-                padding: '0.5rem 1rem',
-                borderRadius: '5px',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                marginTop: '1rem',
-              }}
+              className="bg-blue-500 text-white border-none py-2 px-4 rounded flex items-center mt-4 mx-auto"
             >
               Ver Curso
             </button>

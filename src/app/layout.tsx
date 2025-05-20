@@ -33,13 +33,7 @@ export default function RootLayout({
         <main>{children}</main>
 
         {/* Footer */}
-        <footer style={{
-          textAlign: 'center',
-          padding: '1rem 0',
-          backgroundColor: '#f9fafb',
-          marginTop: '2rem',
-          color: '#333',
-        }}>
+        <footer className="text-center py-4 bg-gray-50 mt-8 text-gray-800">
           <p>&copy; 2025 MiPlataformaCursos</p>
         </footer>
       </body>

@@ -5,12 +5,8 @@ interface ProgressBarProps {
   progress: number;
 }
 
-<<<<<<< HEAD
-export default function ProgressBar({ progress }: { progress: number }) {  return (
-=======
 export default function ProgressBar({ progress }: { progress: number }) {
   return (
->>>>>>> main
     <div className="flex items-center gap-3">
       <div className="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden">
         <div
@@ -22,7 +18,3 @@ export default function ProgressBar({ progress }: { progress: number }) {
     </div>
   );
 }
-<<<<<<< HEAD
-
-=======
->>>>>>> main

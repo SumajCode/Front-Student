@@ -1,19 +1,12 @@
-//Ejemplo de como se ven los cursos en la pagina principal
-//esto se deberia ver al hacer click en explorar o el logo
-// ruta raiz  " / " 
-
-//Repito este solo es un ejemplo de como se veria la pagina principal
+//Ejemplo de que aqui van mis cursos
+//esto se deberia ver al hacer click en mi aprendizaje
 export default function Home() {
   return (
     <div className="container mx-auto">
       <section className="py-12">
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold mb-4">
-            Aprende las habilidades del futuro
-          </h1>
-          <p className="text-xl text-gray-600">
-            Miles de cursos impartidos por expertos. Aprende a tu ritmo.
-          </p>
+          <h1 className="text-4xl font-bold mb-4">Mis cursos</h1>
+          <p className="text-xl text-gray-600"></p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">

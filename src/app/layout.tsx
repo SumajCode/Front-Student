@@ -1,21 +1,27 @@
-import './globals.css';
-import React from 'react';
+import Header from "@/globals/layout/Head";
+import "./globals.css";
+import React from "react";
+import Footer from "@/globals/layout/Footer";
 
 export const metadata = {
   title: "Curso Interactivo",
   description: "Plataforma estilo Udemy con Next.js",
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang="es">
-      <head>
-        <link
-          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
-          rel="stylesheet"
-        />
-      </head>
-      <body className="bg-gray-100">{children}</body>
+      <body>
+        <Header />
+        <main className="min-h-screen py-8 px-4 md:px-6 lg:px-8">
+          {children}
+        </main>
+        <Footer />
+      </body>
     </html>
   );
 }

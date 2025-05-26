@@ -66,9 +66,14 @@ Clona el repositorio y cambia a la rama correspondiente:
 Instala las dependencias:
 
 ```bash
-  npm install
   npm install autoprefixer
 ```
+
+en caso de errores de punteros:
+```bash
+  npm install autoprefixer
+```
+
 Este proyecto utiliza Turbopack para un desarrollo más veloz.
 
 ```bash

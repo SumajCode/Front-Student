@@ -7,16 +7,16 @@ import React from "react";
 
 export default function page() {
   return (
-    <div>
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 p-4">
-        <div className="lg:col-span-2">
+    <div className="container mx-auto py-8">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="lg:col-span-2 space-y-6">
           <Hero />
+          <CourseInfo />
         </div>
-        <div className="lg:col-span-1">
+        <div className="lg:col-span-1 lg:sticky lg:top-6 self-start">
           <CourseContent />
         </div>
       </div>
-      <CourseInfo />
     </div>
   );
 }

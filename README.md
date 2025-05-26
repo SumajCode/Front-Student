@@ -66,7 +66,7 @@ Clona el repositorio y cambia a la rama correspondiente:
 Instala las dependencias:
 
 ```bash
-  npm install autoprefixer
+  npm install
 ```
 
 en caso de errores de punteros:

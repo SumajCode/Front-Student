@@ -1,9 +1,6 @@
 "use client";
 import React from "react";
 
-interface ProgressBarProps {
-  progress: number;
-}
 
 export default function ProgressBar({ progress }: { progress: number }) {
   return (

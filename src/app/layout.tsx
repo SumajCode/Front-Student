@@ -7,7 +7,7 @@ export const metadata = {
   title: "Curso Interactivo",
   description: "Plataforma estilo Udemy con Next.js",
   icons: {
-    icon: "/favicon.ico", // ✅ Esto carga tu favicon desde /public
+    icon: "/favicon.ico", 
   },
 };
 

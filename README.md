@@ -67,7 +67,7 @@ Instala las dependencias:
 
 ```bash
   npm install
-
+  npm install autoprefixer
 ```
 Este proyecto utiliza Turbopack para un desarrollo más veloz.
 

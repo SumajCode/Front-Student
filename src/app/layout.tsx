@@ -6,6 +6,9 @@ import Footer from "@/globals/layout/Footer";
 export const metadata = {
   title: "Curso Interactivo",
   description: "Plataforma estilo Udemy con Next.js",
+  icons: {
+    icon: "/favicon.ico", // ✅ Esto carga tu favicon desde /public
+  },
 };
 
 export default function RootLayout({

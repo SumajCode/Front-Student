@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { Bell, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import Image from "next/image";
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -13,26 +14,11 @@ export default function Header() {
       <div className="container mx-auto flex items-center justify-between h-16 px-4 md:px-6 lg:px-8">
         {/* Logo */}
         <div className="flex items-center">
-          <Link href="/" className="flex items-center">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="32"
-              height="32"
-              viewBox="0 0 32 32"
-              fill="none"
-              className="text-purple-600"
-            >
-              <path
-                d="M16 2C8.268 2 2 8.268 2 16C2 23.732 8.268 30 16 30C23.732 30 30 23.732 30 16C30 8.268 23.732 2 16 2Z"
-                fill="currentColor"
-              />
-              <path
-                d="M22 16C22 19.314 19.314 22 16 22C12.686 22 10 19.314 10 16C10 12.686 12.686 10 16 10C19.314 10 22 12.686 22 16Z"
-                fill="white"
-              />
-            </svg>
-            <span className="ml-2 font-bold text-xl">SumajCode</span>
-          </Link>
+          <Link href="/" className="flex items-center space-x-2">
+          <Image src="/logo.png" alt="SumajCode" width={32} height={32} />
+          <span className="text-xl font-bold">SumajCode</span>
+        </Link>
+
         </div>
 
         {/* Navigation */}

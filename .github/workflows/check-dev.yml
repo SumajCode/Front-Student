@@ -1,0 +1,32 @@
+name: Verificar calidad para dev
+
+on:
+  push:
+    branches: [dev]
+  pull_request:
+    branches: [dev]
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Descargar código
+        uses: actions/checkout@v3
+
+      - name: Configurar Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Instalar dependencias
+        run: npm install
+
+      - name: Ejecutar Lint
+        run: npm run lint
+
+      - name: Ejecutar Build
+        run: npm run build
+
+      - name: Ejecutar Tests (si existen)
+        run: npm run test

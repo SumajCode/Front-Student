@@ -40,7 +40,7 @@ jobs:
         # Paso 5: Compila el proyecto.
 
       - name: Run tests
-        run: npm test
+        run: npx jest
         # Paso 6: Ejecuta los tests definidos en el proyecto.
 
 #      - name: Prettier Check

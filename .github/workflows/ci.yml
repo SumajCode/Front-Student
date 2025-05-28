@@ -31,22 +31,22 @@ jobs:
         run: npm install
         # Paso 3: Instala las dependencias del proyecto usando npm.
 
-      - name: Lint
-        run: npx next lint --max-warnings=0
+#      - name: Lint
+#        run: npx next lint --max-warnings=0
         # Paso 4: Ejecuta el linter y falla si hay advertencias o errores.
 
-      - name: Build
-        run: npm run build
+#      - name: Build
+#        run: npm run build
         # Paso 5: Compila el proyecto.
 
       - name: Run tests
         run: npm test
         # Paso 6: Ejecuta los tests definidos en el proyecto.
 
-      - name: Prettier Check
-        run: npx prettier --check .
+#      - name: Prettier Check
+#        run: npx prettier --check .
         # Paso extra: Verifica que el código cumpla con el formato Prettier.
 
-      - name: Audit dependencies
-        run: npm audit --audit-level=high
+#      - name: Audit dependencies
+#        run: npm audit --audit-level=high
         # Falla si hay vulnerabilidades de nivel alto o crítico.

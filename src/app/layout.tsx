@@ -2,6 +2,7 @@ import Header from "@/globals/layout/Head";
 import "./globals.css";
 import React from "react";
 import Footer from "@/globals/layout/Footer";
+import Link from "next/link";
 
 export const metadata = {
   title: "Curso Interactivo",
@@ -12,14 +13,18 @@ export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
-}) {
-  return (
+}) {  return (
     <html lang="es">
       <body>
         <Header />
-        <main className="min-h-screen py-8 px-4 md:px-6 lg:px-8">
-          {children}
-        </main>
+        {/* Menú móvil - solo visible en pantallas pequeñas */}
+        <nav className="md:hidden">
+          <Link href="/explorar">Explorar</Link>
+          <Link href="/mi-aprendizaje">Mi aprendizaje</Link>
+        </nav>
+
+        {/* Contenido principal */}
+        <main className="w-full">{children}</main>
         <Footer />
       </body>
     </html>

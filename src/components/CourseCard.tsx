@@ -14,7 +14,6 @@ interface CourseCardProps {
   progress: number;
   duration: string;
   instructor: string;
-  price?: string;
   rating?: number;
   totalRatings?: number;
 }
@@ -26,7 +25,7 @@ export default function CourseCard({
   progress,
   duration,
   instructor,
-  price = "€14.99",
+ 
   rating,
   totalRatings,
 }: CourseCardProps) {
@@ -74,7 +73,7 @@ export default function CourseCard({
             </div>
           </div>
         </Link>
-        <CourseDropdownMenu courseId={id} price={price} rating={rating} totalRatings={totalRatings} />
+        <CourseDropdownMenu courseId={id}  rating={rating} totalRatings={totalRatings} />
       </div>
 
       {/* Contenido */}

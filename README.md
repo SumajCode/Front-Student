@@ -53,25 +53,22 @@ Verifica tu versión de Node.js:
 ```bash
 node -v
 ```
-## Installation
+## Instalación
 
-Clona el repositorio y cambia a la rama correspondiente:
-
+1. Clona el repositorio:
 ```bash
-  git clone https://github.com/Generacion-Software/Sumaj_Code.git
-  cd Sumaj_Code
-  git checkout Front
-
+git clone https://github.com/SumajCode/Front-Student.git
+cd Front-Student
 ```
-Instala las dependencias:
 
+2. Instala las dependencias:
 ```bash
-  npm install
-
+npm install
 ```
-Este proyecto utiliza Turbopack para un desarrollo más veloz.
 
+¡Eso es todo! No necesitas instalar Tailwind, PostCSS o Autoprefixer por separado, ya que están incluidos en las dependencias del proyecto y se configurarán automáticamente.
+
+3. Inicia el servidor de desarrollo:
 ```bash
-  npm run dev
-
+npm run dev
 ```

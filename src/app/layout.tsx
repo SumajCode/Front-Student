@@ -21,6 +21,7 @@ export default function RootLayout({
         <nav className="md:hidden">
           <Link href="/explorar">Explorar</Link>
           <Link href="/mi-aprendizaje">Mi aprendizaje</Link>
+          <Link href="/estudiantes" className="ml-4">Estudiantes</Link>
         </nav>
 
         {/* Contenido principal */}

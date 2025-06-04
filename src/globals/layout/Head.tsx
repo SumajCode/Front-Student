@@ -2,203 +2,423 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Bell, Menu, X, Clock } from "lucide-react";
+import { isValidDate, isValidEmail } from "@/lib/validations";
+import { Bell, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import {
   HoverCard,
   HoverCardContent,
   HoverCardTrigger,
-} from "../../components/ui/hover-card";
+} from "@/components/ui/hover-card";
 import Image from "next/image";
 
-const LEARNING_COURSES = [
-  {
-    id: "1",
-    title: "Curso de Tailwind CSS - Desde cero hasta...",
-    thumbnail: "/course-thumbnails/react-next.svg",
-    action: "Empieza a aprender",
-  },
-  {
-    id: "2",
-    title: "Curso React y Next.js: Aprende Frontend y Backend FullStack",
-    thumbnail: "/course-thumbnails/react-next.svg",
-    action: "Empieza a aprender",
-  },
-  {
-    id: "3",
-    title: "Git GitHub Actions, Buenas Prácticas de Integración Continua",
-    thumbnail: "/course-thumbnails/github.svg",
-    action: "Empieza a aprender",
-  },
-  {
-    id: "4",
-    title: "UX: leyes y fundamentos explicados con ejemplos prácticos",
-    thumbnail: "/course-thumbnails/react-next.svg",
-    action: "Empieza a aprender",
-  },
-];
+interface LoginData {
+  correo: string;
+  contrasenia: string;
+}
+
+interface EstudianteInput {
+  nombre_estudiante: string;
+  apellido_estudiante: string;
+  correo_estudiante: string;
+  contrasenia: string;
+  fecha_nacimiento?: string;
+  numero_celular?: string;
+  id_pais: number;
+  id_ciudad: number;
+}
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isLogin, setIsLogin] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [open, setOpen] = useState(false);
+  const [loginData, setLoginData] = useState({
+    correo: '',
+    contrasenia: ''
+  });
+  const [formData, setFormData] = useState<EstudianteInput>({
+    nombre_estudiante: '',
+    apellido_estudiante: '',
+    correo_estudiante: '',
+    contrasenia: '',
+    fecha_nacimiento: '',
+    numero_celular: '',
+    id_pais: 1,
+    id_ciudad: 1
+  });
+  const [registroExitoso, setRegistroExitoso] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      setLoading(true);
+      setError('');
+      // TODO: Implementar la lógica de login
+      console.log('Login con:', loginData);
+      setIsAuthenticated(true);
+      setOpen(false);
+    } catch (error) {
+      setError('Error al iniciar sesión');
+    } finally {
+      setLoading(false);
+    }
+  };  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      setLoading(true);
+      setError('');
+        // Validar solo los campos realmente requeridos
+      const requiredFields = ['nombre_estudiante', 'apellido_estudiante', 'correo_estudiante', 'contrasenia', 'fecha_nacimiento'];
+      const missingFields = requiredFields.filter(field => {
+        const value = formData[field as keyof EstudianteInput];
+        return !value || value.toString().trim() === '';
+      });
+      
+      if (missingFields.length > 0) {
+        throw new Error('Todos los campos son obligatorios');
+      }
+
+      // Validar formato de correo
+      if (!isValidEmail(formData.correo_estudiante)) {
+        throw new Error('El formato del correo electrónico no es válido');
+      }
+      
+      // Validar fecha de nacimiento
+      if (!formData.fecha_nacimiento) {
+        throw new Error('La fecha de nacimiento es requerida');
+      }
+      
+      if (!isValidDate(formData.fecha_nacimiento)) {
+        throw new Error('La fecha de nacimiento no es válida. Debes ser mayor de 5 años.');
+      }
+
+      const response = await fetch('/api/estudiantes', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData)
+      });
+
+      const result = await response.json();
+
+      if (!result.success) {
+        throw new Error(result.message || 'Error al registrar estudiante');
+      }
+
+      setRegistroExitoso(true);
+      setIsLogin(true);
+      // Limpiar el formulario
+      setFormData({
+        nombre_estudiante: '',
+        apellido_estudiante: '',
+        correo_estudiante: '',
+        contrasenia: '',
+        fecha_nacimiento: '',
+        numero_celular: '',
+        id_pais: 1,
+        id_ciudad: 1
+      });
+      
+      setTimeout(() => {
+        setRegistroExitoso(false);
+      }, 2000);
+    } catch (error) {
+      setError(error instanceof Error ? error.message : 'Error al registrar estudiante');
+    } finally {
+      setLoading(false);
+    }
+  };
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    if (isLogin) {
+      setLoginData((prev: LoginData) => ({
+        ...prev,
+        [name]: value
+      }));
+    } else {
+      setFormData((prev: EstudianteInput) => ({
+        ...prev,
+        [name]: value
+      }));
+    }
+  };
 
   return (
-    <header className="border-b sticky top-0 bg-white z-50 text-black">
-      <div className="container mx-auto flex items-center justify-between h-20 px-4 md:px-6 lg:px-8">
-        {/* Logo */}
-        <div className="flex items-center">
-          <Link href="/" className="flex items-center">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="40"
-              height="40"
-              viewBox="0 0 32 32"
-              fill="none"
-              className="text-purple-600"
-            >
-              <path
-                d="M16 2C8.268 2 2 8.268 2 16C2 23.732 8.268 30 16 30C23.732 30 30 23.732 30 16C30 8.268 23.732 2 16 2Z"
-                fill="currentColor"
-              />
-              <path
-                d="M22 16C22 19.314 19.314 22 16 22C12.686 22 10 19.314 10 16C10 12.686 12.686 10 16 10C19.314 10 22 12.686 22 16Z"
-                fill="white"
-              />
-            </svg>
-            <span className="ml-3 font-bold text-2xl">SumajCode</span>
+    <header className="border-b sticky top-0 bg-white z-50">
+      <div className="container mx-auto flex items-center justify-between h-20">
+        {/* Logo y Nombre */}
+        <div className="flex items-center gap-2">
+          <Link href="/" className="flex items-center gap-2">
+            <div className="w-10 h-10 bg-purple-600 rounded-full flex items-center justify-center">
+              {/* Puedes agregar un ícono o imagen aquí si lo deseas */}
+            </div>
+            <span className="font-bold text-xl">SumajCode</span>
           </Link>
         </div>
 
-        {/* Navigation */}
-        <div className="hidden md:flex items-center gap-6">
-          <Link href="/">
-            <Button
-              variant="ghost"
-              size="lg"
-              className="text-base font-medium hover:text-purple-600 hover:bg-purple-50"
-            >
-              Explorar
-            </Button>
+        {/* Navegación Central */}
+        <nav className="hidden md:flex items-center gap-8">
+          <Link
+            href="/explorar"
+            className="text-gray-600 hover:text-gray-900"
+          >
+            Explorar
           </Link>
+          <Link
+            href="/estudiantes"
+            className="text-gray-600 hover:text-gray-900"
+          >
+            Estudiantes
+          </Link>
+          <Link
+            href="/mi-aprendizaje"
+            className="text-gray-600 hover:text-gray-900"
+          >
+            Mi aprendizaje
+          </Link>
+        </nav>
 
-          <div className="relative">
-            <HoverCard openDelay={0} closeDelay={150}>
-              <HoverCardTrigger asChild>
-                <Link href="/mi-aprendizaje">
-                  <Button
-                    variant="ghost"
-                    size="lg"
-                    className="text-base font-medium hover:text-purple-600 hover:bg-purple-50"
-                  >
-                    Mi aprendizaje
-                  </Button>
-                </Link>
-              </HoverCardTrigger>
-              <HoverCardContent
-                align="end"
-                side="bottom"
-                className="w-[400px] p-0"
-              >
-                <div className="flex items-center justify-between p-4 border-b">
-                  <div className="flex items-center gap-2">
-                    <Clock className="w-4 h-4 text-gray-500" />
-                    <span className="text-sm text-gray-600">
-                      24 min visualizados
-                    </span>
-                  </div>
-                  <Link href="/mi-aprendizaje">
-                    <span className="text-sm text-purple-600 hover:text-purple-700">
-                      Ver toda la actividad
-                    </span>
-                  </Link>
-                </div>
-                <div className="py-2">
-                  {LEARNING_COURSES.map((course) => (
-                    <Link
-                      key={course.id}
-                      href={`/mis-cursos/${course.id}`}
-                      className="flex items-center gap-3 w-full p-3 hover:bg-gray-50"
+        {/* Botones derecha */}
+        <div className="flex items-center gap-4">
+          {/* Notificaciones */}
+          <HoverCard>
+            <HoverCardTrigger>
+              <Bell className="h-6 w-6 text-gray-600 hover:text-gray-900 cursor-pointer" />
+            </HoverCardTrigger>
+            <HoverCardContent className="w-80">
+              <div className="space-y-2">
+                <h4 className="font-semibold">Notificaciones</h4>
+                <p className="text-sm text-gray-500">No hay notificaciones nuevas</p>
+              </div>
+            </HoverCardContent>
+          </HoverCard>
+
+          {/* Botón GO con Popover de autenticación */}
+          <Popover open={open} onOpenChange={setOpen}>
+            <PopoverTrigger asChild>
+              <Button className="bg-[#9333EA] hover:bg-[#7E22CE] text-white rounded-lg px-4 py-2">
+                GO
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-96 p-4">
+              {!isAuthenticated ? (
+                <div className="space-y-4">                  <div className="flex items-center justify-between">
+                    <h3 className="font-semibold text-lg">
+                      {isLogin ? 'Iniciar Sesión' : 'Registro de Estudiante'}
+                    </h3>
+                    <button
+                      type="button"
+                      className="text-[#9333EA] hover:text-[#7E22CE] text-sm"
+                      onClick={() => setIsLogin(!isLogin)}
                     >
-                      <div className="relative w-12 h-12 rounded-lg bg-purple-100 flex items-center justify-center flex-shrink-0">
-                        <Image
-                          src={course.thumbnail}
-                          alt={course.title}
-                          width={24}
-                          height={24}
+                      {isLogin ? 'Registrarse' : 'Volver al login'}
+                    </button>
+                  </div>                  {error && (
+                    <div className="bg-red-100 border border-red-400 text-red-700 px-3 py-2 rounded text-sm">
+                      {error}
+                    </div>
+                  )}
+                  
+                  {!isLogin && !error && (
+                    <div className="bg-red-100 border border-red-400 text-red-700 px-3 py-2 rounded text-sm">
+                      Los campos marcados son obligatorios
+                    </div>
+                  )}
+
+                  {registroExitoso && (
+                    <div className="bg-green-100 border border-green-400 text-green-700 px-3 py-2 rounded text-sm">
+                      ¡Registro exitoso! Por favor, inicia sesión.
+                    </div>
+                  )}
+
+                  {isLogin ? (
+                    // Formulario de Login
+                    <form onSubmit={handleLogin} className="space-y-3">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700">Correo</label>
+                        <input
+                          type="email"
+                          name="correo"
+                          value={loginData.correo}
+                          onChange={handleChange}
+                          required
+                          className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
+                          placeholder="tu@email.com"
                         />
                       </div>
-                      <div className="flex-1 min-w-0">
-                        <h4 className="text-sm font-medium text-gray-900 truncate">
-                          {course.title}
-                        </h4>
-                        <p className="text-sm text-purple-600">
-                          {course.action}
-                        </p>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700">Contraseña</label>
+                        <input
+                          type="password"
+                          name="contrasenia"
+                          value={loginData.contrasenia}
+                          onChange={handleChange}
+                          required
+                          className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
+                        />
                       </div>
-                    </Link>
-                  ))}
+                      <Button
+                        type="submit"
+                        disabled={loading}
+                        className="w-full bg-[#9333EA] hover:bg-[#7E22CE] text-white"
+                      >
+                        {loading ? 'Iniciando sesión...' : 'Iniciar Sesión'}
+                      </Button>
+                    </form>
+                  ) : (
+                    // Formulario de Registro
+                    <form onSubmit={handleSubmit} className="space-y-3">
+                      <div className="grid grid-cols-2 gap-3">
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700">Nombre</label>
+                          <input
+                            type="text"
+                            name="nombre_estudiante"
+                            value={formData.nombre_estudiante}
+                            onChange={handleChange}
+                            required
+                            className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700">Apellido</label>
+                          <input
+                            type="text"
+                            name="apellido_estudiante"
+                            value={formData.apellido_estudiante}
+                            onChange={handleChange}
+                            required
+                            className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
+                          />
+                        </div>
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700">Correo</label>
+                        <input
+                          type="email"
+                          name="correo_estudiante"
+                          value={formData.correo_estudiante}
+                          onChange={handleChange}
+                          required
+                          className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
+                        />
+                      </div>                      <div>
+                        <label className="block text-sm font-medium text-gray-700">Contraseña</label>
+                        <input
+                          type="password"
+                          name="contrasenia"
+                          value={formData.contrasenia}
+                          onChange={handleChange}
+                          required
+                          className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
+                        />                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700">
+                          Número de Celular <span className="text-gray-500 text-xs">(Opcional)</span>
+                        </label>
+                        <input
+                          type="tel"
+                          name="numero_celular"
+                          value={formData.numero_celular}
+                          onChange={handleChange}
+                          className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
+                          placeholder="Ej: 70123456"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700">Fecha de Nacimiento</label>
+                        <input
+                          type="date"
+                          name="fecha_nacimiento"
+                          value={formData.fecha_nacimiento}
+                          onChange={(e) => {
+                            const inputDate = e.target.value;
+                            // Asegurarnos de que la fecha esté en formato YYYY-MM-DD
+                            if (inputDate) {
+                              setFormData(prev => ({
+                                ...prev,
+                                fecha_nacimiento: inputDate // El input type="date" ya devuelve YYYY-MM-DD
+                              }));
+                            }
+                          }}
+                          required
+                          max={new Date().toISOString().split('T')[0]} // Limitar a la fecha actual
+                          className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
+                        />
+                        {formData.fecha_nacimiento && !isValidDate(formData.fecha_nacimiento) && (
+                          <p className="text-red-500 text-xs mt-1">
+                            La fecha de nacimiento no es válida. Debes ser mayor de 5 años.
+                          </p>
+                        )}
+                      </div>
+                      <Button
+                        type="submit"
+                        disabled={loading}
+                        className="w-full bg-[#9333EA] hover:bg-[#7E22CE] text-white"
+                      >
+                        {loading ? 'Registrando...' : 'Registrarse'}
+                      </Button>
+                    </form>
+                  )}
                 </div>
-                <div className="p-4 bg-gray-50 border-t">
-                  <Link href="/mi-aprendizaje" className="w-full">
+              ) : (
+                <div className="space-y-4">
+                  <h3 className="font-semibold text-lg">Mi Perfil</h3>
+                  <div className="space-y-2">
+                    <p className="text-sm text-gray-600">
+                      {loginData.correo}
+                    </p>
                     <Button
-                      variant="secondary"
-                      className="w-full bg-purple-600 hover:bg-purple-700 text-white"
+                      onClick={() => {
+                        setIsAuthenticated(false);
+                        setOpen(false);
+                      }}
+                      className="w-full bg-[#9333EA] hover:bg-[#7E22CE] text-white"
                     >
-                      Ir a Mi aprendizaje
+                      Cerrar Sesión
                     </Button>
-                  </Link>
+                  </div>
                 </div>
-              </HoverCardContent>
-            </HoverCard>
-          </div>
-
-          <Button
-            variant="ghost"
-            size="icon"
-            className="h-12 w-12 hover:text-purple-600 hover:bg-purple-50"
-          >
-            <Bell className="h-6 w-6" />
-          </Button>
-
-          <div className="h-10 w-10 rounded-full bg-gray-800 flex items-center justify-center text-white text-base font-medium">
-            GO
-          </div>
-        </div>
-
-        {/* Mobile Menu Button */}
-        <div className="md:hidden flex items-center">
-          <Button
-            variant="ghost"
-            size="sm"
-            className="p-2"
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-          >
-            {isMenuOpen ? (
-              <X className="h-5 w-5" />
-            ) : (
-              <Menu className="h-5 w-5" />
-            )}
-          </Button>
+              )}
+            </PopoverContent>
+          </Popover>
         </div>
       </div>
 
-      {/* Mobile Menu */}
-      {isMenuOpen && (
-        <div className="md:hidden border-t">
-          <div className="container mx-auto px-4 py-3">
-            <nav className="flex flex-col space-y-3">
-              <Link href="/" className="py-2 px-3 hover:bg-gray-100 rounded-md">
+      {/* Menú móvil */}
+      <div className="md:hidden">
+        <button
+          onClick={() => setIsMenuOpen(!isMenuOpen)}
+          className="p-2"
+        >
+          <Menu className="h-6 w-6" />
+        </button>
+        
+        {isMenuOpen && (
+          <nav className="border-t py-4">
+            <div className="container mx-auto space-y-4">
+              <Link href="/explorar" className="block text-gray-600 hover:text-gray-900">
                 Explorar
               </Link>
-              <Link
-                href="/mis-cursos"
-                className="py-2 px-3 hover:bg-gray-100 rounded-md"
-              >
+              <Link href="/estudiantes" className="block text-gray-600 hover:text-gray-900">
+                Estudiantes
+              </Link>
+              <Link href="/mi-aprendizaje" className="block text-gray-600 hover:text-gray-900">
                 Mi aprendizaje
               </Link>
-            </nav>
-          </div>
-        </div>
-      )}
+            </div>
+          </nav>
+        )}
+      </div>
     </header>
   );
 }

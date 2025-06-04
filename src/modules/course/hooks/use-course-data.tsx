@@ -1,10 +1,10 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { courseData } from "../data/course-data";
+import { courseData, Section, Lesson, LessonType } from "../data/course-data";
 
 export function useCourseData() {
-  const [sections, setSections] = useState(courseData.sections);
+  const [sections, setSections] = useState<Section[]>(courseData.sections);
   const [isLoading, setIsLoading] = useState(false);
 
   // Simular carga de datos

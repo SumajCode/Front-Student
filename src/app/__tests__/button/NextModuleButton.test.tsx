@@ -3,11 +3,11 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import NextModuleButton from '@/modules/course/components/NextModuleButton';
 
 // Mock del hook useCourseNavigation
-jest.mock('../../modules/course/hooks/useCourseNavigation', () => ({
+jest.mock('../../../modules/course/hooks/useCourseNavigation', () => ({
   useCourseNavigation: jest.fn(),
 }));
 
-const mockUseCourseNavigation = require('../../modules/course/hooks/useCourseNavigation').useCourseNavigation;
+const mockUseCourseNavigation = require('../../../modules/course/hooks/useCourseNavigation').useCourseNavigation;
 
 describe('NextModuleButton', () => {
   beforeEach(() => {

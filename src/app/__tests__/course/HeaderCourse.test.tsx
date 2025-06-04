@@ -3,12 +3,12 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import HeaderCourse from '@/modules/course/components/HeaderCourse';
 
 // Mock de useCourseNavigation y ProgressBar
-jest.mock('../../modules/course/hooks/useCourseNavigation', () => ({
+jest.mock('../../../modules/course/hooks/useCourseNavigation', () => ({
   useCourseNavigation: jest.fn(),
 }));
-jest.mock('../../modules/course/components/ProgressBar', () => () => <div>Barra de progreso</div>);
+jest.mock('../../../modules/course/components/ProgressBar', () => () => <div>Barra de progreso</div>);
 
-const mockUseCourseNavigation = require('../../modules/course/hooks/useCourseNavigation').useCourseNavigation;
+const mockUseCourseNavigation = require('../../../modules/course/hooks/useCourseNavigation').useCourseNavigation;
 
 describe('HeaderCourse', () => {
   beforeEach(() => {

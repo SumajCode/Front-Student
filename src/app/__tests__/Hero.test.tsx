@@ -6,7 +6,9 @@ describe('Hero', () => {
   it('muestra el tab de video por defecto', () => {
     render(<Hero />);
     expect(screen.getByText('Video')).toHaveClass('bg-gradient-to-r');
-    expect(screen.getByTitle('YouTube video') || screen.getByRole('iframe')).toBeInTheDocument();
+    // Busca el iframe por tagName ya que no tiene role accesible
+    const iframe = document.querySelector('iframe');
+    expect(iframe).toBeInTheDocument();
   });
 
   it('cambia al tab de compilador al hacer click', () => {
@@ -21,6 +23,7 @@ describe('Hero', () => {
     fireEvent.click(screen.getByText('Compilador'));
     fireEvent.click(screen.getByText('Video'));
     expect(screen.getByText('Video')).toHaveClass('bg-gradient-to-r');
-    expect(screen.getByTitle('YouTube video') || screen.getByRole('iframe')).toBeInTheDocument();
+    const iframe = document.querySelector('iframe');
+    expect(iframe).toBeInTheDocument();
   });
 });

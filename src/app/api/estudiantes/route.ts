@@ -87,8 +87,12 @@ export async function POST(request: NextRequest) {
       'apellido_estudiante',
       'correo_estudiante',
       'contrasenia',
-      'fecha_nacimiento'
+      'fecha_nacimiento',
+      'numero_celular',
+      'id_pais',
+      'id_ciudad'
     ];
+    console.log('🔍 Validando campos requeridos:', requiredFields);
     const missingFields = requiredFields.filter(field => {
       const value = body[field];
       return value === undefined || value === null || value === '';
@@ -115,25 +119,40 @@ export async function POST(request: NextRequest) {
       }, { status: 400 });
     }
 
+    // Validar formato de fecha y convertir si es necesario
+    if (body.fecha_nacimiento) {
+      // Verificar si la fecha está en formato DD-MM-YYYY
+      const dateMatch = body.fecha_nacimiento.match(/^(\d{2})-(\d{2})-(\d{4})$/);
+      if (dateMatch) {
+        // Convertir a formato YYYY-MM-DD
+        const [, day, month, year] = dateMatch;
+        body.fecha_nacimiento = `${year}-${month}-${day}`;
+      }
+    }
+
     // Validar formato de fecha
     if (!isValidDate(body.fecha_nacimiento)) {
       return NextResponse.json({
         success: false,
-        message: 'Formato de fecha inválido. Use YYYY-MM-DD',
+        message: 'Formato de fecha inválido o fecha no válida',
         status: 400
       }, { status: 400 });
-    }
-
-    // Sanitizar y validar los datos
-    const sanitizedData = sanitizeStudentData(body);
-      // Si el número de celular está vacío, establecer un valor por defecto
-    if (!body.numero_celular) {
-      body.numero_celular = '';
-    }
+    }    // Sanitizar y validar los datos
+    const sanitizedData = {
+      nombre_estudiante: body.nombre_estudiante.trim(),
+      apellido_estudiante: body.apellido_estudiante.trim(),
+      correo_estudiante: body.correo_estudiante.trim().toLowerCase(),
+      contrasenia: body.contrasenia,
+      fecha_nacimiento: body.fecha_nacimiento,
+      numero_celular: body.numero_celular || '',
+      id_pais: Number(body.id_pais) || 1,
+      id_ciudad: Number(body.id_ciudad) || 1,
+      es_universitario: false
+    };
 
     const url = `${process.env.BACKEND_URL}/api/estudiantes/registrar`;
-    console.log('🎯 Intentando registro en:', url);
-    console.log('📤 Datos sanitizados a enviar:', JSON.stringify(sanitizedData, null, 2));
+    console.log('🎯 URL completa:', url);
+    console.log('📤 Datos a enviar:', JSON.stringify(sanitizedData, null, 2));
 
     const response = await fetch(url, {
       method: 'POST',
@@ -145,12 +164,15 @@ export async function POST(request: NextRequest) {
     });
 
     console.log('📥 Status de la respuesta:', response.status);
+    console.log('📥 Headers de la respuesta:', Object.fromEntries(response.headers));
     
     let responseData;
     try {
-      responseData = await response.json();
+      const responseText = await response.text();
+      console.log('📥 Respuesta texto crudo:', responseText);
+      responseData = JSON.parse(responseText);
     } catch (parseError) {
-      console.error('❌ Error al parsear la respuesta del backend:', parseError);
+      console.error('❌ Error al parsear la respuesta:', parseError);
       throw new Error('Error al procesar la respuesta del servidor');
     }
 

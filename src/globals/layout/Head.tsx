@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import React, { useState } from "react";
 import Link from "next/link";
-import { isValidDate, isValidEmail } from "@/lib/validations";
+import { isValidEmail } from "@/lib/validations";
 import { Bell, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -90,16 +90,10 @@ export default function Header() {
       if (!isValidEmail(formData.correo_estudiante)) {
         throw new Error('El formato del correo electrónico no es válido');
       }
-      
-      // Validar fecha de nacimiento
+        // Validar que la fecha no esté vacía
       if (!formData.fecha_nacimiento) {
         throw new Error('La fecha de nacimiento es requerida');
-      }
-      
-      if (!isValidDate(formData.fecha_nacimiento)) {
-        throw new Error('La fecha de nacimiento no es válida. Debes ser mayor de 5 años.');
-      }
-
+      }console.log('Datos a enviar:', JSON.stringify(formData, null, 2));
       const response = await fetch('/api/estudiantes', {
         method: 'POST',
         headers: {
@@ -335,30 +329,34 @@ export default function Header() {
                         />
                       </div>
                       <div>
-                        <label className="block text-sm font-medium text-gray-700">Fecha de Nacimiento</label>
-                        <input
-                          type="date"
+                        <label className="block text-sm font-medium text-gray-700">Fecha de Nacimiento</label>                        <input
+                          type="text"
                           name="fecha_nacimiento"
+                          placeholder="DD-MM-YYYY"
                           value={formData.fecha_nacimiento}
                           onChange={(e) => {
-                            const inputDate = e.target.value;
-                            // Asegurarnos de que la fecha esté en formato YYYY-MM-DD
-                            if (inputDate) {
-                              setFormData(prev => ({
-                                ...prev,
-                                fecha_nacimiento: inputDate // El input type="date" ya devuelve YYYY-MM-DD
-                              }));
+                            const value = e.target.value;
+                            // Permitir solo números y guiones
+                            if (value === '' || /^[\d-]*$/.test(value)) {
+                              // Formatear automáticamente con guiones
+                              let formatted = value.replace(/\D/g, ''); // Remover no-dígitos
+                              if (formatted.length > 4) {
+                                formatted = formatted.slice(0, 2) + '-' + formatted.slice(2, 4) + '-' + formatted.slice(4, 8);
+                              } else if (formatted.length > 2) {
+                                formatted = formatted.slice(0, 2) + '-' + formatted.slice(2);
+                              }
+                              // Solo actualizar si la longitud es correcta o está borrando
+                              if (formatted.length <= 10) {
+                                setFormData(prev => ({
+                                  ...prev,
+                                  fecha_nacimiento: formatted
+                                }));
+                              }
                             }
                           }}
                           required
-                          max={new Date().toISOString().split('T')[0]} // Limitar a la fecha actual
-                          className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
+                          max={new Date().toISOString().split('T')[0]} // Limitar a la fecha actual                          className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
                         />
-                        {formData.fecha_nacimiento && !isValidDate(formData.fecha_nacimiento) && (
-                          <p className="text-red-500 text-xs mt-1">
-                            La fecha de nacimiento no es válida. Debes ser mayor de 5 años.
-                          </p>
-                        )}
                       </div>
                       <Button
                         type="submit"

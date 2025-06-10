@@ -1,3 +1,5 @@
+import React from 'react';
+
 export function CourseInfo() {
   return (
     <div className="bg-white border-t mt-6 py-6">

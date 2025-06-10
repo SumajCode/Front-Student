@@ -1,4 +1,5 @@
 "use client";
+import React from 'react';
 import CourseCard from "@/components/CourseCard";
 
 //Ejemplo de como se ven los cursos en la pagina principal

@@ -71,14 +71,14 @@ export function Hero() {
         status: "OK",
         message: data.message || "Compilación exitosa"
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Error en la compilación:", error);
       setCompilerResult({
         result: "",
         memoriaUso: 0,
         tiempoEjecucion: 0,
         status: "ERROR",
-        message: error?.message || "Error al intentar compilar el código"
+        message: error instanceof Error ? error.message : "Error al intentar compilar el código"
       });
     } finally {
       setIsCompiling(false);

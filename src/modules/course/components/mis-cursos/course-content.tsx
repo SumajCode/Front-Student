@@ -5,7 +5,7 @@ import { ChevronDown, FileText, CheckCircle, Download, Link as LinkIcon, FileJso
 import { Button } from "@/components/ui/button";
 import { useCourseData } from "../../hooks/use-course-data";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Section, Lesson } from "../../data/course-data";
+import { Section } from "../../data/course-data";
 
 export function CourseContent() {
   const { sections } = useCourseData();

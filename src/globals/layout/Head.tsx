@@ -15,7 +15,6 @@ import {
   HoverCardContent,
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
-import Image from "next/image";
 
 interface LoginData {
   correo: string;
@@ -65,7 +64,7 @@ export default function Header() {
       console.log('Login con:', loginData);
       setIsAuthenticated(true);
       setOpen(false);
-    } catch (error) {
+    } catch {
       setError('Error al iniciar sesión');
     } finally {
       setLoading(false);

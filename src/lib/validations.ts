@@ -23,26 +23,83 @@ export function isValidDate(dateString: string): boolean {
   return true;
 }
 
-export interface StudentDataInput {
-  nombre_estudiante: string;
-  apellido_estudiante: string;
-  correo_estudiante: string;
+interface LoginInput {
+  correo: string;
   contrasenia: string;
-  fecha_nacimiento: string;
-  numero_celular?: string | number;
-  id_pais: string | number;
-  id_ciudad: string | number;
 }
 
-export function sanitizeStudentData(data: StudentDataInput) {
+export function sanitizeLoginData(data: LoginInput) {
   return {
-    nombre_estudiante: String(data.nombre_estudiante).trim(),
-    apellido_estudiante: String(data.apellido_estudiante).trim(),
-    correo_estudiante: String(data.correo_estudiante).trim().toLowerCase(),
-    contrasenia: String(data.contrasenia),
-    fecha_nacimiento: String(data.fecha_nacimiento),
-    numero_celular: data.numero_celular ? String(data.numero_celular).trim() : undefined,
-    id_pais: Number(data.id_pais),
-    id_ciudad: Number(data.id_ciudad)
+    correo: String(data.correo).trim().toLowerCase(),
+    contrasenia: String(data.contrasenia)
   };
+}
+
+interface ApiResponse<T = unknown> {
+  success: boolean;
+  data?: T;
+  message?: string;
+  status?: number;
+}
+
+interface LoginResponseData {
+  token: string;
+  estudiante: {
+    id: string;
+    nombre: string;
+    apellido: string;
+    correo: string;
+    telefono?: string;
+  };
+}
+
+interface PerfilResponseData {
+  nombre: string;
+  apellido: string;
+  correo: string;
+  telefono?: string;
+}
+
+export function validateApiResponse<T>(response: ApiResponse<T>): boolean {
+  return (
+    response &&
+    typeof response.success === 'boolean' &&
+    (!response.data || typeof response.data === 'object') &&
+    (!response.message || typeof response.message === 'string') &&
+    (!response.status || typeof response.status === 'number')
+  );
+}
+
+export function validateLoginResponse(response: unknown): response is ApiResponse<LoginResponseData> {
+  return (
+    typeof response === 'object' &&
+    response !== null &&
+    'success' in response &&
+    typeof (response as ApiResponse<LoginResponseData>).success === 'boolean' &&
+    'data' in response &&
+    typeof (response as ApiResponse<LoginResponseData>).data === 'object' &&
+    (response as ApiResponse<LoginResponseData>).data !== null &&
+    'token' in (response as ApiResponse<LoginResponseData>).data! &&
+    typeof (response as ApiResponse<LoginResponseData>).data!.token === 'string' &&
+    'estudiante' in (response as ApiResponse<LoginResponseData>).data! &&
+    typeof (response as ApiResponse<LoginResponseData>).data!.estudiante === 'object'
+  );
+}
+
+export function validatePerfilResponse(response: unknown): response is ApiResponse<PerfilResponseData> {
+  return (
+    typeof response === 'object' &&
+    response !== null &&
+    'success' in response &&
+    typeof (response as ApiResponse<PerfilResponseData>).success === 'boolean' &&
+    'data' in response &&
+    typeof (response as ApiResponse<PerfilResponseData>).data === 'object' &&
+    (response as ApiResponse<PerfilResponseData>).data !== null &&
+    'nombre' in (response as ApiResponse<PerfilResponseData>).data! &&
+    typeof (response as ApiResponse<PerfilResponseData>).data!.nombre === 'string' &&
+    'apellido' in (response as ApiResponse<PerfilResponseData>).data! &&
+    typeof (response as ApiResponse<PerfilResponseData>).data!.apellido === 'string' &&
+    'correo' in (response as ApiResponse<PerfilResponseData>).data! &&
+    typeof (response as ApiResponse<PerfilResponseData>).data!.correo === 'string'
+  );
 }

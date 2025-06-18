@@ -13,15 +13,25 @@ export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
-}) {  return (
+}) {
+  return (
     <html lang="es">
       <body>
         <Header />
         {/* Menú móvil - solo visible en pantallas pequeñas */}
-        <nav className="md:hidden">
-          <Link href="/explorar">Explorar</Link>
-          <Link href="/mi-aprendizaje">Mi aprendizaje</Link>
-          <Link href="/estudiantes" className="ml-4">Estudiantes</Link>
+        <nav className="md:hidden bg-gray-50 p-2">
+          <Link
+            href="/explorar"
+            className="text-gray-600 hover:text-gray-900 px-2"
+          >
+            Explorar
+          </Link>
+          <Link
+            href="/mi-aprendizaje"
+            className="text-gray-600 hover:text-gray-900 px-2"
+          >
+            Mi aprendizaje
+          </Link>
         </nav>
 
         {/* Contenido principal */}

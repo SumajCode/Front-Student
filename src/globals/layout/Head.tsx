@@ -1,423 +1,279 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
-import { isValidDate, isValidEmail } from "@/lib/validations";
-import { Bell, Menu } from "lucide-react";
+import { Bell } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import {
-  HoverCard,
-  HoverCardContent,
-  HoverCardTrigger,
-} from "@/components/ui/hover-card";
+import { usePathname, useRouter } from 'next/navigation';
 
 interface LoginData {
   correo: string;
   contrasenia: string;
 }
 
-interface EstudianteInput {
-  nombre_estudiante: string;
-  apellido_estudiante: string;
-  correo_estudiante: string;
-  contrasenia: string;
-  fecha_nacimiento?: string;
-  numero_celular?: string;
-  id_pais: number;
-  id_ciudad: number;
-}
-
 export default function Header() {
+  const router = useRouter();
+  const pathname = usePathname();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isLogin, setIsLogin] = useState(true);
+  const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [open, setOpen] = useState(false);
-  const [loginData, setLoginData] = useState({
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [loginData, setLoginData] = useState<LoginData>({
     correo: '',
     contrasenia: ''
   });
-  const [formData, setFormData] = useState<EstudianteInput>({
-    nombre_estudiante: '',
-    apellido_estudiante: '',
-    correo_estudiante: '',
-    contrasenia: '',
-    fecha_nacimiento: '',
-    numero_celular: '',
-    id_pais: 1,
-    id_ciudad: 1
-  });
-  const [registroExitoso, setRegistroExitoso] = useState(false);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  useEffect(() => {
+    // Verificar autenticación al cargar
+    const token = localStorage.getItem('token');
+    setIsAuthenticated(!!token);
+  }, []);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    try {
-      setLoading(true);
-      setError('');
-      // TODO: Implementar la lógica de login
-      console.log('Login con:', loginData);
-      setIsAuthenticated(true);
-      setOpen(false);
-    } catch {
-      setError('Error al iniciar sesión');
-    } finally {
-      setLoading(false);
-    }
-  };  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    try {
-      setLoading(true);
-      setError('');
-        // Validar solo los campos realmente requeridos
-      const requiredFields = ['nombre_estudiante', 'apellido_estudiante', 'correo_estudiante', 'contrasenia', 'fecha_nacimiento'];
-      const missingFields = requiredFields.filter(field => {
-        const value = formData[field as keyof EstudianteInput];
-        return !value || value.toString().trim() === '';
-      });
-      
-      if (missingFields.length > 0) {
-        throw new Error('Todos los campos son obligatorios');
-      }
+    setLoading(true);
+    setError('');
 
-      // Validar formato de correo
-      if (!isValidEmail(formData.correo_estudiante)) {
-        throw new Error('El formato del correo electrónico no es válido');
-      }
-      
-      // Validar fecha de nacimiento
-      if (!formData.fecha_nacimiento) {
-        throw new Error('La fecha de nacimiento es requerida');
-      }
-      
-      if (!isValidDate(formData.fecha_nacimiento)) {
-        throw new Error('La fecha de nacimiento no es válida. Debes ser mayor de 5 años.');
-      }
-
-      const response = await fetch('/api/estudiantes', {
+    try {
+      const response = await fetch('/api/auth', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData)
+        body: JSON.stringify({
+          correo: loginData.correo,
+          contrasenia: loginData.contrasenia
+        })
       });
 
-      const result = await response.json();
+      const data = await response.json();
 
-      if (!result.success) {
-        throw new Error(result.message || 'Error al registrar estudiante');
+      if (!response.ok) {
+        throw new Error(data.message || 'Error al iniciar sesión');
       }
 
-      setRegistroExitoso(true);
-      setIsLogin(true);
-      // Limpiar el formulario
-      setFormData({
-        nombre_estudiante: '',
-        apellido_estudiante: '',
-        correo_estudiante: '',
-        contrasenia: '',
-        fecha_nacimiento: '',
-        numero_celular: '',
-        id_pais: 1,
-        id_ciudad: 1
-      });
-      
-      setTimeout(() => {
-        setRegistroExitoso(false);
-      }, 2000);
+      if (data.data && data.data.token) {
+        localStorage.setItem('token', data.data.token);
+        localStorage.setItem('estudiante', JSON.stringify(data.data.estudiante));
+        setIsAuthenticated(true);
+        setIsLoginOpen(false);
+        setLoginData({ correo: '', contrasenia: '' });
+        router.push('/homepage');
+      }
     } catch (error) {
-      setError(error instanceof Error ? error.message : 'Error al registrar estudiante');
+      setError(error instanceof Error ? error.message : 'Error al iniciar sesión');
     } finally {
       setLoading(false);
     }
   };
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value } = e.target;
-    if (isLogin) {
-      setLoginData((prev: LoginData) => ({
-        ...prev,
-        [name]: value
-      }));
-    } else {
-      setFormData((prev: EstudianteInput) => ({
-        ...prev,
-        [name]: value
-      }));
-    }
-  };
 
   return (
-    <header className="border-b sticky top-0 bg-white z-50">
-      <div className="container mx-auto flex items-center justify-between h-20">
-        {/* Logo y Nombre */}
-        <div className="flex items-center gap-2">
-          <Link href="/" className="flex items-center gap-2">
-            <div className="w-10 h-10 bg-purple-600 rounded-full flex items-center justify-center">
-              {/* Puedes agregar un ícono o imagen aquí si lo deseas */}
-            </div>
-            <span className="font-bold text-xl">SumajCode</span>
-          </Link>
-        </div>
-
-        {/* Navegación Central */}
-        <nav className="hidden md:flex items-center gap-8">
-          <Link
-            href="/explorar"
-            className="text-gray-600 hover:text-gray-900"
+    <header className="bg-white border-b border-gray-200 transition-all duration-200 ease-in-out">
+      <div className="container mx-auto flex items-center justify-between py-3 px-6">
+        {/* Logo */}
+        <Link href="/" className="flex-shrink-0">
+          <span className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-violet-500 bg-clip-text text-transparent 
+            transition-all duration-300 ease-in-out hover:opacity-80">
+            SumajCode
+          </span>
+        </Link>
+        
+        {/* Navegación principal centrada */}
+        <nav className="hidden md:flex items-center gap-8 absolute left-1/2 transform -translate-x-1/2">          <Link 
+            href="/" 
+            className={`group flex items-center gap-2 text-gray-700 hover:text-purple-600 text-[15px] font-medium
+              transition-all duration-200 ease-in-out ${
+              pathname === '/' ? 'text-purple-600' : ''
+            }`}
           >
-            Explorar
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 transition-transform group-hover:scale-110 duration-200" 
+              fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} 
+                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+            <span className="relative after:content-[''] after:absolute after:w-full after:h-0.5 
+              after:bg-purple-600 after:left-0 after:bottom-[-4px] after:transform after:scale-x-0 
+              after:transition-transform after:duration-200 group-hover:after:scale-x-100
+              ${pathname === '/explorar' ? 'after:scale-x-100' : ''}">
+              Explorar
+            </span>
           </Link>
-          <Link
-            href="/estudiantes"
-            className="text-gray-600 hover:text-gray-900"
-          >
-            Estudiantes
-          </Link>
-          <Link
+          <Link 
             href="/mi-aprendizaje"
-            className="text-gray-600 hover:text-gray-900"
+            className={`group flex items-center gap-2 text-gray-700 hover:text-purple-600 text-[15px] font-medium
+              transition-all duration-200 ease-in-out ${
+              pathname === '/mi-aprendizaje' ? 'text-purple-600' : ''
+            }`}
           >
-            Mi aprendizaje
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 transition-transform group-hover:scale-110 duration-200" 
+              fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} 
+                d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+            </svg>
+            <span className="relative after:content-[''] after:absolute after:w-full after:h-0.5 
+              after:bg-purple-600 after:left-0 after:bottom-[-4px] after:transform after:scale-x-0 
+              after:transition-transform after:duration-200 group-hover:after:scale-x-100
+              ${pathname === '/mi-aprendizaje' ? 'after:scale-x-100' : ''}">
+              Mi Aprendizaje
+            </span>
           </Link>
         </nav>
 
-        {/* Botones derecha */}
+        {/* Botones de acción */}
         <div className="flex items-center gap-4">
-          {/* Notificaciones */}
-          <HoverCard>
-            <HoverCardTrigger>
-              <Bell className="h-6 w-6 text-gray-600 hover:text-gray-900 cursor-pointer" />
-            </HoverCardTrigger>
-            <HoverCardContent className="w-80">
-              <div className="space-y-2">
-                <h4 className="font-semibold">Notificaciones</h4>
-                <p className="text-sm text-gray-500">No hay notificaciones nuevas</p>
-              </div>
-            </HoverCardContent>
-          </HoverCard>
-
-          {/* Botón GO con Popover de autenticación */}
-          <Popover open={open} onOpenChange={setOpen}>
-            <PopoverTrigger asChild>
-              <Button className="bg-[#9333EA] hover:bg-[#7E22CE] text-white rounded-lg px-4 py-2">
-                GO
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-96 p-4">
-              {!isAuthenticated ? (
-                <div className="space-y-4">                  <div className="flex items-center justify-between">
-                    <h3 className="font-semibold text-lg">
-                      {isLogin ? 'Iniciar Sesión' : 'Registro de Estudiante'}
-                    </h3>
-                    <button
-                      type="button"
-                      className="text-[#9333EA] hover:text-[#7E22CE] text-sm"
-                      onClick={() => setIsLogin(!isLogin)}
-                    >
-                      {isLogin ? 'Registrarse' : 'Volver al login'}
-                    </button>
-                  </div>                  {error && (
-                    <div className="bg-red-100 border border-red-400 text-red-700 px-3 py-2 rounded text-sm">
-                      {error}
-                    </div>
-                  )}
-                  
-                  {!isLogin && !error && (
-                    <div className="bg-red-100 border border-red-400 text-red-700 px-3 py-2 rounded text-sm">
-                      Los campos marcados son obligatorios
-                    </div>
-                  )}
-
-                  {registroExitoso && (
-                    <div className="bg-green-100 border border-green-400 text-green-700 px-3 py-2 rounded text-sm">
-                      ¡Registro exitoso! Por favor, inicia sesión.
-                    </div>
-                  )}
-
-                  {isLogin ? (
-                    // Formulario de Login
-                    <form onSubmit={handleLogin} className="space-y-3">
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700">Correo</label>
-                        <input
-                          type="email"
-                          name="correo"
-                          value={loginData.correo}
-                          onChange={handleChange}
-                          required
-                          className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
-                          placeholder="tu@email.com"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700">Contraseña</label>
-                        <input
-                          type="password"
-                          name="contrasenia"
-                          value={loginData.contrasenia}
-                          onChange={handleChange}
-                          required
-                          className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
-                        />
-                      </div>
-                      <Button
-                        type="submit"
-                        disabled={loading}
-                        className="w-full bg-[#9333EA] hover:bg-[#7E22CE] text-white"
-                      >
-                        {loading ? 'Iniciando sesión...' : 'Iniciar Sesión'}
+          {isAuthenticated ? (
+            <>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button 
+                    variant="ghost" 
+                    size="icon"
+                    className="relative hover:bg-purple-50 transition-colors duration-200"
+                  >
+                    <Bell className="h-5 w-5 text-gray-700 hover:text-purple-600 transition-colors duration-200" />
+                    <span className="absolute top-1 right-1 h-2 w-2 bg-purple-600 rounded-full animate-pulse"></span>
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-80 p-4">
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <h4 className="font-semibold text-gray-900">Notificaciones</h4>
+                      <Button variant="ghost" size="sm" className="text-purple-600 hover:text-purple-700 text-sm">
+                        Marcar todo como leído
                       </Button>
-                    </form>
-                  ) : (
-                    // Formulario de Registro
-                    <form onSubmit={handleSubmit} className="space-y-3">
-                      <div className="grid grid-cols-2 gap-3">
-                        <div>
-                          <label className="block text-sm font-medium text-gray-700">Nombre</label>
-                          <input
-                            type="text"
-                            name="nombre_estudiante"
-                            value={formData.nombre_estudiante}
-                            onChange={handleChange}
-                            required
-                            className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
-                          />
+                    </div>
+                    <div className="space-y-3">
+                      <div className="flex items-start gap-3 p-2 hover:bg-gray-50 rounded-lg transition-colors duration-200">
+                        <div className="h-8 w-8 rounded-full bg-purple-100 flex items-center justify-center flex-shrink-0">
+                          <svg className="h-4 w-4 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} 
+                              d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                          </svg>
                         </div>
                         <div>
-                          <label className="block text-sm font-medium text-gray-700">Apellido</label>
-                          <input
-                            type="text"
-                            name="apellido_estudiante"
-                            value={formData.apellido_estudiante}
-                            onChange={handleChange}
-                            required
-                            className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
-                          />
+                          <p className="text-sm text-gray-900">Nueva lección disponible</p>
+                          <p className="text-xs text-gray-500">Python para Ciencia de Datos</p>
                         </div>
                       </div>
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700">Correo</label>
-                        <input
-                          type="email"
-                          name="correo_estudiante"
-                          value={formData.correo_estudiante}
-                          onChange={handleChange}
-                          required
-                          className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
-                        />
-                      </div>                      <div>
-                        <label className="block text-sm font-medium text-gray-700">Contraseña</label>
-                        <input
-                          type="password"
-                          name="contrasenia"
-                          value={formData.contrasenia}
-                          onChange={handleChange}
-                          required
-                          className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
-                        />                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700">
-                          Número de Celular <span className="text-gray-500 text-xs">(Opcional)</span>
-                        </label>
-                        <input
-                          type="tel"
-                          name="numero_celular"
-                          value={formData.numero_celular}
-                          onChange={handleChange}
-                          className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
-                          placeholder="Ej: 70123456"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700">Fecha de Nacimiento</label>
-                        <input
-                          type="date"
-                          name="fecha_nacimiento"
-                          value={formData.fecha_nacimiento}
-                          onChange={(e) => {
-                            const inputDate = e.target.value;
-                            // Asegurarnos de que la fecha esté en formato YYYY-MM-DD
-                            if (inputDate) {
-                              setFormData(prev => ({
-                                ...prev,
-                                fecha_nacimiento: inputDate // El input type="date" ya devuelve YYYY-MM-DD
-                              }));
-                            }
-                          }}
-                          required
-                          max={new Date().toISOString().split('T')[0]} // Limitar a la fecha actual
-                          className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
-                        />
-                        {formData.fecha_nacimiento && !isValidDate(formData.fecha_nacimiento) && (
-                          <p className="text-red-500 text-xs mt-1">
-                            La fecha de nacimiento no es válida. Debes ser mayor de 5 años.
-                          </p>
-                        )}
-                      </div>
-                      <Button
-                        type="submit"
-                        disabled={loading}
-                        className="w-full bg-[#9333EA] hover:bg-[#7E22CE] text-white"
-                      >
-                        {loading ? 'Registrando...' : 'Registrarse'}
-                      </Button>
-                    </form>
-                  )}
-                </div>
-              ) : (
-                <div className="space-y-4">
-                  <h3 className="font-semibold text-lg">Mi Perfil</h3>
-                  <div className="space-y-2">
-                    <p className="text-sm text-gray-600">
-                      {loginData.correo}
-                    </p>
-                    <Button
-                      onClick={() => {
-                        setIsAuthenticated(false);
-                        setOpen(false);
-                      }}
-                      className="w-full bg-[#9333EA] hover:bg-[#7E22CE] text-white"
-                    >
-                      Cerrar Sesión
-                    </Button>
+                    </div>
                   </div>
-                </div>
-              )}
-            </PopoverContent>
-          </Popover>
+                </PopoverContent>
+              </Popover>
+
+              <Button 
+                onClick={() => {
+                  localStorage.removeItem('token');
+                  setIsAuthenticated(false);
+                  router.push('/');
+                }}
+                variant="ghost"
+                className="text-gray-700 hover:text-purple-600 hover:bg-purple-50 font-medium 
+                  transition-all duration-200 flex items-center gap-2"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} 
+                    d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                </svg>
+                Cerrar sesión
+              </Button>
+            </>
+          ) : (
+            <Popover open={isLoginOpen} onOpenChange={setIsLoginOpen}>
+              <PopoverTrigger asChild>
+                <Button className="bg-purple-600 text-white hover:bg-purple-700">
+                  Login
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-80 p-4">
+                <form onSubmit={handleLogin} className="space-y-4">
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">
+                      Correo electrónico
+                    </label>
+                    <input
+                      type="email"
+                      className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all"
+                      value={loginData.correo}
+                      onChange={(e) =>
+                        setLoginData({ ...loginData, correo: e.target.value })
+                      }
+                      required
+                      placeholder="ejemplo: mateo@gmail.com"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">Contraseña</label>
+                    <input
+                      type="password"
+                      className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all"
+                      value={loginData.contrasenia}
+                      onChange={(e) =>
+                        setLoginData({
+                          ...loginData,
+                          contrasenia: e.target.value,
+                        })
+                      }
+                      required
+                      placeholder="ejemplo: hola123"
+                    />
+                  </div>
+                  {error && (
+                    <p className="text-red-500 text-sm text-center bg-red-50 p-2 rounded-lg">
+                      {error}
+                    </p>
+                  )}
+                  <Button 
+                    type="submit" 
+                    className="w-full bg-purple-600 text-white"
+                    disabled={loading}
+                  >
+                    {loading ? (
+                      <div className="flex items-center justify-center gap-2">
+                        <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                        <span>Iniciando...</span>
+                      </div>
+                    ) : (
+                      "Iniciar sesión"
+                    )}
+                  </Button>
+                </form>
+              </PopoverContent>
+            </Popover>
+          )}
         </div>
       </div>
 
       {/* Menú móvil */}
-      <div className="md:hidden">
-        <button
-          onClick={() => setIsMenuOpen(!isMenuOpen)}
-          className="p-2"
-        >
-          <Menu className="h-6 w-6" />
-        </button>
-        
-        {isMenuOpen && (
-          <nav className="border-t py-4">
-            <div className="container mx-auto space-y-4">
-              <Link href="/explorar" className="block text-gray-600 hover:text-gray-900">
-                Explorar
-              </Link>
-              <Link href="/estudiantes" className="block text-gray-600 hover:text-gray-900">
-                Estudiantes
-              </Link>
-              <Link href="/mi-aprendizaje" className="block text-gray-600 hover:text-gray-900">
-                Mi aprendizaje
-              </Link>
-            </div>
-          </nav>
-        )}
-      </div>
+      {isMenuOpen && (
+        <div className="md:hidden border-t border-gray-200">
+          <div className="container mx-auto px-4 py-2 space-y-2">
+            <Link
+              href="/explorar"
+              className={`block p-2 rounded-lg hover:bg-purple-50 hover:text-purple-600 transition-colors ${
+                pathname === '/explorar' ? 'bg-purple-50 text-purple-600' : ''
+              }`}
+              onClick={() => setIsMenuOpen(false)}
+            >
+              Explorar
+            </Link>
+            <Link
+              href="/mi-aprendizaje"
+              className={`block p-2 rounded-lg hover:bg-purple-50 hover:text-purple-600 transition-colors ${
+                pathname === '/mi-aprendizaje' ? 'bg-purple-50 text-purple-600' : ''
+              }`}
+              onClick={() => setIsMenuOpen(false)}
+            >
+              Mi aprendizaje
+            </Link>
+          </div>
+        </div>
+      )}
     </header>
   );
 }

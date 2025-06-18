@@ -16,12 +16,6 @@ interface Estudiante {
   numero_celular: string | null;
 }
 
-interface ApiResponse {
-  success: boolean;
-  data: Estudiante[];
-  message?: string;
-  status?: number;
-}
 
 export default function EstudiantesPage() {
   const [estudiantes, setEstudiantes] = useState<Estudiante[]>([]);
@@ -44,23 +38,36 @@ export default function EstudiantesPage() {
         }
       });
       
-      if (!response.ok) {
-        const errorText = await response.text();
-        console.error('Error de la API:', errorText);
-        throw new Error(errorText || 'Error al cargar estudiantes');
+      console.log('Status de la respuesta:', response.status);
+      console.log('Headers:', Object.fromEntries(response.headers));
+
+      const responseText = await response.text();
+      console.log('Respuesta raw:', responseText);
+
+      let result;
+      try {
+        result = JSON.parse(responseText);
+      } catch (e) {
+        console.error('Error al parsear JSON:', e);
+        throw new Error('Error al procesar la respuesta del servidor');
       }
 
-      const result: ApiResponse = await response.json();
-      console.log('Respuesta recibida:', result);
-      
-      if (!result.success) {
-        throw new Error(result.message || 'Error al cargar estudiantes');
+      console.log('Respuesta parseada:', result);
+
+      if (!response.ok) {
+        throw new Error(result.message || `Error ${response.status}: ${result.status || 'Error desconocido'}`);
       }
-      
+
+      if (!result.success) {
+        throw new Error(result.message || 'Error al cargar los estudiantes');
+      }
+
       setEstudiantes(result.data || []);
     } catch (error) {
-      const message = error instanceof Error ? error.message : 'Error al cargar estudiantes';
-      console.error('Error detallado:', error);
+      console.error('Error completo:', error);
+      const message = error instanceof Error 
+        ? `Error al cargar estudiantes: ${error.message}`
+        : 'Error desconocido al cargar estudiantes';
       setError(message);
       setEstudiantes([]);
     } finally {

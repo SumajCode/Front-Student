@@ -6,6 +6,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
+import React from "react";
 import { Star, Info, GraduationCap, ShoppingCart } from "lucide-react";
 import Link from "next/link";
 

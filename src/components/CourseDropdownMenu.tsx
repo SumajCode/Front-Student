@@ -4,60 +4,91 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuTrigger,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { Star, Info, GraduationCap, BookPlus } from "lucide-react";
-import Link from "next/link";
+import { 
+  Code2, 
+  Info, 
+  GraduationCap, 
+  BookOpen,
+  FileJson,
+  Share2
+} from "lucide-react";
 
 interface CourseDropdownMenuProps {
-  rating?: number;
-  totalRatings?: number;
- 
-  courseId?: string;
+  courseId: string;
+  hasResources?: boolean;
+  hasCertificate?: boolean;
 }
 
-export default function CourseDropdownMenu({ rating = 4.7, totalRatings = 1234, courseId }: CourseDropdownMenuProps) {
+export default function CourseDropdownMenu({ 
+  hasResources = true,
+  hasCertificate = true 
+}: CourseDropdownMenuProps) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <div className="absolute inset-0 bg-black/0 hover:bg-black/40 transition-all duration-300 cursor-pointer flex items-center justify-center opacity-0 hover:opacity-100">          <Button 
-            variant="secondary" 
-            size="sm" 
-            className="shadow-lg bg-white hover:bg-white/90 transition-all duration-300 transform translate-y-4 hover:translate-y-0"
-          >
-            Opciones
-          </Button>
-        </div>
+        <Button 
+          variant="secondary" 
+          size="icon"
+          className="h-8 w-8 bg-white/90 hover:bg-white shadow-sm hover:shadow-md
+            transition-all duration-200 hover:text-purple-600"
+        >
+          <Info className="h-4 w-4" />
+        </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent 
-        align="center" 
-        className="w-[320px] p-4 animate-in slide-in-from-top-1 duration-200"
-        sideOffset={10}
+        align="end" 
+        className="w-[280px] p-2"
+        sideOffset={4}
       >
-        <div className="space-y-4">
-          <div className="flex items-center gap-2">
-            <Star className="w-5 h-5 text-yellow-400 fill-yellow-400" />
-            <span className="font-semibold">{rating}</span>
-            <span className="text-gray-500">({totalRatings} valoraciones)</span>
+        <DropdownMenuItem className="flex items-center gap-2 cursor-pointer">
+          <Code2 className="w-4 h-4 text-purple-600" />
+          <div className="flex flex-col">
+            <span className="text-sm font-medium">Ver código fuente</span>
+            <span className="text-xs text-gray-500">Accede al repositorio del proyecto</span>
           </div>
-          <div className="flex items-center gap-2">
-            <Info className="w-5 h-5 text-gray-500" />
-            <span className="text-sm">Última actualización: mayo 2025</span>
+        </DropdownMenuItem>
+
+        <DropdownMenuItem className="flex items-center gap-2 cursor-pointer">
+          <BookOpen className="w-4 h-4 text-purple-600" />
+          <div className="flex flex-col">
+            <span className="text-sm font-medium">Documentación</span>
+            <span className="text-xs text-gray-500">Guías y recursos adicionales</span>
           </div>
-          <div className="flex items-center gap-2">
-            <GraduationCap className="w-5 h-5 text-gray-500" />
-            <span className="text-sm">Certificado al completar el curso</span>
+        </DropdownMenuItem>
+
+        {hasResources && (
+          <DropdownMenuItem className="flex items-center gap-2 cursor-pointer">
+            <FileJson className="w-4 h-4 text-purple-600" />
+            <div className="flex flex-col">
+              <span className="text-sm font-medium">Recursos del curso</span>
+              <span className="text-xs text-gray-500">Archivos y ejemplos de código</span>
+            </div>
+          </DropdownMenuItem>
+        )}
+
+        <DropdownMenuSeparator />
+
+        {hasCertificate && (
+          <DropdownMenuItem className="flex items-center gap-2 cursor-pointer">
+            <GraduationCap className="w-4 h-4 text-purple-600" />
+            <div className="flex flex-col">
+              <span className="text-sm font-medium">Certificado</span>
+              <span className="text-xs text-gray-500">Disponible al completar el curso</span>
+            </div>
+          </DropdownMenuItem>
+        )}
+
+        <DropdownMenuItem className="flex items-center gap-2 cursor-pointer">
+          <Share2 className="w-4 h-4 text-purple-600" />
+          <div className="flex flex-col">
+            <span className="text-sm font-medium">Compartir curso</span>
+            <span className="text-xs text-gray-500">Invita a otros a aprender</span>
           </div>
-          <div className="pt-4 border-t flex items-center justify-between">
-            
-            <Link href={courseId ? `/curso/${courseId}` : "#"}>
-              <Button className="bg-purple-600 hover:bg-purple-700 text-white gap-2">
-                <BookPlus className="w-4 h-4" />
-                Agregar Curso
-              </Button>
-            </Link>
-          </div>
-        </div>
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );

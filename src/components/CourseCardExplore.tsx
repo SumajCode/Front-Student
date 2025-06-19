@@ -10,10 +10,8 @@ interface CourseCardExploreProps {
   description: string;
   duration: string;
   instructor: string;
-  rating?: number;
-  totalRatings?: number;
-  students?: number;
   level?: string;
+  technologies?: string[];
 }
 
 export default function CourseCardExplore({
@@ -22,10 +20,8 @@ export default function CourseCardExplore({
   description,
   duration,
   instructor,
-  rating,
-  totalRatings,
-  students,
   level = "Principiante",
+  technologies = [],
 }: CourseCardExploreProps) {
   return (
     <div className="group relative bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300">
@@ -80,41 +76,52 @@ export default function CourseCardExplore({
           </div>
         </div>
 
-        {/* Estadísticas del curso */}
+        {/* Tecnologías del curso */}
+        {technologies.length > 0 && (
+          <div className="flex flex-wrap gap-2">
+            {technologies.map((tech, index) => (
+              <span 
+                key={index}
+                className="px-2 py-1 text-xs font-medium bg-purple-100 text-purple-700 rounded-full"
+              >
+                {tech}
+              </span>
+            ))}
+          </div>
+        )}
+
+        {/* Detalles del curso */}
         <div className="flex items-center gap-3 text-sm text-gray-600">
           <div className="flex items-center gap-1">
-            <svg className="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
-              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+            <svg className="w-4 h-4 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} 
+                d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
             </svg>
-            <span className="font-medium">{rating || 4.5}</span>
-            <span className="text-gray-500">({totalRatings || 0} valoraciones)</span>
+            <span>{level}</span>
           </div>
-          <span>•</span>
-          <span>{students || 0} estudiantes</span>
           <span>•</span>
           <span>{duration}</span>
         </div>
 
         {/* Botón de inscripción */}
         <div className="pt-2">
-          <Link href={`/curso/${id}`}>
+          <Link href={`/course/${id}`}>
             <Button 
               className="w-full bg-purple-600 text-white hover:bg-purple-700 
                 transition-all duration-200 font-medium"
             >
-              Inscríbete ahora
+              Comenzar curso
             </Button>
           </Link>
         </div>
 
-        {/* Etiqueta de popularidad */}
-        {students && students > 1000 && (
-          <div className="absolute top-3 left-3">
-            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
-              Popular
-            </span>
-          </div>
-        )}
+        {/* Etiqueta de nivel */}
+        <div className="absolute top-3 left-3">
+          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 
+            bg-purple-100 text-purple-800">
+            {level}
+          </span>
+        </div>
       </div>
     </div>
   );

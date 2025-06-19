@@ -75,14 +75,6 @@ export default function Page() {
 								href="#"
 								className="inline-block px-1 py-4 text-gray-500 hover:text-gray-700"
 							>
-								Vías de aprendizaje
-							</a>
-						</li>
-						<li>
-							<a
-								href="#"
-								className="inline-block px-1 py-4 text-gray-500 hover:text-gray-700"
-							>
 								Certificaciones
 							</a>
 						</li>
@@ -99,7 +91,7 @@ export default function Page() {
 								href="#"
 								className="inline-block px-1 py-4 text-gray-500 hover:text-gray-700"
 							>
-								Herramientas de aprendizaje
+								Recursos
 							</a>
 						</li>
 					</ul>

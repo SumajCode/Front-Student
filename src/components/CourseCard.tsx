@@ -13,8 +13,6 @@ interface CourseCardProps {
   progress: number;
   duration: string;
   instructor: string;
-  rating?: number;
-  totalRatings?: number;
 }
 
 export default function CourseCard({
@@ -24,11 +22,18 @@ export default function CourseCard({
   progress,
   duration,
   instructor,
-  rating,
-  totalRatings,
 }: CourseCardProps) {
   return (
     <div className="group relative bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-all duration-300">
+      {/* Botón de menú */}
+      <div className="absolute top-2 right-2 z-10">
+        <CourseDropdownMenu 
+          courseId={id}
+          hasResources={true}
+          hasCertificate={progress === 100}
+        />
+      </div>
+
       {/* Miniatura del curso con gradiente */}
       <div className="relative h-40">
         <div className="absolute inset-0 bg-gradient-to-br from-purple-800 to-purple-600"></div>
@@ -79,6 +84,7 @@ export default function CourseCard({
               {title}
             </h3>
           </Link>
+          <p className="text-sm text-gray-600 line-clamp-2">{description}</p>
           <p className="text-xs text-gray-500">{instructor}</p>
         </div>
 
@@ -110,11 +116,6 @@ export default function CourseCard({
              progress === 100 ? 'Repasar curso' : 'Continuar aprendiendo'}
           </Button>
         </Link>
-
-        {/* Menú de opciones */}
-        <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-          <CourseDropdownMenu courseId={id} />
-        </div>
       </div>
     </div>
   );

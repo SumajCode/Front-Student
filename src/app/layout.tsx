@@ -3,6 +3,7 @@ import "./globals.css";
 import React from "react";
 import Footer from "@/globals/layout/Footer";
 import Link from "next/link";
+import { Toaster } from "sonner";
 
 export const metadata = {
   title: "Curso Interactivo",
@@ -16,26 +17,31 @@ export default function RootLayout({
 }) {
   return (
     <html lang="es">
-      <body>
+      <body className="min-h-screen flex flex-col bg-gray-50">
         <Header />
+        <Toaster position="top-right" richColors />
+
         {/* Menú móvil - solo visible en pantallas pequeñas */}
-        <nav className="md:hidden bg-gray-50 p-2">
-          <Link
-            href="/explorar"
-            className="text-gray-600 hover:text-gray-900 px-2"
-          >
-            Explorar
-          </Link>
-          <Link
-            href="/mi-aprendizaje"
-            className="text-gray-600 hover:text-gray-900 px-2"
-          >
-            Mi aprendizaje
-          </Link>
+        <nav className="md:hidden bg-white border-b p-3 sticky top-0 z-10">
+          <div className="container mx-auto flex justify-center space-x-6">
+            <Link
+              href="/explore"
+              className="text-gray-600 hover:text-purple-600 px-3 py-2 rounded-lg hover:bg-purple-50 transition-colors"
+            >
+              Explorar
+            </Link>
+            <Link
+              href="/learning/dashboard"
+              className="text-gray-600 hover:text-purple-600 px-3 py-2 rounded-lg hover:bg-purple-50 transition-colors"
+            >
+              Mi aprendizaje
+            </Link>
+          </div>
         </nav>
 
         {/* Contenido principal */}
-        <main className="w-full">{children}</main>
+        <main className="flex-grow w-full">{children}</main>
+
         <Footer />
       </body>
     </html>

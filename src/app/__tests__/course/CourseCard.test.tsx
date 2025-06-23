@@ -18,7 +18,9 @@ describe('CourseCard', () => {
 
   it('abre y cierra el menú contextual', () => {
     render(<CourseCard {...props} />);
-    const menuButton = screen.getByText('Vista previa rápida');
+    const menuButton = screen.getByText('Opciones');
     fireEvent.click(menuButton);
+    // Aquí puedes agregar asserts para verificar que el menú se abre, por ejemplo:
+    // expect(screen.getByText('Recomendar')).toBeInTheDocument();
   });
 });

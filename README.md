@@ -29,7 +29,14 @@ Guardar o comparar versiones de su código, si se habilita.
 - **Simuladores visuales:**
 Para ciertas lecciones, se integra un simulador dinámico que ayuda a visualizar el comportamiento del código, como:
 
+---
 
+#tablero de tareas
+```bash
+https://trello.com/invite/b/681611d3e42ca4d38256bc70/ATTIee97f90887527b6624129cc054cccf5f75A69B1D/plataorm-for-pograming-gensoft
+```
+
+---
 
 # Sumaj Code - Frontend
 
@@ -63,12 +70,34 @@ cd Front-Student
 
 2. Instala las dependencias:
 ```bash
-npm install
+  npm install
 ```
 
-¡Eso es todo! No necesitas instalar Tailwind, PostCSS o Autoprefixer por separado, ya que están incluidos en las dependencias del proyecto y se configurarán automáticamente.
-
-3. Inicia el servidor de desarrollo:
+en caso de errores de punteros:
 ```bash
-npm run dev
+  npm install autoprefixer
+  npm install -D tailwindcss postcss autoprefixer
+```
+
+Este proyecto utiliza Turbopack para un desarrollo más veloz.
+
+```bash
+  npm run dev
+
+```
+
+---
+
+# Test
+
+instalar dependencias
+```bash
+  npm install --save-dev babel-jest@^29.7.0
+  npm install --save-dev @babel/preset-typescript
+  npm install --save-dev jest-environment-jsdom
+```
+
+correr test
+```bash
+  npx jest
 ```

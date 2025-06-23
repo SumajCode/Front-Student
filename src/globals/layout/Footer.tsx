@@ -1,5 +1,5 @@
-import { FooterLogo } from "./footer/FooterLogo";
-import { FooterCopyright } from "./footer/FooterCopyright";
+import Link from "next/link";
+import React from 'react';
 
 export default function Footer() {
   return (

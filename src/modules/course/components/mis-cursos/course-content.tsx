@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { useState } from "react";
 import { ChevronDown, FileText, CheckCircle, Download, Link as LinkIcon, FileJson } from "lucide-react";
 import { Button } from "@/components/ui/button";

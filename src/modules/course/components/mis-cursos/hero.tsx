@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import React from "react";
 
 export function Hero() {
   const [activeTab, setActiveTab] = useState<"video" | "compiler">("video");

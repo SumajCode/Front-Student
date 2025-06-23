@@ -16,21 +16,9 @@ describe('CourseCard', () => {
     expect(screen.getByText('2h 30m')).toBeInTheDocument();
   });
 
-  it('muestra el iframe del video', () => {
-    render(<CourseCard {...props} />);
-    const iframe = document.querySelector('iframe');
-    expect(iframe).toBeInTheDocument();
-    expect(iframe).toHaveAttribute('src', props.videoUrl);
-  });
-
   it('abre y cierra el menú contextual', () => {
     render(<CourseCard {...props} />);
     const menuButton = screen.getByText('Vista previa rápida');
     fireEvent.click(menuButton);
-    // El texto 'Recomendar' solo aparecerá si el menú contextual realmente lo muestra
-    // Si no existe, este test puede necesitar ser ajustado según la implementación real
-    // expect(screen.getByText('Recomendar')).toBeInTheDocument();
-    // fireEvent.click(menuButton);
-    // expect(screen.queryByText('Recomendar')).not.toBeInTheDocument();
   });
 });

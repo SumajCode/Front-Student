@@ -29,7 +29,14 @@ Guardar o comparar versiones de su código, si se habilita.
 - **Simuladores visuales:**
 Para ciertas lecciones, se integra un simulador dinámico que ayuda a visualizar el comportamiento del código, como:
 
+---
 
+#tablero de tareas
+```bash
+https://trello.com/invite/b/681611d3e42ca4d38256bc70/ATTIee97f90887527b6624129cc054cccf5f75A69B1D/plataorm-for-pograming-gensoft
+```
+
+---
 
 # Sumaj Code - Frontend
 
@@ -53,18 +60,15 @@ Verifica tu versión de Node.js:
 ```bash
 node -v
 ```
-## Installation
+## Instalación
 
-Clona el repositorio y cambia a la rama correspondiente:
-
+1. Clona el repositorio:
 ```bash
-  git clone https://github.com/Generacion-Software/Sumaj_Code.git
-  cd Sumaj_Code
-  git checkout Front
-
+git clone https://github.com/SumajCode/Front-Student.git
+cd Front-Student
 ```
-Instala las dependencias:
 
+2. Instala las dependencias:
 ```bash
   npm install
 ```
@@ -72,6 +76,7 @@ Instala las dependencias:
 en caso de errores de punteros:
 ```bash
   npm install autoprefixer
+  npm install -D tailwindcss postcss autoprefixer
 ```
 
 Este proyecto utiliza Turbopack para un desarrollo más veloz.
@@ -79,4 +84,20 @@ Este proyecto utiliza Turbopack para un desarrollo más veloz.
 ```bash
   npm run dev
 
+```
+
+---
+
+# Test
+
+instalar dependencias
+```bash
+  npm install --save-dev babel-jest@^29.7.0
+  npm install --save-dev @babel/preset-typescript
+  npm install --save-dev jest-environment-jsdom
+```
+
+correr test
+```bash
+  npx jest
 ```

@@ -1,6 +1,6 @@
 import Image from "next/image";
 import CourseCard from "../components/CourseCard";
-import { courses } from "../data/courses";
+import { courses } from "@/modules/course/data/course-data";
 
 export default function Homepage() {
   return (

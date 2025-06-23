@@ -19,7 +19,7 @@ const FEATURED_COURSES = [
     instructor: 'Kevin Verduguez',
     rating: 4.7,
     totalRatings: 1234,
-    price: '€14.99'
+    
   },
   {
     id: '2',
@@ -31,7 +31,7 @@ const FEATURED_COURSES = [
     instructor: 'Ana Martínez',
     rating: 4.7,
     totalRatings: 1234,
-    price: '€14.99'
+
   },
   {
     id: '3',
@@ -43,7 +43,6 @@ const FEATURED_COURSES = [
     instructor: 'Carlos Ruiz',
     rating: 4.7,
     totalRatings: 1234,
-    price: '€14.99'
   },
   {
     id: '4',
@@ -55,7 +54,6 @@ const FEATURED_COURSES = [
     instructor: 'María García',
     rating: 4.7,
     totalRatings: 1234,
-    price: '€14.99'
   },
   {
     id: '5',
@@ -67,7 +65,6 @@ const FEATURED_COURSES = [
     instructor: 'David López',
     rating: 4.7,
     totalRatings: 1234,
-    price: '€14.99'
   },
   {
     id: '6',
@@ -79,7 +76,6 @@ const FEATURED_COURSES = [
     instructor: 'Laura Ramírez',
     rating: 4.7,
     totalRatings: 1234,
-    price: '€14.99'
   }
 ];
 

@@ -1,10 +1,11 @@
 "use client";
-
+import React from 'react';
 import { useState } from "react";
 import { ChevronDown, FileText, CheckCircle, Download, Link as LinkIcon, FileJson } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useCourseData } from "../../hooks/use-course-data";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Section, Lesson } from "../../data/course-data";
 
 export function CourseContent() {
   const { sections } = useCourseData();
@@ -25,26 +26,7 @@ export function CourseContent() {
       </div>
 
       <div className="divide-y">
-        {sections.map((section: {
-          title: string;
-          completed: number;
-          total: number;
-          duration: number;
-          lessons: {
-            id?: number;
-            completed: boolean;
-            type: string;
-            number: number;
-            title: string;
-            duration: number;
-            hasResources: boolean;
-            resources?: {
-              title: string;
-              type: "download" | "link" | "code";
-              url: string;
-            }[];
-          }[];
-        }, index: number) => (
+        {sections.map((section: Section, index: number) => (
           <div key={index} className="bg-white">
             <div
               className="flex justify-between items-center p-4 cursor-pointer hover:bg-gray-50 transition-colors duration-200"

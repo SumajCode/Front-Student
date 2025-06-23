@@ -1,4 +1,5 @@
 "use client";
+import React from 'react';
 
 import {
   DropdownMenu,
@@ -6,27 +7,26 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { Star, Info, GraduationCap, ShoppingCart } from "lucide-react";
+import { Star, Info, GraduationCap, BookPlus } from "lucide-react";
 import Link from "next/link";
 
 interface CourseDropdownMenuProps {
   rating?: number;
   totalRatings?: number;
-  price: string;
+ 
   courseId?: string;
 }
 
-export default function CourseDropdownMenu({ rating = 4.7, totalRatings = 1234, price, courseId }: CourseDropdownMenuProps) {
+export default function CourseDropdownMenu({ rating = 4.7, totalRatings = 1234, courseId }: CourseDropdownMenuProps) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <div className="absolute inset-0 bg-black/0 hover:bg-black/40 transition-all duration-300 cursor-pointer flex items-center justify-center opacity-0 hover:opacity-100">
-          <Button 
+        <div className="absolute inset-0 bg-black/0 hover:bg-black/40 transition-all duration-300 cursor-pointer flex items-center justify-center opacity-0 hover:opacity-100">          <Button 
             variant="secondary" 
             size="sm" 
             className="shadow-lg bg-white hover:bg-white/90 transition-all duration-300 transform translate-y-4 hover:translate-y-0"
           >
-            Vista previa rápida
+            Opciones
           </Button>
         </div>
       </DropdownMenuTrigger>
@@ -50,11 +50,11 @@ export default function CourseDropdownMenu({ rating = 4.7, totalRatings = 1234, 
             <span className="text-sm">Certificado al completar el curso</span>
           </div>
           <div className="pt-4 border-t flex items-center justify-between">
-            <span className="font-bold text-xl">{price}</span>
+            
             <Link href={courseId ? `/curso/${courseId}` : "#"}>
               <Button className="bg-purple-600 hover:bg-purple-700 text-white gap-2">
-                <ShoppingCart className="w-4 h-4" />
-                Agregar al carrito
+                <BookPlus className="w-4 h-4" />
+                Agregar Curso
               </Button>
             </Link>
           </div>

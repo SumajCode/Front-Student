@@ -1,3 +1,6 @@
+"use client";
+import React from "react";
+
 //Ejemplo de que aqui van mis cursos
 //esto se deberia ver al hacer click en mi aprendizaje
 export default function Home() {

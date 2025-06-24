@@ -197,9 +197,22 @@ export default function Head() {
             </Button>
           )}
         </div>
-      </div>
-      {/* Menú móvil */}
-      <MobileMenu open={open} setOpen={setOpen} />
+      </div>      {/* Menú móvil */}
+      <MobileMenu 
+        open={open} 
+        setOpen={setOpen}
+        isLogin={isLogin}
+        setIsLogin={setIsLogin}
+        error={error}
+        loading={loading}
+        loginData={loginData}
+        registroExitoso={registroExitoso}
+        formData={formData}
+        handleLogin={handleLogin}
+        handleRegister={handleRegister}
+        handleInputChange={handleInputChange}
+        onClose={() => setOpen(false)}
+      />
     </header>
   );
 }

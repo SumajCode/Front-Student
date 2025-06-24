@@ -7,31 +7,42 @@ import type { LoginData, FormData } from "@/lib/types";
 interface MobileMenuProps {
   open: boolean;
   setOpen: (value: boolean) => void;
-  isLogin: boolean;
-  setIsLogin: (value: boolean) => void;
-  error: string;
-  loading: boolean;
-  loginData: LoginData | null;
-  registroExitoso: boolean;
-  formData: FormData;
-  handleLogin: (e: React.FormEvent) => void;
-  handleRegister: (e: React.FormEvent) => void;
-  handleInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  onClose: () => void;
+  isLogin?: boolean;
+  setIsLogin?: (value: boolean) => void;
+  error?: string;
+  loading?: boolean;
+  loginData?: LoginData | null;
+  registroExitoso?: boolean;
+  formData?: FormData;
+  handleLogin?: (e: React.FormEvent) => void;
+  handleRegister?: (e: React.FormEvent) => void;
+  handleInputChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onClose?: () => void;
 }
 
 export default function MobileMenu({
   open,
-  isLogin,
-  setIsLogin,
-  error,
-  loading,
-  registroExitoso,
-  formData,
-  handleLogin,
-  handleRegister,
-  handleInputChange,
-  onClose,
+  setOpen,
+  isLogin = true,
+  setIsLogin = () => {},
+  error = "",
+  loading = false,
+  registroExitoso = false,
+  formData = {
+    nombres: "",
+    apellidos: "",
+    correo: "",
+    contrasenia: "",
+    confirmarContrasenia: "",
+  },
+  handleLogin = (e) => {
+    e.preventDefault();
+  },
+  handleRegister = (e) => {
+    e.preventDefault();
+  },
+  handleInputChange = () => {},
+  onClose = () => setOpen(false),
 }: MobileMenuProps) {
   if (!open) return null;
 

@@ -59,7 +59,10 @@ export const estudiantesService = {
       // Si hay token, agregarlo a los headers
       if (token) {
         headers['Authorization'] = `Bearer ${token}`;
-      }      const url = `https://microservice-estudiante.onrender.com/api/estudiantes/${id}`;
+      }
+      
+      const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || 'https://microservice-estudiante.onrender.com';
+      const url = `${API_BASE}/api/estudiantes/${id}`;
       console.log('🔍 API Call: URL:', url);
       console.log('🔍 API Call: Headers:', headers);
 

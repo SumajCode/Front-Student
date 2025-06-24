@@ -10,7 +10,7 @@ interface EstudianteUpdate {
   id_ciudad?: number;
 }
 
-const API_BASE = 'https://microservice-estudiante.onrender.com';
+const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || 'https://microservice-estudiante.onrender.com';
 
 export async function GET(request: NextRequest) {
   try {

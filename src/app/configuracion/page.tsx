@@ -225,6 +225,14 @@ export default function ConfiguracionPage() {
     e.preventDefault();
     if (!user?.token) return;
 
+    // Obtener el correo del estudiante de diferentes fuentes posibles
+    const correoEstudiante = estudianteData?.correo_estudiante || user?.correo_estudiante || user?.correo;
+    
+    if (!correoEstudiante) {
+      setError('No se puede cambiar la contraseña: correo del estudiante no disponible');
+      return;
+    }
+
     if (passwordData.nueva_contrasenia !== passwordData.confirmar_contrasenia) {
       setError('Las contraseñas no coinciden');
       return;
@@ -240,13 +248,20 @@ export default function ConfiguracionPage() {
     setSuccess('');
 
     try {
+      // Log para depuración
+      console.log('Datos que se enviarán para cambio de contraseña:', {
+        correo_estudiante: correoEstudiante,
+        contrasenia_actual: passwordData.contrasenia_actual ? 'PRESENTE' : 'AUSENTE',
+        nueva_contrasenia: passwordData.nueva_contrasenia ? 'PRESENTE' : 'AUSENTE'
+      });
+      
       const response = await fetch('/api/cambiar-contrasenia', {
-        method: 'POST',
+        method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          correo_estudiante: estudianteData?.correo_estudiante,
+          correo_estudiante: correoEstudiante,
           contrasenia_actual: passwordData.contrasenia_actual,
           nueva_contrasenia: passwordData.nueva_contrasenia
         })

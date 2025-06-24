@@ -4,10 +4,19 @@ import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Compass, BookOpen } from "lucide-react";
-import type { LoginData } from "@/lib/types";
+
+// Tipo compatible con ambos sistemas
+type User = {
+  id: string;
+  token: string;
+  nombre: string;
+  apellido?: string;
+  correo: string;
+  telefono?: string;
+} | null;
 
 interface NavigationProps {
-  loginData: LoginData | null;
+  loginData: User;
   isLearningPath?: boolean;
 }
 

@@ -4,10 +4,9 @@ import React, { useState } from 'react';
 import { useAuth } from '../hooks/useAuth';
 
 export default function Login() {
-  const { login } = useAuth();
-  const [formData, setFormData] = useState({
-    correo: '',
-    contrasenia: ''
+  const { login } = useAuth();  const [formData, setFormData] = useState({
+    correo: 'kevin@gmail.com',
+    contrasenia: 'abc123'
   });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -19,15 +18,21 @@ export default function Login() {
       [name]: value
     }));
   };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
     setLoading(true);
 
     try {
-      await login(formData.correo, formData.contrasenia);
+      console.log('🔍 Iniciando login desde componente con:', { correo: formData.correo });
+      const success = await login(formData.correo, formData.contrasenia);
+      console.log('🔍 Resultado del login:', success);
+      
+      if (!success) {
+        setError('Error al iniciar sesión. Verifica tus credenciales.');
+      }
     } catch (error) {
+      console.error('❌ Error en login component:', error);
       setError(error instanceof Error ? error.message : 'Error al iniciar sesión');
     } finally {
       setLoading(false);

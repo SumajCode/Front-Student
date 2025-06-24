@@ -2,10 +2,12 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
 interface EstudianteUpdate {
-  nombre?: string;
-  apellido?: string;
-  correo?: string;
-  telefono?: string;
+  nombre_estudiante?: string;
+  apellido_estudiante?: string;
+  fecha_nacimiento?: string;
+  numero_celular?: string;
+  id_pais?: number;
+  id_ciudad?: number;
 }
 
 const API_BASE = 'https://microservice-estudiante.onrender.com';
@@ -71,7 +73,7 @@ export async function PUT(request: NextRequest) {
 
     const body: EstudianteUpdate = await request.json();
 
-    const response = await fetch(`${API_BASE}/estudiantes/${id}`, {
+    const response = await fetch(`${API_BASE}/api/estudiantes/actualizar/${id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',

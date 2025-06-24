@@ -6,31 +6,23 @@ const API_BASE = 'https://microservice-estudiante.onrender.com';
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { token, contrasenia_actual, nueva_contrasenia } = body;
+    const { correo_estudiante, contrasenia_actual, nueva_contrasenia } = body;
     
-    if (!token) {
+    if (!correo_estudiante || !contrasenia_actual || !nueva_contrasenia) {
       return NextResponse.json({
         success: false,
-        message: 'Token no proporcionado',
-        status: 401
-      }, { status: 401 });
-    }
-
-    if (!contrasenia_actual || !nueva_contrasenia) {
-      return NextResponse.json({
-        success: false,
-        message: 'Contraseña actual y nueva contraseña son requeridas',
+        message: 'Correo del estudiante, contraseña actual y nueva contraseña son requeridas',
         status: 400
       }, { status: 400 });
     }
 
     const response = await fetch(`${API_BASE}/api/login/cambiarContrasenia`, {
-      method: 'POST',
+      method: 'PUT',
       headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify({
+        correo_estudiante,
         contrasenia_actual,
         nueva_contrasenia
       })
@@ -48,7 +40,8 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({
       success: true,
-      message: 'Contraseña actualizada con éxito'
+      message: 'Contraseña actualizada con éxito',
+      data
     });
   } catch (error) {
     console.error('Error al cambiar contraseña:', error);

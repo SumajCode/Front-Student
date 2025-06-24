@@ -116,70 +116,11 @@ export default function UserMenu() {
         
         <DropdownMenuSeparator />
         
-        {/* Información adicional del estudiante */}
-        {loading && (
-          <DropdownMenuItem disabled>
-            <div className="flex items-center gap-2">
-              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-purple-600"></div>
-              Cargando información...
-            </div>
-          </DropdownMenuItem>
-        )}
-        
-        {estudianteData && !loading && (
-          <>
-            <DropdownMenuLabel className="text-xs text-gray-500 uppercase tracking-wide">
-              Información del Estudiante
-            </DropdownMenuLabel>
-              {(estudianteData.numero_celular || estudianteData.telefono) && (
-              <DropdownMenuItem className="text-sm">
-                <span className="text-gray-500">Teléfono:</span>
-                <span className="ml-2">{estudianteData.numero_celular || estudianteData.telefono}</span>
-              </DropdownMenuItem>
-            )}
-            
-            {estudianteData.es_universitario !== undefined && (
-              <DropdownMenuItem className="text-sm">
-                <span className="text-gray-500">Universitario:</span>
-                <span className="ml-2">{estudianteData.es_universitario ? 'Sí' : 'No'}</span>
-              </DropdownMenuItem>
-            )}
-            
-            {estudianteData.universidad && (
-              <DropdownMenuItem className="text-sm">
-                <span className="text-gray-500">Universidad:</span>
-                <span className="ml-2">{estudianteData.universidad}</span>
-              </DropdownMenuItem>
-            )}
-            
-            {estudianteData.carrera && (
-              <DropdownMenuItem className="text-sm">
-                <span className="text-gray-500">Carrera:</span>
-                <span className="ml-2">{estudianteData.carrera}</span>
-              </DropdownMenuItem>
-            )}
-            
-            <DropdownMenuSeparator />
-          </>
-        )}
-        
         {/* Opciones del menú */}
         <DropdownMenuItem asChild>
-          <Link href="/learning/dashboard" className="flex items-center gap-2">
-            <BookOpen className="h-4 w-4" />
-            Mi Aprendizaje
-          </Link>
-        </DropdownMenuItem>        <DropdownMenuItem asChild>
           <Link href="/configuracion" className="flex items-center gap-2">
             <Settings className="h-4 w-4" />
-            Configuración Temporal
-          </Link>
-        </DropdownMenuItem>
-        
-        <DropdownMenuItem asChild>
-          <Link href="/auth/debug" className="flex items-center gap-2">
-            <Settings className="h-4 w-4" />
-            Debug Auth
+            Configuración
           </Link>
         </DropdownMenuItem>
         

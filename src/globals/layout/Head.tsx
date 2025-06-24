@@ -35,25 +35,11 @@ export default function Head() {
             <UserMenu />
           ) : (
             <div className="flex items-center gap-2">
-              {/* Comentado temporalmente hasta que llegue el Web Component externo */}
-              {/* <Button
-                onClick={() => window.open('http://localhost:3001/login', '_blank')}
-                className="bg-purple-600 text-white hover:bg-purple-700"
-              >
-                Iniciar sesión (Externo)
-              </Button> */}
-              {/* Login temporal usando API real de estudiantes */}
+              
               <Link href="/login">
                 <Button className="bg-purple-600 text-white hover:bg-purple-700">
                   Iniciar sesión
                 </Button>
-              </Link>
-              
-              <Link 
-                href="/test-login"
-                className="text-sm text-gray-600 hover:text-purple-700 underline"
-              >
-                Test Login
               </Link>
             </div>
           )}

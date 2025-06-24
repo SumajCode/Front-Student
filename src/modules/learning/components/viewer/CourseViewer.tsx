@@ -5,6 +5,7 @@ import { ModuleList } from "./ModuleList";
 import { useCourseNavigation } from "../../hooks/useCourseNavigation";
 import VideoPlayer from "./VideoPlayer";
 import { CourseOverview } from "./CourseOverview";
+import { CodeCompiler } from "./CodeCompiler";
 
 interface CourseViewerProps {
   initialDescription?: string;
@@ -53,14 +54,8 @@ export function CourseViewer({ initialTitle, initialDescription }: CourseViewerP
                   <VideoPlayer videoUrl={currentModule.videoUrl} />
                 )}
               </div>
-            </div>
-          ) : activeTab === 'compilador' ? (
-            <div className="h-full bg-gray-50 p-6">
-              <div className="max-w-4xl mx-auto">
-                <h2 className="text-xl font-semibold mb-4">Compilador</h2>
-                {/* Aquí iría el contenido del compilador */}
-              </div>
-            </div>
+            </div>          ) : activeTab === 'compilador' ? (
+            <CodeCompiler />
           ) : (
             <CourseOverview 
               title={initialTitle || courseName || "Bienvenido al Curso"}

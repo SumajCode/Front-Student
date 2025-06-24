@@ -55,7 +55,7 @@ async function get<T>(url: string): Promise<ApiResponse<T>> {
   return handleResponse<T>(response);
 }
 
-async function post<T>(url: string, data?: Record<string, unknown>): Promise<ApiResponse<T>> {
+async function post<T>(url: string, data?: any): Promise<ApiResponse<T>> {
   const response = await fetch(API_CONFIG.baseURL + url, {
     method: 'POST',
     headers: API_CONFIG.headers,
@@ -65,7 +65,7 @@ async function post<T>(url: string, data?: Record<string, unknown>): Promise<Api
   return handleResponse<T>(response);
 }
 
-async function put<T>(url: string, data?: Record<string, unknown>): Promise<ApiResponse<T>> {
+async function put<T>(url: string, data?: any): Promise<ApiResponse<T>> {
   const response = await fetch(API_CONFIG.baseURL + url, {
     method: 'PUT',
     headers: API_CONFIG.headers,

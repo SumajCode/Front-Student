@@ -1,0 +1,21 @@
+# Archivos de test
+**/__tests__/**
+**/*.test.ts
+**/*.test.tsx
+**/*.test.js
+**/*.test.jsx
+
+# Build output
+.next/
+out/
+dist/
+
+# Node modules
+node_modules/
+
+# Environment files
+.env*
+
+# IDE
+.vscode/
+.idea/

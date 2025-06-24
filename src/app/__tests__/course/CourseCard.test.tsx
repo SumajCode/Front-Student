@@ -1,35 +1,37 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
-import CourseCard from '@/components/CourseCard';
+import CourseCard from '@/modules/learning/components/dashboard/CourseCard';
 
 describe('CourseCard', () => {
-  const props = {
-    title: 'Curso de Prueba',
-    lesson: 'Lección 1',
+  const mockCourse = {
+    id: '1',
+    title: 'Test Course',
+    description: 'Test Description',
+    progress: 50,
     duration: '2h 30m',
-    videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
+    instructor: 'Test Instructor'
   };
 
-  it('muestra el título, lección y duración', () => {
-    render(<CourseCard {...props} />);
-    expect(screen.getByText('Curso de Prueba')).toBeInTheDocument();
-    expect(screen.getByText('Lección 1')).toBeInTheDocument();
-    expect(screen.getByText('2h 30m')).toBeInTheDocument();
+  it('renders course information correctly', () => {
+    render(<CourseCard {...mockCourse} />);
+    
+    expect(screen.getByText(mockCourse.title)).toBeInTheDocument();
+    expect(screen.getByText(mockCourse.description)).toBeInTheDocument();
+    expect(screen.getByText(`${mockCourse.progress}% completado`)).toBeInTheDocument();
+    expect(screen.getByText(mockCourse.instructor)).toBeInTheDocument();
   });
 
-  it('muestra el iframe del video', () => {
-    render(<CourseCard {...props} />);
-    const iframe = screen.getByTitle('Curso de Prueba');
-    expect(iframe).toBeInTheDocument();
-    expect(iframe).toHaveAttribute('src', props.videoUrl);
-  });
+  it('displays correct button text based on progress', () => {
+    const notStartedCourse = { ...mockCourse, progress: 0 };
+    const { rerender } = render(<CourseCard {...notStartedCourse} />);
+    expect(screen.getByText('Comenzar curso')).toBeInTheDocument();
 
-  it('abre y cierra el menú contextual', () => {
-    render(<CourseCard {...props} />);
-    const menuButton = screen.getByRole('button', { name: /⋮/ });
-    fireEvent.click(menuButton);
-    expect(screen.getByText('Recomendar')).toBeInTheDocument();
-    fireEvent.click(menuButton);
-    expect(screen.queryByText('Recomendar')).not.toBeInTheDocument();
+    const inProgressCourse = { ...mockCourse, progress: 50 };
+    rerender(<CourseCard {...inProgressCourse} />);
+    expect(screen.getByText('Continuar aprendiendo')).toBeInTheDocument();
+
+    const completedCourse = { ...mockCourse, progress: 100 };
+    rerender(<CourseCard {...completedCourse} />);
+    expect(screen.getByText('Repasar curso')).toBeInTheDocument();
   });
 });

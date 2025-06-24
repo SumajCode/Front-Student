@@ -1,3 +1,4 @@
+import React from "react";
 import { ModuleViewerClient } from "./ModuleViewerClient";
 
 interface Props {

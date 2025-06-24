@@ -4,14 +4,29 @@ const tsJestTransformCfg = createDefaultPreset().transform;
 
 /** @type {import('jest').Config} */
 module.exports = {
-  testEnvironment: 'jsdom', // Necesario si estás testeando React
+  testEnvironment: 'jsdom',
+  setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
   transform: {
-    '^.+\\.(js|jsx|ts|tsx)$': 'babel-jest', // Usa babel-jest para compilar el código
+    '^.+\\.(js|jsx|ts|tsx)$': ['@swc/jest', {
+      // Opciones de configuración de SWC si son necesarias
+      // Por ejemplo, para asegurar la compatibilidad con React:
+      jsc: {
+        parser: {
+          syntax: 'typescript',
+          tsx: true,
+          decorators: true, // si usas decoradores
+        },
+        transform: {
+          react: {
+            runtime: 'automatic', // o 'classic'
+          },
+        },
+      },
+    }],
   },
   moduleFileExtensions: ['js', 'jsx', 'ts', 'tsx'],
   moduleNameMapper: {
-    '^@/(.*)$': '<rootDir>/src/$1', // Soporte para alias "@/*" como en tu tsconfig.json
+    '^@/(.*)$': '<rootDir>/src/$1',
   },
-  testMatch: ['**/__tests__/**/*.(ts|tsx|js|jsx)'], // Asegura que Jest busque bien los tests
+  testMatch: ['**/__tests__/**/*.(ts|tsx|js|jsx)'],
 };
-

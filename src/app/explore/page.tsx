@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useState } from "react";
 import CourseCard from "@/modules/learning/components/dashboard/CourseCard";
 
 interface Course {

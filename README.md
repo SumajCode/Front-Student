@@ -101,3 +101,36 @@ correr test
 ```bash
   npx jest
 ```
+
+---
+
+## Configuración de Desarrollo
+
+### Importaciones de React en Archivos JSX/TSX
+
+Esta aplicación requiere importar React explícitamente en todos los archivos que usan JSX o TSX. Esto es obligatorio para garantizar la compatibilidad entre diferentes entornos de desarrollo.
+
+```jsx
+// Forma correcta
+import React from "react";
+
+export function MyComponent() {
+  return <div>Hello world</div>;
+}
+```
+
+Se ha configurado ESLint para detectar y marcar como error la falta de importación de React. Para verificar o corregir automáticamente los archivos:
+
+```bash
+# Verificar si hay archivos sin la importación de React
+npm run check-imports
+
+# Corregir automáticamente los archivos (añadir las importaciones faltantes)
+npm run lint:fix
+```
+
+### Linting y Formateo
+
+- Utilizamos ESLint para mantener la consistencia y calidad del código
+- Las reglas principales están configuradas en `.eslintrc.js`
+- Para ejecutar las verificaciones manualmente: `npm run lint`

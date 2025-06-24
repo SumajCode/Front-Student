@@ -20,4 +20,18 @@ export interface CourseDropdownMenuProps {
   hasCertificate?: boolean;
 }
 
-// Otros tipos del sistema pueden agregarse aquí
+// Interfaces para autenticación
+export interface LoginData {
+  token: string;
+  nombres: string;
+  apellidos: string;
+  correo: string;
+}
+
+export interface FormData {
+  nombres: string;
+  apellidos: string;
+  correo: string;
+  contrasenia: string;
+  confirmarContrasenia?: string;
+}

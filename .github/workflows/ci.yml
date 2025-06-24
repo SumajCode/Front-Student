@@ -43,6 +43,10 @@ jobs:
         run: npx jest
         # Paso 6: Ejecuta los tests definidos en el proyecto.
 
+      - name: Run ESLint and export SARIF
+        run: npx eslint . -f sarif -o eslint-results.sarif
+        # Ejecuta ESLint y exporta el reporte en formato SARIF para GitHub Code Scanning
+
 #      - name: Prettier Check
 #        run: npx prettier --check .
         # Paso extra: Verifica que el código cumpla con el formato Prettier.

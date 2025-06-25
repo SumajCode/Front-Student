@@ -75,53 +75,26 @@ export default function ConfiguracionPage() {
 
   // Cargar datos del estudiante
   useEffect(() => {
-    const fetchEstudianteData = async () => {
-      if (!user?.id || !user?.token) {
-        setError('No hay usuario autenticado');
-        return;
-      }
-      
-      setLoading(true);
-      setError('');
-      
-      try {
-        const estudianteId = user.id_estudiante?.toString() || user.id || '1';
-        
-        const response = await fetch(`/api/perfil`, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${user.token}`,
-            'x-student-id': estudianteId
-          }
-        });
-        const result = await response.json();
-        
-        if (result.success && result.data) {
-          console.log('🔍 Datos del estudiante desde la API:', result.data);
-          console.log('🔍 Es universitario:', result.data.es_universitario);
-          setEstudianteData(result.data);
-          // Inicializar formulario con datos existentes
-          setEditData({
-            nombre_estudiante: result.data.nombre_estudiante || '',
-            apellido_estudiante: result.data.apellido_estudiante || '',
-            numero_celular: result.data.numero_celular || '',
-            fecha_nacimiento: result.data.fecha_nacimiento || '',
-            id_pais: result.data.id_pais?.toString() || '',
-            id_ciudad: result.data.id_ciudad?.toString() || ''
-          });
-        } else {
-          setError(result.message || 'No se pudieron cargar los datos del estudiante');
-        }
-      } catch (error) {
-        setError('Error al conectar con el servidor');
-        console.error('Error al obtener datos del estudiante:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchEstudianteData();
+    // Si tienes datos en user, los usas directamente
+    if (user) {
+      setEstudianteData({
+        id_estudiante: user.id_estudiante,
+        nombre_estudiante: user.nombre_estudiante,
+        apellido_estudiante: user.apellido_estudiante,
+        correo_estudiante: user.correo_estudiante,
+        numero_celular: user.numero_celular,
+        es_universitario: user.es_universitario,
+        // Puedes agregar más campos si los tienes en user
+      });
+      setEditData({
+        nombre_estudiante: user.nombre_estudiante || '',
+        apellido_estudiante: user.apellido_estudiante || '',
+        numero_celular: user.numero_celular || '',
+        fecha_nacimiento: '',
+        id_pais: '',
+        id_ciudad: ''
+      });
+    }
   }, [user]);
 
   // Cargar países

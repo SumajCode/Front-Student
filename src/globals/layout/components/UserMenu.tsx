@@ -84,54 +84,96 @@ export default function UserMenu() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" className="flex items-center gap-2 h-auto p-2">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-purple-600 rounded-full flex items-center justify-center">
-              <User className="h-4 w-4 text-white" />
+        <Button 
+          variant="ghost" 
+          className="flex items-center gap-2 h-auto p-2 rounded-xl hover:bg-purple-50 transition-all duration-200 group"
+        >
+          <div className="flex items-center gap-3">
+            <div className="relative">
+              <div className="w-9 h-9 bg-gradient-to-r from-purple-600 to-blue-600 rounded-full flex items-center justify-center shadow-lg ring-2 ring-white transition-transform group-hover:scale-105">
+                <User className="h-5 w-5 text-white" />
+              </div>
+              {/* Indicador de conexión */}
+              <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></div>
             </div>
             <div className="text-left hidden md:block">
-              <div className="text-sm font-medium">{displayName}</div>              <div className="text-xs text-gray-500">
+              <div className="text-sm font-semibold text-gray-900">{displayName}</div>
+              <div className="text-xs text-gray-500 truncate max-w-[120px]">
                 {estudianteData?.correo_estudiante || estudianteData?.correo || user.correo}
               </div>
             </div>
-            <ChevronDown className="h-4 w-4" />
+            <ChevronDown className="h-4 w-4 text-gray-400 transition-transform group-hover:rotate-180" />
           </div>
         </Button>
       </DropdownMenuTrigger>
       
-      <DropdownMenuContent align="end" className="w-80">
-        <DropdownMenuLabel>
-          <div className="flex items-center gap-3">
-            <div className="w-12 h-12 bg-purple-600 rounded-full flex items-center justify-center">
-              <User className="h-6 w-6 text-white" />
+      <DropdownMenuContent align="end" className="w-80 p-2 shadow-xl border-0 bg-white/95 backdrop-blur-md">
+        <DropdownMenuLabel className="p-4">
+          <div className="flex items-center gap-4">
+            <div className="relative">
+              <div className="w-14 h-14 bg-gradient-to-r from-purple-600 to-blue-600 rounded-full flex items-center justify-center shadow-lg">
+                <User className="h-7 w-7 text-white" />
+              </div>
+              <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white"></div>
             </div>
-            <div>
-              <div className="font-medium">{displayName}</div>
-              <div className="text-sm text-gray-500">
+            <div className="flex-1 min-w-0">
+              <div className="font-semibold text-gray-900 text-base">{displayName}</div>
+              <div className="text-sm text-gray-500 truncate">
                 {estudianteData?.correo || user.correo}
+              </div>
+              <div className="text-xs text-purple-600 font-medium mt-1">
+                Estudiante Activo
               </div>
             </div>
           </div>
         </DropdownMenuLabel>
         
-        <DropdownMenuSeparator />
+        <DropdownMenuSeparator className="my-2" />
         
         {/* Opciones del menú */}
         <DropdownMenuItem asChild>
-          <Link href="/configuracion" className="flex items-center gap-2">
-            <Settings className="h-4 w-4" />
-            Configuración
+          <Link 
+            href="/learning/dashboard" 
+            className="flex items-center gap-3 p-3 rounded-lg hover:bg-purple-50 transition-colors"
+          >
+            <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
+              <BookOpen className="h-4 w-4 text-blue-600" />
+            </div>
+            <div>
+              <div className="font-medium">Mis Cursos</div>
+              <div className="text-xs text-gray-500">Ve tu progreso</div>
+            </div>
           </Link>
         </DropdownMenuItem>
         
-        <DropdownMenuSeparator />
+        <DropdownMenuItem asChild>
+          <Link 
+            href="/configuracion" 
+            className="flex items-center gap-3 p-3 rounded-lg hover:bg-purple-50 transition-colors"
+          >
+            <div className="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center">
+              <Settings className="h-4 w-4 text-gray-600" />
+            </div>
+            <div>
+              <div className="font-medium">Configuración</div>
+              <div className="text-xs text-gray-500">Ajusta tu perfil</div>
+            </div>
+          </Link>
+        </DropdownMenuItem>
+        
+        <DropdownMenuSeparator className="my-2" />
         
         <DropdownMenuItem 
           onClick={logout}
-          className="flex items-center gap-2 text-red-600 focus:text-red-600"
+          className="flex items-center gap-3 p-3 rounded-lg hover:bg-red-50 text-red-600 focus:text-red-600 transition-colors"
         >
-          <LogOut className="h-4 w-4" />
-          Cerrar Sesión
+          <div className="w-8 h-8 bg-red-100 rounded-lg flex items-center justify-center">
+            <LogOut className="h-4 w-4 text-red-600" />
+          </div>
+          <div>
+            <div className="font-medium">Cerrar Sesión</div>
+            <div className="text-xs text-red-500">Salir de tu cuenta</div>
+          </div>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

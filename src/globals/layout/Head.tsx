@@ -8,7 +8,7 @@ import { Button } from "@/ui/button";
 import { useAuth } from "@/modules/auth/hooks/useAuth";
 import Navigation from "./components/Navigation";
 import UserMenu from "./components/UserMenu";
-import MobileMenu from "./components/MobileMenu";
+import MobileNavMenu from "./components/MobileNavMenu";
 
 export default function Head() {
   const pathname = usePathname();
@@ -18,31 +18,58 @@ export default function Head() {
   const isLearningPath = pathname?.startsWith('/learning');
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/60">
-      <div className="container flex h-14 max-w-screen-2xl items-center justify-between">
+    <header className="sticky top-0 z-50 w-full border-b border-gray-200 bg-white/95 backdrop-blur-md shadow-sm supports-[backdrop-filter]:bg-white/80">
+      <div className="container mx-auto flex h-16 max-w-7xl items-center justify-between px-4 lg:px-8">
         {/* Logo a la izquierda */}
-        <Link href="/" className="flex items-center gap-2">
-          <Image src="/file.svg" width={28} height={28} alt="Logo" />
-          <span className="font-bold text-purple-700 text-xl">SumajCode</span>
+        <Link href="/" className="flex items-center gap-3 group">
+          <div className="relative">
+            <Image 
+              src="/file.svg" 
+              width={32} 
+              height={32} 
+              alt="Logo" 
+              className="transition-transform group-hover:scale-110" 
+            />
+          </div>
+          <span className="font-bold text-purple-700 text-xl lg:text-2xl tracking-tight transition-colors group-hover:text-purple-600">
+            SumajCode
+          </span>
         </Link>
 
-        {/* Navegación centrada */}
-        <div className="flex-1 flex justify-center">
+        {/* Navegación centrada - oculta en móvil */}
+        <div className="hidden md:flex flex-1 justify-center">
           <Navigation loginData={user} isLearningPath={isLearningPath} />
-        </div>        {/* Menú de usuario o botón de login temporal */}
-        <div className="flex items-center gap-2">
+        </div>
+
+        {/* Menú de usuario o botón de login */}
+        <div className="flex items-center gap-3">
           {user ? (
             <UserMenu />
           ) : (
-            <div className="flex items-center gap-2">
-              
-              <Link href="/login">
-                <Button className="bg-purple-600 text-white hover:bg-purple-700">
+            <div className="flex items-center gap-3">
+              <Link href="/login" className="hidden sm:block">
+                <Button 
+                  variant="outline" 
+                  className="text-purple-600 border-purple-600 hover:bg-purple-50 transition-all duration-200"
+                >
                   Iniciar sesión
+                </Button>
+              </Link>
+              <Link href="/login" className="sm:hidden">
+                <Button 
+                  size="sm"
+                  className="bg-purple-600 text-white hover:bg-purple-700 transition-all duration-200"
+                >
+                  Login
                 </Button>
               </Link>
             </div>
           )}
+          
+          {/* Menú móvil para navegación */}
+          <div className="md:hidden">
+            <MobileNavMenu loginData={user} isLearningPath={isLearningPath} />
+          </div>
         </div>
       </div>
     </header>

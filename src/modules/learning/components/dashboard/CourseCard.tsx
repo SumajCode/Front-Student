@@ -108,36 +108,6 @@ export default function CourseCard({
              progress === 100 ? 'Repasar curso' : 'Continuar aprendiendo'}
           </Button>
         </Link>
-
-        {/* Botones secundarios mejorados */}
-        <div className="grid grid-cols-2 gap-2 mt-2">
-          <Button 
-            variant="outline"
-            size="sm"
-            className="border-purple-200 text-purple-600 hover:bg-purple-50 hover:border-purple-300 
-              transition-all duration-200 h-8 text-xs font-medium"
-            onClick={(e) => {
-              e.preventDefault();
-              // Aquí iría la lógica para descargar recursos
-              alert('Descargando recursos del curso...');
-            }}
-          >
-            📥 Recursos
-          </Button>
-          <Button 
-            variant="outline"
-            size="sm"
-            className="border-blue-200 text-blue-600 hover:bg-blue-50 hover:border-blue-300 
-              transition-all duration-200 h-8 text-xs font-medium"
-            onClick={(e) => {
-              e.preventDefault();
-              // Aquí iría la lógica para ver el programa
-              alert('Mostrando programa del curso...');
-            }}
-          >
-            📋 Programa
-          </Button>
-        </div>
       </div>
     </div>
   );

@@ -168,6 +168,16 @@ export const docentesService = {
     apiService.get(`${API_ROUTES.DOCENTES.MATERIAS}/${docenteId}`),
 };
 
+export const docenteService = {
+  async getCursosEstudiante(id_estudiante: number) {
+    const res = await fetch(
+      `https://microservice-docente.onrender.com/apidocentes/v1/matricula/listar/estudiante?id_estudiante=${id_estudiante}`
+    );
+    if (!res.ok) throw new Error('No se pudieron obtener los cursos');
+    return res.json();
+  },
+};
+
 // Servicio para materias
 export const materiasService = {
   crear: (materia: any) => 

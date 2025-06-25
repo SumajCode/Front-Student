@@ -1,11 +1,35 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { CourseDashboard } from "@/modules/learning/components/dashboard/CourseDashboard";
 import type { CursoResumenDto } from "@/lib/api-config";
+import { useAuth } from "@/modules/auth/hooks/useAuth";
+import { docenteService } from "@/lib/gateway-service";
 
 export default function DashboardPage() {
-  // Datos de ejemplo mientras no hay conexión completa al backend
-  const courses: CursoResumenDto[] = [];
+  const { user } = useAuth();
+  const [courses, setCourses] = useState<CursoResumenDto[]>([]);
+  const [error, setError] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(true);
+
+  useEffect(() => {
+    if (user?.id_estudiante) {
+      docenteService
+        .getCursosEstudiante(user.id_estudiante)
+        .then((data) => {
+          setCourses(data);
+          setLoading(false);
+        })
+        .catch((err) => {
+          setError(err.message);
+          setLoading(false);
+        });
+    } else {
+      setLoading(false);
+    }
+  }, [user]);
+
+  if (loading) return <div>Cargando cursos...</div>;
+  if (error) return <div>Error: {error}</div>;
 
   return (
     <div className="min-h-screen bg-gray-50 py-16 mt-16">

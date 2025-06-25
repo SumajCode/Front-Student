@@ -1,4 +1,5 @@
 import { apiService } from '@/lib/api-service';
+import { API_CONFIG } from '@/lib/api-config';
 
 interface RecursoDto {
   id: string;
@@ -10,16 +11,24 @@ interface RecursoDto {
 
 export class RecursosService {
   async obtenerRecursosModulo(moduloId: string): Promise<RecursoDto[]> {
-    return apiService.get(`/api/modulos/${moduloId}/recursos`);
+    const response = await apiService.get<RecursoDto[]>(`/api/modulos/${moduloId}/recursos`);
+    if (response.success && response.data) {
+      return response.data;
+    }
+    throw new Error(response.message || 'Error al obtener recursos del módulo');
   }
 
   async obtenerRecurso(recursoId: string): Promise<RecursoDto> {
-    return apiService.get(`/api/recursos/${recursoId}`);
+    const response = await apiService.get<RecursoDto>(`/api/recursos/${recursoId}`);
+    if (response.success && response.data) {
+      return response.data;
+    }
+    throw new Error(response.message || 'Error al obtener el recurso');
   }
 
   async descargarRecurso(recursoId: string): Promise<Blob> {
-    const response = await fetch(`${apiService.baseURL}/api/recursos/${recursoId}/descargar`, {
-      headers: apiService.getHeaders()
+    const response = await fetch(`${API_CONFIG.baseURL}/api/recursos/${recursoId}/descargar`, {
+      headers: API_CONFIG.headers
     });
 
     if (!response.ok) {

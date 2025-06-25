@@ -82,7 +82,7 @@ export const API_ROUTES = {
     LISTAR: '/api/estudiantes',
     OBTENER: '/api/estudiantes/id',
     REGISTRAR: '/api/estudiantes/registrar',
-    ACTUALIZAR: '/api/estudiantes/actualizar/id',
+    ACTUALIZAR: '/estudiantes/actualizar',
     ELIMINAR: '/api/estudiantes/eliminar/id',
     REGISTRAR_LOTE: '/api/registrarLoteEstudiantes'
   },

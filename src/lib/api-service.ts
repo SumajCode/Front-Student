@@ -18,6 +18,36 @@ class ApiError extends Error {
   }
 }
 
+// Función para obtener headers con autenticación
+function getHeaders(): Record<string, string> {
+  const headers: Record<string, string> = {
+    ...API_CONFIG.headers
+  };
+
+  // Obtener datos de autenticación del localStorage
+  if (typeof window !== 'undefined') {
+    const token = localStorage.getItem('token');
+    const estudianteData = localStorage.getItem('estudiante');
+    
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+    
+    if (estudianteData) {
+      try {
+        const estudiante = JSON.parse(estudianteData);
+        if (estudiante.id || estudiante.id_estudiante) {
+          headers['x-student-id'] = (estudiante.id || estudiante.id_estudiante).toString();
+        }
+      } catch (error) {
+        console.warn('Error parsing estudiante data from localStorage:', error);
+      }
+    }
+  }
+
+  return headers;
+}
+
 async function handleResponse<T>(response: Response): Promise<ApiResponse<T>> {
   const contentType = response.headers.get('content-type');
   let data;
@@ -49,7 +79,7 @@ async function handleResponse<T>(response: Response): Promise<ApiResponse<T>> {
 async function get<T>(url: string): Promise<ApiResponse<T>> {
   const response = await fetch(API_CONFIG.baseURL + url, {
     method: 'GET',
-    headers: API_CONFIG.headers,
+    headers: getHeaders(),
     credentials: 'include',
   });
   return handleResponse<T>(response);
@@ -58,7 +88,7 @@ async function get<T>(url: string): Promise<ApiResponse<T>> {
 async function post<T>(url: string, data?: any): Promise<ApiResponse<T>> {
   const response = await fetch(API_CONFIG.baseURL + url, {
     method: 'POST',
-    headers: API_CONFIG.headers,
+    headers: getHeaders(),
     credentials: 'include',
     body: JSON.stringify(data),
   });
@@ -68,7 +98,7 @@ async function post<T>(url: string, data?: any): Promise<ApiResponse<T>> {
 async function put<T>(url: string, data?: any): Promise<ApiResponse<T>> {
   const response = await fetch(API_CONFIG.baseURL + url, {
     method: 'PUT',
-    headers: API_CONFIG.headers,
+    headers: getHeaders(),
     credentials: 'include',
     body: JSON.stringify(data),
   });
@@ -78,7 +108,7 @@ async function put<T>(url: string, data?: any): Promise<ApiResponse<T>> {
 async function del<T>(url: string): Promise<ApiResponse<T>> {
   const response = await fetch(API_CONFIG.baseURL + url, {
     method: 'DELETE',
-    headers: API_CONFIG.headers,
+    headers: getHeaders(),
     credentials: 'include',
   });
   return handleResponse<T>(response);

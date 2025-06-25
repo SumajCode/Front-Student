@@ -87,10 +87,19 @@ export default function ConfiguracionPage() {
       try {
         const estudianteId = user.id_estudiante?.toString() || user.id || '1';
         
-        const response = await fetch(`/api/perfil?token=${user.token}&id=${estudianteId}`);
+        const response = await fetch(`/api/perfil`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${user.token}`,
+            'x-student-id': estudianteId
+          }
+        });
         const result = await response.json();
         
         if (result.success && result.data) {
+          console.log('🔍 Datos del estudiante desde la API:', result.data);
+          console.log('🔍 Es universitario:', result.data.es_universitario);
           setEstudianteData(result.data);
           // Inicializar formulario con datos existentes
           setEditData({
@@ -193,10 +202,12 @@ export default function ConfiguracionPage() {
         id_ciudad: editData.id_ciudad ? parseInt(editData.id_ciudad) : null
       };
       
-      const response = await fetch(`/api/perfil?token=${user.token}&id=${estudianteId}`, {
+      const response = await fetch(`/api/estudiantes/actualizar/${estudianteId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${user.token}`,
+          'x-student-id': estudianteId
         },
         body: JSON.stringify(dataToSend)
       });
@@ -343,9 +354,23 @@ export default function ConfiguracionPage() {
               <User className="h-5 w-5 text-purple-600" />
               Datos Personales
             </CardTitle>
-            <p className="text-sm text-gray-600 mt-2">
-              Actualiza tu información personal
-            </p>
+            <div className="flex items-center justify-between mt-2">
+              <p className="text-sm text-gray-600">
+                Actualiza tu información personal
+              </p>
+              {estudianteData && (
+                <div className="flex items-center gap-2">
+                  <span className="text-xs text-gray-500">Tipo de estudiante:</span>
+                  <span className={`px-3 py-1 rounded-full text-xs font-medium ${
+                    estudianteData.es_universitario 
+                      ? 'bg-blue-100 text-blue-800 border border-blue-200' 
+                      : 'bg-green-100 text-green-800 border border-green-200'
+                  }`}>
+                    {estudianteData.es_universitario ? '🎓 Universitario' : '📚 Estudiante'}
+                  </span>
+                </div>
+              )}
+            </div>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleUpdateData} className="space-y-4">
@@ -626,59 +651,6 @@ export default function ConfiguracionPage() {
           </CardContent>
         </Card>
       </div>
-
-      {/* Información adicional del estudiante */}
-      {estudianteData && (
-        <Card className="p-6 mt-6">
-          <CardHeader>
-            <CardTitle>Información Adicional</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-              <div>
-                <span className="font-medium text-gray-700">ID de Estudiante:</span>
-                <span className="ml-2">{estudianteData.id_estudiante}</span>
-              </div>
-              <div>
-                <span className="font-medium text-gray-700">Es Universitario:</span>
-                <span className="ml-2">{estudianteData.es_universitario ? 'Sí' : 'No'}</span>
-              </div>
-              {estudianteData.fecha_registro && (
-                <div>
-                  <span className="font-medium text-gray-700">Fecha de Registro:</span>
-                  <span className="ml-2">
-                    {new Date(estudianteData.fecha_registro).toLocaleDateString('es-ES')}
-                  </span>
-                </div>
-              )}
-              {estudianteData.fecha_ultimo_acceso && (
-                <div>
-                  <span className="font-medium text-gray-700">Último Acceso:</span>
-                  <span className="ml-2">
-                    {new Date(estudianteData.fecha_ultimo_acceso).toLocaleDateString('es-ES')}
-                  </span>
-                </div>
-              )}
-              {estudianteData.id_pais && (
-                <div>
-                  <span className="font-medium text-gray-700">País:</span>
-                  <span className="ml-2">
-                    {paises.find(p => p.id_pais === estudianteData.id_pais)?.nombre_pais || `ID: ${estudianteData.id_pais}`}
-                  </span>
-                </div>
-              )}
-              {estudianteData.id_ciudad && (
-                <div>
-                  <span className="font-medium text-gray-700">Ciudad:</span>
-                  <span className="ml-2">
-                    {ciudades.find(c => c.id_ciudad === estudianteData.id_ciudad)?.nombre_ciudad || `ID: ${estudianteData.id_ciudad}`}
-                  </span>
-                </div>
-              )}
-            </div>
-          </CardContent>
-        </Card>
-      )}
     </div>
   );
 }

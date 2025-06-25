@@ -218,13 +218,20 @@ export const compiladorDirectoService = {
   compilar: async (codigo: { codigo: string; lenguaje: string }) => {
     try {
       const compilerBaseUrl = process.env.NEXT_PUBLIC_COMPILER_API_URL || 'https://microservicecompilador.onrender.com';
+      
+      // Mapear al formato que espera la API del compilador
+      const payload = {
+        code: codigo.codigo,
+        lang: codigo.lenguaje
+      };
+      
       const response = await fetch(`${compilerBaseUrl}/apicompilador/v1/code/compilar`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json'
         },
-        body: JSON.stringify(codigo)
+        body: JSON.stringify(payload)
       });
 
       if (response.ok) {
@@ -251,16 +258,40 @@ export const compiladorDirectoService = {
     }
   },
   
-  evaluar: async (codigo: { codigo: string; lenguaje: string; casos_prueba?: any[] }) => {
+  evaluar: async (codigo: { 
+    codigo: string; 
+    lenguaje: string; 
+    outputs?: any[]; 
+    inputs?: any[]; 
+    functionInvoke?: string;
+    rules?: any;
+  }) => {
     try {
       const compilerBaseUrl = process.env.NEXT_PUBLIC_COMPILER_API_URL || 'https://microservicecompilador.onrender.com';
+      
+      // Mapear al formato que espera la API del compilador para evaluar
+      const payload = {
+        code: codigo.codigo,
+        lang: codigo.lenguaje,
+        outputs: codigo.outputs || [],
+        inputs: codigo.inputs || [],
+        functionInvoke: codigo.functionInvoke || '',
+        rules: codigo.rules || {
+          functions: {
+            functionNames: []
+          }
+        }
+      };
+      
+      console.log('Enviando a /evaluar:', payload);
+      
       const response = await fetch(`${compilerBaseUrl}/apicompilador/v1/code/evaluar`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json'
         },
-        body: JSON.stringify(codigo)
+        body: JSON.stringify(payload)
       });
 
       if (response.ok) {

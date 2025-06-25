@@ -20,7 +20,7 @@ interface CourseContextType {
   currentModuleId: number;
   currentModule: Module | undefined;
   modules: Module[];
-  navigateToModule: (moduleId: number) => void;
+  navigateToModule: (_moduleId: number) => void;
   courseName: string;
 }
 
@@ -92,10 +92,10 @@ export function CourseProvider({ children, initialModuleId }: CourseProviderProp
   const currentModule = courseData.modules.find((m) => m.id === currentModuleId);
 
   const navigateToModule = useCallback(
-    (moduleId: number) => {
-      if (moduleId >= 1 && moduleId <= courseData.modules.length) {
-        setCurrentModuleId(moduleId);
-        router.push(`/learning/viewer/${moduleId}`, { scroll: false });
+    (_moduleId: number) => {
+      if (_moduleId >= 1 && _moduleId <= courseData.modules.length) {
+        setCurrentModuleId(_moduleId);
+        router.push(`/learning/viewer/${_moduleId}`, { scroll: false });
       }
     },
     [router]

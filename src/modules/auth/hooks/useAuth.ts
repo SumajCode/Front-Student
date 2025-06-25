@@ -3,7 +3,6 @@
 import React, { useState, useEffect, createContext, useContext } from 'react';
 import { useRouter } from 'next/navigation';
 import { authService } from '@/lib/gateway-service';
-import type { LoginDto, PerfilDto } from '@/lib/api-config';
 
 type User = {
   id: string;
@@ -27,7 +26,7 @@ type AuthContextType = {
   login: (correo: string, contrasenia: string) => Promise<boolean>;
   loginWithExternalToken: (token: string, userData: any) => boolean;
   logout: () => void;
-  updateProfile: (profileData: PerfilDto) => Promise<boolean>;
+  updateProfile: (profileData: any) => Promise<boolean>;
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -55,22 +54,22 @@ export function AuthProvider(props: { children: React.ReactNode }) {
   }, []);
 
   // Nueva función para login externo (desde Web Component)
-  const loginWithExternalToken = (token: string, userData: any): boolean => {
+  const loginWithExternalToken = (token: string, _userData: any): boolean => {
     try {
       localStorage.setItem('token', token);
-      localStorage.setItem('estudiante', JSON.stringify(userData));
-      setUser({ token, ...userData });
-        console.log('Login externo exitoso:', userData);
+      localStorage.setItem('estudiante', JSON.stringify(_userData));
+      setUser({ token, ..._userData });
+        console.log('Login externo exitoso:', _userData);
       router.push('/learning/dashboard');
       return true;
     } catch (error) {
       console.error('Error en login externo:', error);
       return false;
     }
-  };  const login = async (correo: string, contrasenia: string): Promise<boolean> => {
+  };  const login = async (_correo: string, _contrasenia: string): Promise<boolean> => {
     try {
-      console.log('🔍 useAuth: Iniciando login con correo:', correo);
-      const response = await authService.login({ correo, contrasenia });
+      console.log('🔍 useAuth: Iniciando login con correo:', _correo);
+      const response = await authService.login({ correo: _correo, contrasenia: _contrasenia });
       console.log('🔍 useAuth: Respuesta del authService:', response);
 
       if (response.success && response.data) {
@@ -113,7 +112,7 @@ export function AuthProvider(props: { children: React.ReactNode }) {
     setUser(null);
     router.push('/');
   };
-  const updateProfile = async (profileData: PerfilDto): Promise<boolean> => {
+  const updateProfile = async (_profileData: any): Promise<boolean> => {
     try {
       if (!user?.token || !user?.id) {
         throw new Error('No hay sesión activa');
@@ -121,7 +120,7 @@ export function AuthProvider(props: { children: React.ReactNode }) {
 
       // Por ahora, simplemente actualizamos localmente
       // Cuando tengamos la API de perfil lista, usaremos el gateway service
-      const updatedUser = { ...user, ...profileData };
+      const updatedUser = { ...user, ..._profileData };
       localStorage.setItem('estudiante', JSON.stringify(updatedUser));
       setUser(updatedUser);
       

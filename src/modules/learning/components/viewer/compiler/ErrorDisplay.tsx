@@ -7,7 +7,7 @@ interface ErrorDisplayProps {
   mode: 'compilar' | 'evaluar';
 }
 
-export function ErrorDisplay({ error, mode }: ErrorDisplayProps) {
+export function ErrorDisplay({ error, mode: _mode }: ErrorDisplayProps) {
   const errorText = error || '';
   
   // Extraer mensaje del sistema si existe

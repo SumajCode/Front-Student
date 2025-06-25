@@ -16,18 +16,18 @@ export default function MaterialesCurso({ cursoId }: MaterialesCursoProps) {
   const [downloadingId, setDownloadingId] = useState<string | null>(null);
 
   useEffect(() => {
-    const cargarMateriales = async () => {
+    const _cargarMateriales = async () => {
       try {
-        const materialesData = await materialesService.obtenerMateriales(cursoId);
-        setMateriales(materialesData);
-      } catch (error) {
-        console.error('Error al cargar materiales:', error);
+        const _materialesData = await materialesService.obtenerMateriales(cursoId);
+        setMateriales(_materialesData);
+      } catch (_error) {
+        console.error('Error al cargar materiales:', _error);
       } finally {
         setIsLoading(false);
       }
     };
 
-    cargarMateriales();
+    _cargarMateriales();
   }, [cursoId]);
 
   const obtenerIconoTipo = (tipo: MaterialCursoDto['tipo']) => {
@@ -47,12 +47,12 @@ export default function MaterialesCurso({ cursoId }: MaterialesCursoProps) {
     }
   };
 
-  const handleDescargarMaterial = async (material: MaterialCursoDto) => {
-    setDownloadingId(material.id);
+  const handleDescargarMaterial = async (_material: MaterialCursoDto) => {
+    setDownloadingId(_material.id);
     try {
-      await materialesService.descargarMaterial(material.url, material.nombre);
-    } catch (error) {
-      console.error('Error al descargar material:', error);
+      await materialesService.descargarMaterial(_material.url, _material.nombre);
+    } catch (_error) {
+      console.error('Error al descargar material:', _error);
       alert('Error al descargar el material');
     } finally {
       setDownloadingId(null);
@@ -93,32 +93,32 @@ export default function MaterialesCurso({ cursoId }: MaterialesCursoProps) {
       </div>
 
       <div className="space-y-3">
-        {materiales.map((material) => (
+        {materiales.map((_material) => (
           <div 
-            key={material.id} 
+            key={_material.id} 
             className="flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:border-purple-300 transition-colors duration-200"
           >
             <div className="flex items-center gap-3 flex-1">
-              {obtenerIconoTipo(material.tipo)}
+              {obtenerIconoTipo(_material.tipo)}
               <div className="flex-1 min-w-0">
-                <h4 className="font-medium text-gray-900 truncate">{material.nombre}</h4>
-                {material.descripcion && (
-                  <p className="text-sm text-gray-600 truncate">{material.descripcion}</p>
+                <h4 className="font-medium text-gray-900 truncate">{_material.nombre}</h4>
+                {_material.descripcion && (
+                  <p className="text-sm text-gray-600 truncate">{_material.descripcion}</p>
                 )}
                 <div className="flex items-center gap-4 text-xs text-gray-500 mt-1">
-                  <span>Tamaño: {materialesService.formatearTamaño(material.tamaño)}</span>
-                  <span>Tipo: {material.tipo.toUpperCase()}</span>
-                  <span>Subido: {new Date(material.fechaSubida).toLocaleDateString()}</span>
+                  <span>Tamaño: {materialesService.formatearTamaño(_material.tamaño)}</span>
+                  <span>Tipo: {_material.tipo.toUpperCase()}</span>
+                  <span>Subido: {new Date(_material.fechaSubida).toLocaleDateString()}</span>
                 </div>
               </div>
             </div>
 
             <Button
-              onClick={() => handleDescargarMaterial(material)}
-              disabled={downloadingId === material.id}
+              onClick={() => handleDescargarMaterial(_material)}
+              disabled={downloadingId === _material.id}
               className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 text-sm"
             >
-              {downloadingId === material.id ? (
+              {downloadingId === _material.id ? (
                 <>
                   <Loader2 className="h-4 w-4 animate-spin mr-2" />
                   Descargando...

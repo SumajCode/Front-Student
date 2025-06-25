@@ -2,7 +2,6 @@ import Header from "@/globals/layout/Head";
 import "./globals.css";
 import React from "react";
 import Footer from "@/globals/layout/Footer";
-import Link from "next/link";
 import { AuthProvider } from "@/modules/auth/hooks/useAuth";
 
 export const metadata = {

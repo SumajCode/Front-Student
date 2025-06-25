@@ -107,13 +107,14 @@ export default function ExplorePage() {
     setCourses(mockCourses);
   }, []);
 
-  const mapCourseToProps = (course: Course) => ({
+  const _mapCourseToProps = (course: Course) => ({
     id: course.id,
     title: course.titulo,
     description: course.descripcion,
     progress: course.progreso,
     duration: course.duracion || "0h 0m",
     instructor: course.instructor || "Instructor",
+    cantidadModulos: course.cantidadModulos
   });
 
   const filteredCourses = courses.filter((course) => {
@@ -231,7 +232,7 @@ export default function ExplorePage() {
               <div className="relative overflow-hidden rounded-2xl bg-white shadow-lg border border-gray-100 hover:border-purple-200 transition-all duration-300">
                 <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 via-transparent to-blue-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 <div className="relative">
-                  <CourseCard {...mapCourseToProps(course)} />
+                  <CourseCard {..._mapCourseToProps(course)} />
                 </div>
               </div>
             </div>
@@ -253,19 +254,6 @@ export default function ExplorePage() {
           </div>
         )}
       </div>
-      
-      <style jsx>{`
-        @keyframes fadeInUp {
-          from {
-            opacity: 0;
-            transform: translateY(30px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-      `}</style>
     </div>
   );
 }

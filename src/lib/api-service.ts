@@ -65,7 +65,7 @@ async function handleResponse<T>(response: Response): Promise<ApiResponse<T>> {
 
     return {
       success: true,
-      data,
+      data: data,
       status: response.status,
     };
   } catch (error) {

@@ -1,5 +1,5 @@
 import { apiService } from './api-service';
-import { API_ROUTES, LoginDto, PerfilDto } from './api-config';
+import { API_ROUTES, LoginDto } from './api-config';
 
 // Servicio para autenticación
 export const authService = {

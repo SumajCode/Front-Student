@@ -30,7 +30,7 @@ export default function CourseDropdownMenu({
   const [programa, setPrograma] = useState<ProgramaCursoDto | null>(null);
   const [showProgramModal, setShowProgramModal] = useState(false);
 
-  const showToast = (title: string, description: string, type: 'success' | 'error' = 'success') => {
+  const showToast = (title: string, description: string) => {
     // Usando alert por ahora, el sistema de toast original ya existe
     alert(`${title}: ${description}`);
   };
@@ -52,7 +52,7 @@ export default function CourseDropdownMenu({
       
       showToast("✅ Descarga iniciada", "Los recursos del curso se están descargando.");
     } catch (error) {
-      showToast("❌ Error de descarga", "No se pudieron descargar los recursos del curso.", 'error');
+      showToast("❌ Error de descarga", "No se pudieron descargar los recursos del curso.");
     } finally {
       setIsDownloading(false);
     }
@@ -65,7 +65,7 @@ export default function CourseDropdownMenu({
       setPrograma(programaData);
       setShowProgramModal(true);
     } catch (error) {
-      showToast("❌ Error", "No se pudo cargar el programa del curso.", 'error');
+      showToast("❌ Error", "No se pudo cargar el programa del curso.");
     } finally {
       setIsLoadingProgram(false);
     }
@@ -88,7 +88,7 @@ export default function CourseDropdownMenu({
       
       showToast("🏆 Certificado descargado", "Tu certificado se ha descargado exitosamente.");
     } catch (error) {
-      showToast("❌ Error de descarga", "No se pudo descargar el certificado.", 'error');
+      showToast("❌ Error de descarga", "No se pudo descargar el certificado.");
     } finally {
       setIsDownloadingCertificate(false);
     }

@@ -35,13 +35,13 @@ export default function MobileMenu({
     contrasenia: "",
     confirmarContrasenia: "",
   },
-  handleLogin = (e) => {
-    e.preventDefault();
+  handleLogin = (_e) => {
+    _e.preventDefault();
   },
-  handleRegister = (e) => {
-    e.preventDefault();
+  handleRegister = (_e) => {
+    _e.preventDefault();
   },
-  handleInputChange = () => {},
+  handleInputChange = (_e) => {},
   onClose = () => setOpen(false),
 }: MobileMenuProps) {
   if (!open) return null;

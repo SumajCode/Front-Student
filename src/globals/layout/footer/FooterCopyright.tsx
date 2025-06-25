@@ -1,3 +1,5 @@
+import React from "react";
+
 export function FooterCopyright() {
   return (
     <div className="text-gray-400 text-sm">

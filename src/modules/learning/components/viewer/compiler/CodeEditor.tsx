@@ -9,6 +9,8 @@ interface CodeEditorProps {
 }
 
 export function CodeEditor({ codigo, setCodigo, modo }: CodeEditorProps) {
+  const _codigo = codigo;
+  const _setCodigo = setCodigo;
   return (
     <div className={`bg-white rounded-xl border shadow-lg ${modo === 'evaluar' ? 'h-80' : 'flex-1'} flex flex-col overflow-hidden`}>
       <div className="p-4 bg-gradient-to-r from-gray-800 to-gray-900 text-white">
@@ -29,8 +31,8 @@ export function CodeEditor({ codigo, setCodigo, modo }: CodeEditorProps) {
       </div>
       <div className="flex-1 relative">
         <textarea
-          value={codigo}
-          onChange={(e) => setCodigo(e.target.value)}
+          value={_codigo}
+          onChange={(e) => _setCodigo(e.target.value)}
           className="w-full h-full p-6 font-mono text-sm border-0 resize-none focus:outline-none focus:ring-0 bg-gray-50"
           placeholder={modo === 'compilar' 
             ? '# Escribe tu código Python aquí\nprint("¡Hola, mundo!")\n\n# Ejemplo:\n# nombre = "SumajCode"\n# print(f"Bienvenido a {nombre}")'
@@ -43,7 +45,7 @@ export function CodeEditor({ codigo, setCodigo, modo }: CodeEditorProps) {
         />
         {/* Líneas de numeración simuladas */}
         <div className="absolute left-2 top-6 text-xs text-gray-400 pointer-events-none select-none">
-          {codigo.split('\n').map((_, index) => (
+          {_codigo.split('\n').map((_, index) => (
             <div key={index} style={{ lineHeight: '1.5em', height: '21px' }}>
               {index + 1}
             </div>

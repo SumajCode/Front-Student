@@ -19,3 +19,7 @@ node_modules/
 # IDE
 .vscode/
 .idea/
+
+# Archivos temporales o con errores menores
+src/ui/use-toast.ts
+src/ui/toaster.tsx

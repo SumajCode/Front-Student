@@ -2,7 +2,7 @@
 
 import React from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/ui/dialog";
-import { ProgramaCursoDto, TemaDto } from "@/lib/api-config";
+import { ProgramaCursoDto } from "@/lib/api-config";
 import { Clock, CheckCircle, PlayCircle, FileText, Users, Target } from "lucide-react";
 
 interface ProgramaCursoModalProps {
@@ -71,8 +71,8 @@ export default function ProgramaCursoModal({ programa, isOpen, onClose }: Progra
                 Objetivos del Curso
               </h3>
               <ul className="space-y-2">
-                {programa.objetivos.map((objetivo, index) => (
-                  <li key={index} className="flex items-start gap-2">
+                {programa.objetivos.map((objetivo, _index) => (
+                  <li key={_index} className="flex items-start gap-2">
                     <CheckCircle className="h-4 w-4 text-green-600 mt-0.5" />
                     <span className="text-gray-700">{objetivo}</span>
                   </li>
@@ -89,8 +89,8 @@ export default function ProgramaCursoModal({ programa, isOpen, onClose }: Progra
                 Prerrequisitos
               </h3>
               <ul className="space-y-2">
-                {programa.prerrequisitos.map((prereq, index) => (
-                  <li key={index} className="flex items-start gap-2">
+                {programa.prerrequisitos.map((prereq, _index) => (
+                  <li key={_index} className="flex items-start gap-2">
                     <span className="text-yellow-600">•</span>
                     <span className="text-gray-700">{prereq}</span>
                   </li>
@@ -107,8 +107,8 @@ export default function ProgramaCursoModal({ programa, isOpen, onClose }: Progra
                 Dirigido a
               </h3>
               <ul className="space-y-2">
-                {programa.dirigidoA.map((publico, index) => (
-                  <li key={index} className="flex items-start gap-2">
+                {programa.dirigidoA.map((publico, _index) => (
+                  <li key={_index} className="flex items-start gap-2">
                     <span className="text-blue-600">•</span>
                     <span className="text-gray-700">{publico}</span>
                   </li>
@@ -125,7 +125,7 @@ export default function ProgramaCursoModal({ programa, isOpen, onClose }: Progra
             </h3>
             
             <div className="space-y-4">
-              {programa.temario.map((tema, index) => (
+              {programa.temario.map((tema, _index) => (
                 <div key={tema.id} className="border border-gray-200 rounded-lg p-4">
                   <div className="flex items-center justify-between mb-3">
                     <h4 className="font-semibold text-gray-900 flex items-center gap-2">
@@ -139,13 +139,11 @@ export default function ProgramaCursoModal({ programa, isOpen, onClose }: Progra
                       {tema.duracion}
                     </div>
                   </div>
-                  
                   <p className="text-gray-700 mb-3">{tema.descripcion}</p>
-                  
                   {/* Subtemas */}
                   {tema.subTemas && tema.subTemas.length > 0 && (
                     <div className="ml-4 space-y-2">
-                      {tema.subTemas.map((subTema, subIndex) => (
+                      {tema.subTemas.map((subTema, _subIndex) => (
                         <div key={subTema.id} className="flex items-center justify-between p-2 bg-gray-50 rounded">
                           <div className="flex items-center gap-2">
                             {getTipoIcon(subTema.tipo)}

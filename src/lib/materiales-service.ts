@@ -1,5 +1,7 @@
 import { API_CONFIG, API_ROUTES, MaterialCursoDto, ProgramaCursoDto } from '@/lib/api-config';
 
+/// <reference lib="dom" />
+
 class MaterialesService {
   private async request<T>(url: string, options?: RequestInit): Promise<T> {
     const response = await fetch(`${API_CONFIG.baseURL}${url}`, {

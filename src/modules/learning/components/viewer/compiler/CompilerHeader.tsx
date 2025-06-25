@@ -12,6 +12,8 @@ interface CompilerHeaderProps {
 }
 
 export function CompilerHeader({ modo, setModo, loading, onExecute, onClear }: CompilerHeaderProps) {
+  const _modo = modo;
+
   return (
     <div className="bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 p-6 relative overflow-hidden">
       {/* Fondo decorativo */}
@@ -40,12 +42,12 @@ export function CompilerHeader({ modo, setModo, loading, onExecute, onClear }: C
             <button
               onClick={() => setModo('compilar')}
               className={`px-6 py-3 text-sm font-semibold rounded-lg transition-all duration-300 flex items-center gap-3 relative overflow-hidden ${
-                modo === 'compilar'
+                _modo === 'compilar'
                   ? 'bg-gradient-to-r from-purple-600 to-blue-600 text-white shadow-lg shadow-purple-500/25'
                   : 'text-gray-300 hover:text-white hover:bg-gray-700/50'
               }`}
             >
-              {modo === 'compilar' && (
+              {_modo === 'compilar' && (
                 <div className="absolute inset-0 bg-gradient-to-r from-purple-600/20 to-blue-600/20 animate-pulse"></div>
               )}
               <svg className="w-4 h-4 relative z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -56,12 +58,12 @@ export function CompilerHeader({ modo, setModo, loading, onExecute, onClear }: C
             <button
               onClick={() => setModo('evaluar')}
               className={`px-6 py-3 text-sm font-semibold rounded-lg transition-all duration-300 flex items-center gap-3 relative overflow-hidden ${
-                modo === 'evaluar'
+                _modo === 'evaluar'
                   ? 'bg-gradient-to-r from-purple-600 to-blue-600 text-white shadow-lg shadow-purple-500/25'
                   : 'text-gray-300 hover:text-white hover:bg-gray-700/50'
               }`}
             >
-              {modo === 'evaluar' && (
+              {_modo === 'evaluar' && (
                 <div className="absolute inset-0 bg-gradient-to-r from-purple-600/20 to-blue-600/20 animate-pulse"></div>
               )}
               <svg className="w-4 h-4 relative z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -101,7 +103,7 @@ export function CompilerHeader({ modo, setModo, loading, onExecute, onClear }: C
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1m4 0h1m-6 4h.01M15 14h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
-                <span>{modo === 'compilar' ? 'Ejecutar' : 'Evaluar'}</span>
+                <span>{_modo === 'compilar' ? 'Ejecutar' : 'Evaluar'}</span>
               </>
             )}
           </Button>

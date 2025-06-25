@@ -1,7 +1,0 @@
-{
-  "/configuracion/page": "app/configuracion/page.js",
-  "/login/page": "app/login/page.js",
-  "/learning/dashboard/page": "app/learning/dashboard/page.js",
-  "/explore/page": "app/explore/page.js",
-  "/learning/viewer/[moduleId]/page": "app/learning/viewer/[moduleId]/page.js"
-}

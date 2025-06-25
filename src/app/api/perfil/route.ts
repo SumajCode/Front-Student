@@ -28,7 +28,7 @@ export async function GET(request: NextRequest) {
       }, { status: 401 });
     }
 
-    const response = await fetch(`${API_BASE}/estudiantes/${id}/perfil`, {
+    const response = await fetch(`${API_BASE}/api/estudiantes/${id}/perfil`, {
       headers: {
         'Authorization': `Bearer ${token}`
       }

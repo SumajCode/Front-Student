@@ -135,6 +135,49 @@ export const API_ROUTES = {
     MODULO: (cursoId: string, moduloId: string) => `/api/estudiantes/cursos/${cursoId}/modulos/${moduloId}`,
     PROGRESO: (cursoId: string, moduloId: string) => `/api/estudiantes/cursos/${cursoId}/modulos/${moduloId}/progreso`,
     UNIRSE: '/api/estudiantes/cursos/unirse',
-    VALIDAR_CODIGO: '/api/estudiantes/cursos/validar-codigo'
+    VALIDAR_CODIGO: '/api/estudiantes/cursos/validar-codigo',
+    // Nuevos endpoints para materiales
+    MATERIALES: (cursoId: string) => `/api/estudiantes/cursos/${cursoId}/materiales`,
+    PROGRAMA: (cursoId: string) => `/api/estudiantes/cursos/${cursoId}/programa`,
+    DESCARGAR_RECURSOS: (cursoId: string) => `/api/estudiantes/cursos/${cursoId}/recursos/descargar`,
+    CERTIFICADO: (cursoId: string) => `/api/estudiantes/cursos/${cursoId}/certificado`
   }
 } as const;
+
+// DTOs para materiales de cursos
+export interface MaterialCursoDto {
+  id: string;
+  nombre: string;
+  tipo: 'pdf' | 'video' | 'documento' | 'zip' | 'imagen' | 'otro';
+  url: string;
+  tamaño: number;
+  fechaSubida: string;
+  descripcion?: string;
+}
+
+export interface ProgramaCursoDto {
+  id: string;
+  titulo: string;
+  descripcion: string;
+  duracionTotal: string;
+  objetivos: string[];
+  temario: TemaDto[];
+  prerrequisitos: string[];
+  dirigidoA: string[];
+}
+
+export interface TemaDto {
+  id: string;
+  numero: number;
+  titulo: string;
+  descripcion: string;
+  duracion: string;
+  subTemas?: SubTemaDto[];
+}
+
+export interface SubTemaDto {
+  id: string;
+  titulo: string;
+  duracion: string;
+  tipo: 'teorico' | 'practico' | 'laboratorio' | 'evaluacion';
+}

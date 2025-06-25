@@ -3,7 +3,6 @@ import "./globals.css";
 import React from "react";
 import Footer from "@/globals/layout/Footer";
 import Link from "next/link";
-import { Toaster } from "sonner";
 import { AuthProvider } from "@/modules/auth/hooks/useAuth";
 
 export const metadata = {
@@ -21,7 +20,6 @@ export default function RootLayout({
       <body className="min-h-screen flex flex-col bg-gray-50">
         <AuthProvider>
           <Header />
-          <Toaster position="top-right" richColors />
 
           {/* Contenido principal */}
           <main className="flex-grow w-full">{children}</main>

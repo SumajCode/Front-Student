@@ -19,6 +19,7 @@ export default function CourseCard({
     <div className="group relative bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-all duration-300">
       {/* Botón de menú */}
       <div className="absolute top-2 right-2 z-10">        <CourseDropdownMenu 
+          courseId={id}
           hasResources={true}
           hasCertificate={progress === 100}
         />
@@ -96,16 +97,47 @@ export default function CourseCard({
           <span>{Math.round(progress / 100 * 180)} min completados</span>
         </div>
 
-        {/* Botón de acción */}
+        {/* Botón de acción principal */}
         <Link href={`/learning/viewer/${id}`}>
           <Button 
-            className="w-full bg-white text-purple-600 border border-purple-200 hover:bg-purple-50 
-              hover:border-purple-300 transition-all duration-200 text-sm h-9"
+            className="w-full bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 
+              text-white border-0 transition-all duration-200 text-sm h-10 font-semibold shadow-md hover:shadow-lg
+              transform hover:-translate-y-0.5"
           >
             {progress === 0 ? 'Comenzar curso' : 
              progress === 100 ? 'Repasar curso' : 'Continuar aprendiendo'}
           </Button>
         </Link>
+
+        {/* Botones secundarios mejorados */}
+        <div className="grid grid-cols-2 gap-2 mt-2">
+          <Button 
+            variant="outline"
+            size="sm"
+            className="border-purple-200 text-purple-600 hover:bg-purple-50 hover:border-purple-300 
+              transition-all duration-200 h-8 text-xs font-medium"
+            onClick={(e) => {
+              e.preventDefault();
+              // Aquí iría la lógica para descargar recursos
+              alert('Descargando recursos del curso...');
+            }}
+          >
+            📥 Recursos
+          </Button>
+          <Button 
+            variant="outline"
+            size="sm"
+            className="border-blue-200 text-blue-600 hover:bg-blue-50 hover:border-blue-300 
+              transition-all duration-200 h-8 text-xs font-medium"
+            onClick={(e) => {
+              e.preventDefault();
+              // Aquí iría la lógica para ver el programa
+              alert('Mostrando programa del curso...');
+            }}
+          >
+            📋 Programa
+          </Button>
+        </div>
       </div>
     </div>
   );

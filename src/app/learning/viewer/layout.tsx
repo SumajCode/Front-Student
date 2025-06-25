@@ -1,5 +1,6 @@
 "use client";
 import React from "react";
+import { CourseProvider } from "@/modules/learning/context/CourseContext";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -8,7 +9,9 @@ interface LayoutProps {
 export default function CourseViewerLayout({ children }: LayoutProps) {
   return (
     <div className="min-h-screen bg-gray-50">
-      {children}
+      <CourseProvider initialModuleId={1}>
+        {children}
+      </CourseProvider>
     </div>
   );
 }

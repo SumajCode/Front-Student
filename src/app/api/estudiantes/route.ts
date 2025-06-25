@@ -2,6 +2,9 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { isValidEmail, isValidDate } from '@/lib/validations';
 
+// Force dynamic rendering for this route
+export const dynamic = 'force-dynamic';
+
 interface EstudianteData {
   nombre_estudiante: string;
   apellido_estudiante: string;

@@ -1,6 +1,9 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
+// Force dynamic rendering for this route
+export const dynamic = 'force-dynamic';
+
 interface EstudianteUpdate {
   nombre_estudiante?: string;
   apellido_estudiante?: string;
@@ -14,14 +17,13 @@ const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || 'https://microservice-e
 
 export async function GET(request: NextRequest) {
   try {
-    const { searchParams } = new URL(request.url);
-    const token = searchParams.get('token');
-    const id = searchParams.get('id');
+    const token = request.headers.get('authorization')?.replace('Bearer ', '');
+    const id = request.headers.get('x-student-id');
     
     if (!token || !id) {
       return NextResponse.json({
         success: false,
-        message: 'Token e ID del estudiante son requeridos',
+        message: 'Token e ID del estudiante son requeridos en headers',
         status: 401
       }, { status: 401 });
     }
@@ -59,14 +61,13 @@ export async function GET(request: NextRequest) {
 
 export async function PUT(request: NextRequest) {
   try {
-    const { searchParams } = new URL(request.url);
-    const token = searchParams.get('token');
-    const id = searchParams.get('id');
+    const token = request.headers.get('authorization')?.replace('Bearer ', '');
+    const id = request.headers.get('x-student-id');
     
     if (!token || !id) {
       return NextResponse.json({
         success: false,
-        message: 'Token e ID del estudiante son requeridos',
+        message: 'Token e ID del estudiante son requeridos en headers',
         status: 401
       }, { status: 401 });
     }

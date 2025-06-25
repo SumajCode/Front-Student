@@ -1,7 +1,5 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-import { apiService } from '@/lib/api-service';
-import { API_ROUTES } from '@/lib/api-config';
 import { isValidEmail, isValidDate } from '@/lib/validations';
 
 interface EstudianteData {
@@ -280,13 +278,21 @@ export async function PUT(request: NextRequest) {
     }    // Asignar valores por defecto para los campos requeridos por el backend
     const dataToUpdate = {
       ...updates,
-      id_pais: '1', // Valor por defecto
-      id_ciudad: '1', // Valor por defecto
+      id_pais: 1, // Valor por defecto
+      id_ciudad: 1, // Valor por defecto
       contrasenia: updates.contrasenia || '' // La contraseña no se actualiza en PUT
-    } as StudentDataInput;
+    };
 
     // Sanitizar los datos de actualización
-    const sanitizedData = sanitizeStudentData(dataToUpdate);
+    const sanitizedData = {
+      nombre_estudiante: dataToUpdate.nombre_estudiante?.trim(),
+      apellido_estudiante: dataToUpdate.apellido_estudiante?.trim(),
+      correo_estudiante: dataToUpdate.correo_estudiante?.trim().toLowerCase(),
+      fecha_nacimiento: dataToUpdate.fecha_nacimiento,
+      id_pais: dataToUpdate.id_pais,
+      id_ciudad: dataToUpdate.id_ciudad,
+      contrasenia: dataToUpdate.contrasenia
+    };
     
     const url = `${process.env.BACKEND_URL}/api/estudiantes/${id}`;
     console.log('🔄 Intentando actualizar estudiante:', url);
@@ -347,10 +353,20 @@ export async function DELETE(request: NextRequest) {
       }, { status: 400 });
     }
     
-    await apiRequest(
-      API_ROUTES.ESTUDIANTES.ELIMINAR(id),
-      { method: 'DELETE' }
-    );
+    const url = `${process.env.BACKEND_URL}/api/estudiantes/${id}`;
+    
+    const response = await fetch(url, {
+      method: 'DELETE',
+      headers: {
+        'Accept': 'application/json'
+      }
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('Error del backend:', errorText);
+      throw new Error('Error al eliminar estudiante');
+    }
 
     return NextResponse.json({
       success: true,

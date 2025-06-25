@@ -217,7 +217,8 @@ export const compiladorService = {
 export const compiladorDirectoService = {
   compilar: async (codigo: { codigo: string; lenguaje: string }) => {
     try {
-      const response = await fetch('https://microservicecompilador.onrender.com/apicompilador/v1/code/compilar', {
+      const compilerBaseUrl = process.env.NEXT_PUBLIC_COMPILER_API_URL || 'https://microservicecompilador.onrender.com';
+      const response = await fetch(`${compilerBaseUrl}/apicompilador/v1/code/compilar`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -252,7 +253,8 @@ export const compiladorDirectoService = {
   
   evaluar: async (codigo: { codigo: string; lenguaje: string; casos_prueba?: any[] }) => {
     try {
-      const response = await fetch('https://microservicecompilador.onrender.com/apicompilador/v1/code/evaluar', {
+      const compilerBaseUrl = process.env.NEXT_PUBLIC_COMPILER_API_URL || 'https://microservicecompilador.onrender.com';
+      const response = await fetch(`${compilerBaseUrl}/apicompilador/v1/code/evaluar`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

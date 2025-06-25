@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { Button } from "@/ui/button";
-import { compiladorService } from "@/lib/gateway-service";
+import { compiladorDirectoService } from "@/lib/gateway-service";
 
 interface CompilationResult {
   output?: string;
@@ -15,12 +15,13 @@ export function CodeCompiler() {
   const [codigo, setCodigo] = useState('');
   const [resultado, setResultado] = useState<CompilationResult | null>(null);
   const [loading, setLoading] = useState(false);
+  const [modo, setModo] = useState<'compilar' | 'evaluar'>('compilar');
 
-  const compilarCodigo = async () => {
+  const ejecutarCodigo = async () => {
     if (!codigo.trim()) {
       setResultado({
         status: 'error',
-        error: 'Por favor, escriba algo de código antes de compilar.'
+        error: 'Por favor, escriba algo de código antes de ejecutar.'
       });
       return;
     }
@@ -29,27 +30,32 @@ export function CodeCompiler() {
     setResultado({ status: 'running' });
 
     try {
-      console.log('Probando compilador con código:', codigo);
+      console.log(`${modo === 'compilar' ? 'Compilando' : 'Evaluando'} código:`, codigo);
       
-      // Usar el servicio del gateway
-      const response = await compiladorService.compilar({
-        codigo: codigo,
-        lenguaje: 'python'
-      });
+      // Usar el servicio directo del compilador
+      const response = modo === 'compilar' 
+        ? await compiladorDirectoService.compilar({
+            codigo: codigo,
+            lenguaje: 'python'
+          })
+        : await compiladorDirectoService.evaluar({
+            codigo: codigo,
+            lenguaje: 'python'
+          });
       
-      console.log('Respuesta del gateway:', response);
+      console.log('Respuesta del compilador:', response);
 
       if (response.success) {
         const data = response.data as any;
         setResultado({
           status: 'success',
-          output: data.output || data.resultado || data.salida || JSON.stringify(data, null, 2),
-          exitCode: data.exitCode || 0
+          output: data.output || data.resultado || data.salida || data.stdout || JSON.stringify(data, null, 2),
+          exitCode: data.exitCode || data.exit_code || 0
         });
       } else {
         setResultado({
           status: 'error',
-          error: JSON.stringify(response.data) || 'Error desconocido durante la compilación'
+          error: response.data?.error || response.data?.message || JSON.stringify(response.data) || 'Error desconocido durante la compilación'
         });
       }
       
@@ -74,9 +80,31 @@ export function CodeCompiler() {
       {/* Header con controles */}
       <div className="bg-white border-b p-4">
         <div className="flex flex-wrap items-center gap-4">
-          {/* Indicador de lenguaje */}
-          <div className="flex items-center gap-2">
+          {/* Indicador de lenguaje y modo */}
+          <div className="flex items-center gap-4">
             <span className="text-sm font-medium text-gray-700">Lenguaje: Python</span>
+            <div className="flex bg-gray-100 rounded-md p-1">
+              <button
+                onClick={() => setModo('compilar')}
+                className={`px-3 py-1 text-xs rounded transition-colors ${
+                  modo === 'compilar'
+                    ? 'bg-white text-purple-600 shadow-sm'
+                    : 'text-gray-600 hover:text-gray-900'
+                }`}
+              >
+                Compilar
+              </button>
+              <button
+                onClick={() => setModo('evaluar')}
+                className={`px-3 py-1 text-xs rounded transition-colors ${
+                  modo === 'evaluar'
+                    ? 'bg-white text-purple-600 shadow-sm'
+                    : 'text-gray-600 hover:text-gray-900'
+                }`}
+              >
+                Evaluar
+              </button>
+            </div>
           </div>
 
           {/* Botones de acción */}
@@ -89,12 +117,12 @@ export function CodeCompiler() {
               Limpiar
             </Button>
             <Button
-              onClick={compilarCodigo}
+              onClick={ejecutarCodigo}
               disabled={loading}
               size="sm"
               className="bg-purple-600 hover:bg-purple-700"
             >
-              {loading ? 'Ejecutando...' : 'Ejecutar'}
+              {loading ? 'Ejecutando...' : modo === 'compilar' ? 'Compilar' : 'Evaluar'}
             </Button>
           </div>
         </div>

@@ -66,19 +66,41 @@ export function CourseViewer({ initialTitle, initialDescription }: CourseViewerP
             activeTab === 'video' ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-0 absolute'
           }`}>
             {activeTab === 'video' && currentModule ? (
-              <div className="h-full bg-black relative group">
-                {/* Video player */}
-                <div className="w-full h-full relative">
-                  {currentModule.videoUrl && (
+              <div className="h-full bg-white relative group p-6 overflow-y-auto">
+                {/* Si hay videoUrl, mostrar el video */}
+                {currentModule.videoUrl ? (
+                  <div className="w-full h-96 mb-6">
                     <VideoPlayer videoUrl={currentModule.videoUrl} />
-                  )}
-                  
-                  {/* Overlay de información del módulo */}
-                  <div className="absolute top-4 left-4 bg-black/70 backdrop-blur-sm text-white px-4 py-2 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    <h3 className="font-semibold text-sm">{currentModule.title}</h3>
-                    <p className="text-xs text-gray-300">{currentModule.duration}</p>
                   </div>
-                </div>
+                ) : null}
+                {/* Mostrar título y descripción del módulo */}
+                <h2 className="text-2xl font-bold mb-2 text-purple-700">{currentModule.title}</h2>
+                <p className="text-gray-700 mb-4">{(currentModule as any).desciption || currentModule.description || ""}</p>
+                {/* Mostrar contenidos reales si existen */}
+                {Array.isArray(currentModule.contenido) && currentModule.contenido.length > 0 && (
+                  <div className="mt-4">
+                    <h3 className="text-lg font-semibold mb-2 text-purple-600">Contenidos del módulo:</h3>
+                    <ul className="space-y-2">
+                      {currentModule.contenido.map((cont: any) => (
+                        <li key={cont._id || cont.id_contenido} className="p-3 bg-purple-50 rounded-lg border border-purple-100">
+                          <div className="font-medium text-purple-800">{cont.title} <span className="text-xs text-purple-400">({cont.type})</span></div>
+                          {cont.content?.description && (
+                            <div className="text-gray-700 text-sm mt-1">{cont.content.description}</div>
+                          )}
+                          {cont.files && cont.files.length > 0 && (
+                            <div className="text-xs text-purple-500 mt-1">Archivos: {cont.files.join(", ")}</div>
+                          )}
+                          {cont.points && (
+                            <div className="text-xs text-emerald-600 mt-1">Puntaje: {cont.points}</div>
+                          )}
+                          {cont.time_deliver && (
+                            <div className="text-xs text-blue-600 mt-1">Entrega: {new Date(cont.time_deliver).toLocaleString()}</div>
+                          )}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
               </div>
             ) : activeTab === 'video' ? (
               <div className="h-full flex items-center justify-center bg-gradient-to-br from-gray-900 to-gray-800">

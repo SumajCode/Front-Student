@@ -1,13 +1,11 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { CourseDashboard } from "@/modules/learning/components/dashboard/CourseDashboard";
-import type { CursoResumenDto } from "@/lib/api-config";
 import { useAuth } from "@/modules/auth/hooks/useAuth";
 import { docenteService } from "@/lib/gateway-service";
 
 export default function DashboardPage() {
   const { user } = useAuth();
-  const [courses, setCourses] = useState<CursoResumenDto[]>([]);
   const [error, setError] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -16,7 +14,6 @@ export default function DashboardPage() {
       docenteService
         .getCursosEstudiante(user.id_estudiante)
         .then((data) => {
-          setCourses(data);
           setLoading(false);
         })
         .catch((err) => {
@@ -33,7 +30,7 @@ export default function DashboardPage() {
 
   return (
     <div className="min-h-screen bg-gray-50 py-16 mt-16">
-      <CourseDashboard courses={courses} />
+      <CourseDashboard />
     </div>
   );
 }

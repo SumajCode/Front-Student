@@ -3,6 +3,7 @@ import "./globals.css";
 import React from "react";
 import Footer from "@/globals/layout/Footer";
 import { AuthProvider } from "@/modules/auth/hooks/useAuth";
+import GuardarDatosUrlEnLocalStorage from "./GuardarDatosUrlEnLocalStorage";
 
 export const metadata = {
   title: "Curso Interactivo",
@@ -18,6 +19,7 @@ export default function RootLayout({
     <html lang="es">
       <body className="min-h-screen flex flex-col bg-gray-50">
         <AuthProvider>
+          <GuardarDatosUrlEnLocalStorage />
           <Header />
 
           {/* Contenido principal */}

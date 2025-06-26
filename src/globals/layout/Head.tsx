@@ -45,26 +45,7 @@ export default function Head() {
         <div className="flex items-center gap-3">
           {user ? (
             <UserMenu />
-          ) : (
-            <div className="flex items-center gap-3">
-              <Link href="/login" className="hidden sm:block">
-                <Button 
-                  variant="outline" 
-                  className="text-purple-600 border-purple-600 hover:bg-purple-50 transition-all duration-200"
-                >
-                  Iniciar sesión
-                </Button>
-              </Link>
-              <Link href="/login" className="sm:hidden">
-                <Button 
-                  size="sm"
-                  className="bg-purple-600 text-white hover:bg-purple-700 transition-all duration-200"
-                >
-                  Login
-                </Button>
-              </Link>
-            </div>
-          )}
+          ) : null}
           
           {/* Menú móvil para navegación */}
           <div className="md:hidden">

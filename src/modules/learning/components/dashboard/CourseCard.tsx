@@ -69,11 +69,13 @@ export default function CourseCard({
       {/* Contenido del curso */}
       <div className="p-4 space-y-3">
         <div className="space-y-1">
-          <Link href={`/learning/viewer/${id}`} className="block">
-            <h3 className="text-base font-semibold text-gray-900 group-hover:text-purple-600 
-              transition-colors duration-200 line-clamp-2">
-              {title}
-            </h3>
+          <Link href={`/learning/viewer/${id}`} passHref legacyBehavior>
+            <a className="block">
+              <h3 className="text-base font-semibold text-gray-900 group-hover:text-purple-600 \
+                transition-colors duration-200 line-clamp-2">
+                {title}
+              </h3>
+            </a>
           </Link>
           <p className="text-sm text-gray-600 line-clamp-2">{description}</p>
           <p className="text-xs text-gray-500">{instructor}</p>
@@ -98,14 +100,17 @@ export default function CourseCard({
         </div>
 
         {/* Botón de acción principal */}
-        <Link href={`/learning/viewer/${id}`}>
-          <Button 
-            className="w-full bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 
-              text-white border-0 transition-all duration-200 text-sm h-10 font-semibold shadow-md hover:shadow-lg
+        <Link href={`/learning/viewer/${id}`} passHref legacyBehavior>
+          <Button
+            asChild
+            className="w-full bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 \
+              text-white border-0 transition-all duration-200 text-sm h-10 font-semibold shadow-md hover:shadow-lg\
               transform hover:-translate-y-0.5"
           >
-            {progress === 0 ? 'Comenzar curso' : 
-             progress === 100 ? 'Repasar curso' : 'Continuar aprendiendo'}
+            <a>
+              {progress === 0 ? 'Comenzar curso' :
+                progress === 100 ? 'Repasar curso' : 'Continuar aprendiendo'}
+            </a>
           </Button>
         </Link>
       </div>

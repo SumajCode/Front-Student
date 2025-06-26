@@ -7,13 +7,15 @@ import { useRouter } from "next/navigation";
 interface Module {
   id: number;
   title: string;
-  description: string;
-  completed: boolean;
-  content: string;
+  description?: string;
+  completed?: boolean;
+  content?: string;
   videoUrl?: string;
   duration?: string | number;
   resources?: boolean;
   hasSubItems?: boolean;
+  // Para datos reales de la API:
+  contenido?: any[];
 }
 
 interface CourseContextType {
@@ -83,20 +85,24 @@ const courseData = {
 interface CourseProviderProps {
   children: React.ReactNode;
   initialModuleId: number;
+  modules?: any[]; // módulos reales de la API
+  courseName?: string;
 }
 
-export function CourseProvider({ children, initialModuleId }: CourseProviderProps) {
+export function CourseProvider({ children, initialModuleId, modules, courseName }: CourseProviderProps) {
   const router = useRouter();
   const [currentModuleId, setCurrentModuleId] = useState(initialModuleId);
 
-  const currentModule = courseData.modules.find((m) => m.id === currentModuleId);
+  // Usar módulos reales si existen, si no, usar los simulados
+  const realModules = modules && modules.length > 0 ? modules : courseData.modules;
+  const realCourseName = courseName || courseData.name;
+
+  const currentModule = realModules.find((m: any) => m.id === currentModuleId || m._id === currentModuleId);
 
   const navigateToModule = useCallback(
     (_moduleId: number) => {
-      if (_moduleId >= 1 && _moduleId <= courseData.modules.length) {
-        setCurrentModuleId(_moduleId);
-        router.push(`/learning/viewer/${_moduleId}`, { scroll: false });
-      }
+      setCurrentModuleId(_moduleId);
+      router.push(`/learning/viewer/${_moduleId}`, { scroll: false });
     },
     [router]
   );
@@ -104,9 +110,9 @@ export function CourseProvider({ children, initialModuleId }: CourseProviderProp
   const value = {
     currentModuleId,
     currentModule,
-    modules: courseData.modules,
+    modules: realModules,
     navigateToModule,
-    courseName: courseData.name,
+    courseName: realCourseName,
   };
 
   return <CourseContext.Provider value={value}>{children}</CourseContext.Provider>;

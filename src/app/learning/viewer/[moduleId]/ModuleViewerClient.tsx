@@ -1,24 +1,67 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { CourseViewer } from "@/modules/learning/components/viewer/CourseViewer";
 import { CourseProvider } from "@/modules/learning/context/CourseContext";
 
 interface ModuleViewerClientProps {
-  moduleId: number;
+  moduleId: number; // Este es el id de la materia
 }
 
 export function ModuleViewerClient({ moduleId }: ModuleViewerClientProps) {
-  if (isNaN(moduleId)) {
-    return (
-      <div className="p-8 text-center">
-        <p className="text-red-600">ID de módulo inválido</p>
-      </div>
-    );
-  }
+  const [modules, setModules] = useState<any[]>([]);
+  const [courseName, setCourseName] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    setLoading(true);
+    // Buscar matrícula del estudiante en localStorage
+    const estudianteData = localStorage.getItem("estudiante");
+    if (!estudianteData) {
+      setError("No se encontró información del estudiante");
+      setLoading(false);
+      return;
+    }
+    const { id, id_estudiante } = JSON.parse(estudianteData);
+    const idEst = id_estudiante || id;
+    if (!idEst) {
+      setError("No se encontró ID de estudiante");
+      setLoading(false);
+      return;
+    }
+    // Consumir la API de matrículas para obtener módulos de la materia
+    fetch(
+      `https://microservice-docente.onrender.com/apidocentes/v1/matricula/listar/estudiante?id_estudiante=${idEst}`
+    )
+      .then((res) => res.json())
+      .then((data) => {
+        // Buscar la matrícula de la materia seleccionada
+        const matricula = (data.data || []).find(
+          (m: any) => m.id_materia === moduleId
+        );
+        if (matricula && matricula.modulos && matricula.modulos.modulos) {
+          setModules(matricula.modulos.modulos);
+          setCourseName(matricula.nombre_materia || "Curso");
+        } else {
+          setError("No se encontraron módulos para este curso");
+        }
+      })
+      .catch(() => setError("Error al cargar los módulos"))
+      .finally(() => setLoading(false));
+  }, [moduleId]);
+
+  if (loading)
+    return <div className="p-8 text-center">Cargando módulos...</div>;
+  if (error)
+    return <div className="p-8 text-center text-red-600">{error}</div>;
 
   return (
-    <CourseProvider initialModuleId={moduleId}>
+    <CourseProvider
+      initialModuleId={modules[0]?.id || 1}
+      modules={modules}
+      courseName={courseName}
+    >
       <CourseViewer />
     </CourseProvider>
   );

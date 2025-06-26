@@ -38,7 +38,23 @@ export function ModuleList() {
               }`}>
                 {module.title}
               </h3>
-              
+              {/* Mostrar contenidos reales si existen */}
+              {Array.isArray(module.contenido) && module.contenido.length > 0 && (
+                <ul className="mt-2 ml-2 text-xs text-purple-100 space-y-1">
+                  {module.contenido.map((cont: any) => (
+                    <li key={cont._id || cont.id_contenido} className="flex flex-col gap-0.5">
+                      <span className="font-medium">{cont.title}</span>
+                      <span className="italic text-purple-200">{cont.type}</span>
+                      {cont.content?.description && (
+                        <span className="text-purple-300">{cont.content.description}</span>
+                      )}
+                      {cont.files && cont.files.length > 0 && (
+                        <span className="text-purple-300">Archivos: {cont.files.join(", ")}</span>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              )}
               {/* Información adicional */}
               {(module.duration || module.resources) && (
                 <div className="flex items-center mt-2 space-x-3">

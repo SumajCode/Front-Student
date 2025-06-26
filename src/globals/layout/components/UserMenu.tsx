@@ -46,8 +46,8 @@ export default function UserMenu() {
   useEffect(() => {
     const fetchEstudianteData = async () => {
       if (!user?.id) return;
-      
-      setLoading(true);      try {
+      setLoading(true);
+      try {
         // Usar id_estudiante en lugar de id genérico
         const estudianteId = user.id_estudiante?.toString() || user.id || '1';
         console.log('🔍 UserMenu: Obteniendo datos para estudiante ID:', estudianteId);
@@ -58,7 +58,6 @@ export default function UserMenu() {
         
         if (response.success && response.data) {
           setEstudianteData(response.data);
-          console.log('✅ UserMenu: Datos del estudiante obtenidos:', response.data);
         } else {
           console.error('❌ UserMenu: Error obteniendo datos del estudiante:', response);
           console.log('🔍 UserMenu: Response completa:', response);
@@ -75,6 +74,18 @@ export default function UserMenu() {
 
   if (!user) {
     return null; // No mostrar nada si no hay usuario autenticado
+  }
+
+  if (loading) {
+    return (
+      <div className="flex items-center gap-2 px-4 py-2">
+        <div className="w-9 h-9 bg-gradient-to-r from-purple-200 to-blue-200 rounded-full animate-pulse" />
+        <div className="flex flex-col gap-1">
+          <div className="w-24 h-3 bg-gray-200 rounded animate-pulse" />
+          <div className="w-16 h-2 bg-gray-100 rounded animate-pulse" />
+        </div>
+      </div>
+    );
   }  const displayName = estudianteData 
     ? `${estudianteData.nombre_estudiante || estudianteData.nombres || ''} ${estudianteData.apellido_estudiante || estudianteData.apellidos || ''}`.trim()
     : user.nombre_estudiante && user.apellido_estudiante 

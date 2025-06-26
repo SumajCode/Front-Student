@@ -59,8 +59,8 @@ export function AuthProvider(props: { children: React.ReactNode }) {
       localStorage.setItem('token', token);
       localStorage.setItem('estudiante', JSON.stringify(_userData));
       setUser({ token, ..._userData });
-        console.log('Login externo exitoso:', _userData);
-      router.push('/learning/dashboard');
+      // Forzar recarga para rehidratar el contexto y el header
+      window.location.reload();
       return true;
     } catch (error) {
       console.error('Error en login externo:', error);
@@ -110,7 +110,8 @@ export function AuthProvider(props: { children: React.ReactNode }) {
     localStorage.removeItem('token');
     localStorage.removeItem('estudiante');
     setUser(null);
-    router.push('/');
+    // Redirigir al login externo con logged_out=true
+    window.location.href = 'https://front-loginv1.vercel.app/?logged_out=true';
   };
   const updateProfile = async (_profileData: any): Promise<boolean> => {
     try {

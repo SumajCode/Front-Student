@@ -59,8 +59,7 @@ export function AuthProvider(props: { children: React.ReactNode }) {
       localStorage.setItem('token', token);
       localStorage.setItem('estudiante', JSON.stringify(_userData));
       setUser({ token, ..._userData });
-      // Forzar recarga para rehidratar el contexto y el header
-      window.location.reload();
+      // window.location.reload(); // Eliminado para evitar bucles
       return true;
     } catch (error) {
       console.error('Error en login externo:', error);

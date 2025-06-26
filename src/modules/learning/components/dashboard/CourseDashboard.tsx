@@ -3,25 +3,39 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import CourseCard from "./CourseCard";
 
-// Tipos para la matrícula y materia (ajusta según la respuesta real de la API)
-type Modulo = {
-  id: number;
-  titulo: string;
-};
-type Materia = {
-  nombre?: string;
-  descripcion?: string;
-  duracion?: string;
-  instructor?: string;
-  modulos?: Modulo[];
-};
-type Matricula = {
-  id: number;
-  id_estudiante: number;
+// Tipos según el nuevo formato de la API
+interface ContenidoModulo {
+  _id: string;
+  id_contenido: string;
+  id_modulo: string;
+  title: string;
+  type: string;
+  content?: { description?: string; points?: number; status?: string; rules?: any };
+  points?: number;
+  status?: string;
+  time_deliver?: string;
+  timestamp?: string;
+  files?: string[];
+}
+
+interface Modulo {
+  title: string;
+  desciption?: string;
   id_materia: number;
-  materia?: Materia;
-  progreso?: number;
-};
+  contenido: ContenidoModulo[];
+}
+
+interface MateriaModulos {
+  id_materia: number;
+  modulos: Modulo[];
+}
+
+interface Matricula {
+  id: number;
+  id_materia: number;
+  nombre_materia: string;
+  modulos: MateriaModulos;
+}
 
 export function CourseDashboard() {
   const [matriculas, setMatriculas] = useState<Matricula[]>([]);
@@ -43,40 +57,8 @@ export function CourseDashboard() {
       .finally(() => setLoading(false));
   }, []);
 
-  // Simulación temporal de un curso si la API no devuelve ninguno
-  useEffect(() => {
-    if (!loading && matriculas.length === 0) {
-      setMatriculas([
-        {
-          id: 999,
-          id_estudiante: 1,
-          id_materia: 101,
-          progreso: 40,
-          materia: {
-            nombre: "Simulación de Redes",
-            descripcion: "Curso de ejemplo para pruebas de UI y lógica.",
-            duracion: "12h",
-            instructor: "Ing. Simulado",
-            modulos: [
-              { id: 1, titulo: "Introducción a la simulación" },
-              { id: 2, titulo: "Protocolos básicos" },
-              { id: 3, titulo: "Laboratorio virtual" },
-            ],
-          },
-        },
-      ]);
-    }
-  }, [loading, matriculas.length]);
-
   // Filtrado por progreso (cuando la API lo soporte)
-  const cursosFiltrados = (Array.isArray(matriculas) ? matriculas : [])
-    .filter((mat) => {
-      if (filter === "all") return true;
-      if (filter === "inProgress")
-        return mat.progreso && mat.progreso > 0 && mat.progreso < 100;
-      if (filter === "completed") return mat.progreso === 100;
-      return true;
-    });
+  const cursosFiltrados = Array.isArray(matriculas) ? matriculas : [];
 
   return (
     <div className="container mx-auto px-4 sm:px-6 py-4 min-h-[60vh] relative">
@@ -89,48 +71,13 @@ export function CourseDashboard() {
         </p>
       </header>
 
-      {/* Filtros */}
-      <div className="flex gap-4 mb-12">
-        <button
-          onClick={() => setFilter("all")}
-          className={`px-4 py-2 rounded-lg ${
-            filter === "all"
-              ? "bg-purple-600 text-white"
-              : "bg-white text-gray-600 hover:bg-gray-50"
-          }`}
-        >
-          Todos
-        </button>
-        <button
-          onClick={() => setFilter("inProgress")}
-          className={`px-4 py-2 rounded-lg ${
-            filter === "inProgress"
-              ? "bg-purple-600 text-white"
-              : "bg-white text-gray-600 hover:bg-gray-50"
-          }`}
-        >
-          En Progreso
-        </button>
-        <button
-          onClick={() => setFilter("completed")}
-          className={`px-4 py-2 rounded-lg ${
-            filter === "completed"
-              ? "bg-purple-600 text-white"
-              : "bg-white text-gray-600 hover:bg-gray-50"
-          }`}
-        >
-          Completados
-        </button>
-      </div>
+      {/* Filtros (puedes adaptar si tienes progreso) */}
+      {/* ...existing code... */}
 
       {/* Cursos Filtrados */}
       <section className="mb-12 relative">
         <h2 className="text-2xl font-semibold mb-6 text-gray-800">
-          {filter === "all"
-            ? "Todos los Cursos"
-            : filter === "inProgress"
-            ? "Cursos en Progreso"
-            : "Cursos Completados"}
+          Todos los Cursos
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 relative min-h-[200px]">
           {(!loading && cursosFiltrados.length === 0) && (
@@ -142,36 +89,40 @@ export function CourseDashboard() {
             </div>
           )}
           {cursosFiltrados.map((mat) => (
-            <Link
-              key={mat.id}
-              href={`/learning/viewer/${mat.id_materia}`}
-              className="block group transform transition-transform hover:-translate-y-1 z-10"
-              legacyBehavior
-            >
-              <a>
-                <CourseCard
-                  id={String(mat.id_materia)}
-                  title={mat.materia?.nombre || `Materia ${mat.id_materia}`}
-                  description={mat.materia?.descripcion || ""}
-                  progress={mat.progreso || 0}
-                  duration={mat.materia?.duracion || ""}
-                  instructor={mat.materia?.instructor || ""}
-                />
-                {/* Mostrar módulos si existen */}
-                {mat.materia?.modulos && mat.materia.modulos.length > 0 && (
-                  <div className="mt-2 ml-2 p-2 bg-gray-50 rounded-lg border border-gray-200">
-                    <div className="text-xs font-semibold text-gray-500 mb-1">
-                      Módulos:
-                    </div>
-                    <ul className="list-disc list-inside text-sm text-gray-700">
-                      {mat.materia.modulos.map((mod) => (
-                        <li key={mod.id}>{mod.titulo}</li>
-                      ))}
-                    </ul>
+            <div key={mat.id} className="block group transform transition-transform hover:-translate-y-1 z-10">
+              <CourseCard
+                id={String(mat.id_materia)}
+                title={mat.nombre_materia || `Materia ${mat.id_materia}`}
+                description={mat.modulos?.modulos?.[0]?.desciption || ""}
+                progress={0}
+                duration={""}
+                instructor={""}
+              />
+              {/* Mostrar módulos y contenidos */}
+              {mat.modulos?.modulos && mat.modulos.modulos.length > 0 && (
+                <div className="mt-2 ml-2 p-2 bg-gray-50 rounded-lg border border-gray-200">
+                  <div className="text-xs font-semibold text-gray-500 mb-1">
+                    Módulos:
                   </div>
-                )}
-              </a>
-            </Link>
+                  <ul className="list-disc list-inside text-sm text-gray-700">
+                    {mat.modulos.modulos.map((mod, idx) => (
+                      <li key={idx} className="mb-1">
+                        <span className="font-semibold">{mod.title}</span>
+                        {mod.contenido && mod.contenido.length > 0 && (
+                          <ul className="ml-4 list-square text-xs text-gray-600">
+                            {mod.contenido.map((cont) => (
+                              <li key={cont._id || cont.id_contenido}>
+                                <span className="font-medium">{cont.title}</span> - {cont.type} {cont.content?.description ? `: ${cont.content.description}` : ""}
+                              </li>
+                            ))}
+                          </ul>
+                        )}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
           ))}
         </div>
       </section>

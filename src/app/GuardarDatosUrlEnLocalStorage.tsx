@@ -1,7 +1,10 @@
 "use client";
 import { useEffect } from "react";
+import { useAuth } from "@/modules/auth/hooks/useAuth";
 
 export default function GuardarDatosUrlEnLocalStorage() {
+  const { loginWithExternalToken } = useAuth();
+
   useEffect(() => {
     if (typeof window !== "undefined") {
       const params = new URLSearchParams(window.location.search);
@@ -18,6 +21,19 @@ export default function GuardarDatosUrlEnLocalStorage() {
       if (authSource) localStorage.setItem("auth_source", authSource);
       if (timestamp) localStorage.setItem("timestamp", timestamp);
 
+      // Login automático si hay datos mínimos
+      if (idEstudiante && correoEstudiante && nombreEstudiante) {
+        const userData = {
+          id: idEstudiante,
+          id_estudiante: idEstudiante,
+          nombre: nombreEstudiante,
+          nombre_estudiante: nombreEstudiante,
+          correo: correoEstudiante,
+          correo_estudiante: correoEstudiante,
+        };
+        loginWithExternalToken("token_externo_temporal", userData);
+      }
+
       // Limpiar la URL (sin recargar la página)
       if (
         idEstudiante ||
@@ -29,7 +45,7 @@ export default function GuardarDatosUrlEnLocalStorage() {
         window.history.replaceState(null, "", window.location.pathname);
       }
     }
-  }, []);
+  }, [loginWithExternalToken]);
 
   return null;
 }

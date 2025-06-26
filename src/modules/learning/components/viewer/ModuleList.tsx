@@ -9,7 +9,7 @@ export function ModuleList() {
   return (
     <div className="py-3">
       {modules.map((module, index) => (
-        <Link key={module.id} href={`/learning/viewer/${module.id}`}>
+        <Link key={module.id_modulo || module.id} href={`/learning/viewer/${module.id_modulo || module.id}`}>
           <div
             className={`flex items-center p-4 mx-3 mb-2 rounded-xl transition-all duration-300 cursor-pointer transform hover:scale-[1.02] ${
               currentModuleId === module.id

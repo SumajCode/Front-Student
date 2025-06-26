@@ -16,6 +16,7 @@ interface Module {
   hasSubItems?: boolean;
   // Para datos reales de la API:
   contenido?: any[];
+  id_modulo?: string;
 }
 
 interface CourseContextType {

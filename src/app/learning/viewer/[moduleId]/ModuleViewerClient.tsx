@@ -41,7 +41,13 @@ export function ModuleViewerClient({ moduleId }: ModuleViewerClientProps) {
           (m: any) => m.id_materia === moduleId
         );
         if (matricula && matricula.modulos && matricula.modulos.modulos) {
-          setModules(matricula.modulos.modulos);
+          // Normalizar módulos: asegurar que cada uno tenga un 'id' numérico único
+          const normalizedModules = matricula.modulos.modulos.map((mod: any) => ({
+            ...mod,
+            id: mod.id_modulo || mod._id, // Usar el id_modulo real de la API como id principal
+            id_modulo: mod.id_modulo || mod._id, // Guardar el id real explícitamente también
+          }));
+          setModules(normalizedModules);
           setCourseName(matricula.nombre_materia || "Curso");
         } else {
           setError("No se encontraron módulos para este curso");

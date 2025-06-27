@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import CourseCard from "./CourseCard";
 
 // Tipos según el nuevo formato de la API
@@ -19,6 +20,7 @@ interface ContenidoModulo {
 }
 
 interface Modulo {
+  id_modulo?: string; // <-- Añadido para soporte de id único si existe en la API
   title: string;
   desciption?: string;
   id_materia: number;
@@ -41,14 +43,23 @@ export function CourseDashboard() {
   const [matriculas, setMatriculas] = useState<Matricula[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState("all");
+  const router = useRouter();
 
   useEffect(() => {
+    // Intentar obtener el id del estudiante desde localStorage
+    let idEst = undefined;
+    // Primero buscar el objeto 'estudiante' (antiguo)
     const estudianteData = localStorage.getItem("estudiante");
-    if (!estudianteData) return;
-    const { id, id_estudiante } = JSON.parse(estudianteData);
-    const idEst = id_estudiante || id;
+    if (estudianteData) {
+      const { id, id_estudiante } = JSON.parse(estudianteData);
+      idEst = id_estudiante || id;
+    } else {
+      // Si no existe, buscar la clave 'id_estudiante' (nuevo login)
+      idEst = localStorage.getItem("id_estudiante");
+    }
     if (!idEst) return;
 
+    setLoading(true);
     fetch(
       `https://microservice-docente.onrender.com/apidocentes/v1/matricula/listar/estudiante?id_estudiante=${idEst}`
     )
@@ -90,14 +101,18 @@ export function CourseDashboard() {
           )}
           {cursosFiltrados.map((mat) => (
             <div key={mat.id} className="block group transform transition-transform hover:-translate-y-1 z-10">
-              <CourseCard
-                id={String(mat.id_materia)}
-                title={mat.nombre_materia || `Materia ${mat.id_materia}`}
-                description={mat.modulos?.modulos?.[0]?.desciption || ""}
-                progress={0}
-                duration={""}
-                instructor={""}
-              />
+              <Link href={`/learning/viewer/${mat.id_materia}`} passHref legacyBehavior>
+                <a className="block focus:outline-none focus:ring-2 focus:ring-purple-500 rounded-lg">
+                  <CourseCard
+                    id={String(mat.id_materia)}
+                    title={mat.nombre_materia || `Materia ${mat.id_materia}`}
+                    description={mat.modulos?.modulos?.[0]?.desciption || ""}
+                    progress={0}
+                    duration={""}
+                    instructor={""}
+                  />
+                </a>
+              </Link>
               {/* Mostrar módulos y contenidos */}
               {mat.modulos?.modulos && mat.modulos.modulos.length > 0 && (
                 <div className="mt-2 ml-2 p-2 bg-gray-50 rounded-lg border border-gray-200">
@@ -105,20 +120,38 @@ export function CourseDashboard() {
                     Módulos:
                   </div>
                   <ul className="list-disc list-inside text-sm text-gray-700">
-                    {mat.modulos.modulos.map((mod, idx) => (
-                      <li key={idx} className="mb-1">
-                        <span className="font-semibold">{mod.title}</span>
-                        {mod.contenido && mod.contenido.length > 0 && (
-                          <ul className="ml-4 list-square text-xs text-gray-600">
-                            {mod.contenido.map((cont) => (
-                              <li key={cont._id || cont.id_contenido}>
-                                <span className="font-medium">{cont.title}</span> - {cont.type} {cont.content?.description ? `: ${cont.content.description}` : ""}
-                              </li>
-                            ))}
-                          </ul>
-                        )}
-                      </li>
-                    ))}
+                    {mat.modulos.modulos.map((mod, idx) => {
+                      // Buscar el id_modulo del primer contenido, si existe
+                      const idModulo = mod.contenido && mod.contenido.length > 0 ? mod.contenido[0].id_modulo : idx;
+                      return (
+                        <li key={idModulo} className="mb-1">
+                          <span
+                            className="font-semibold cursor-pointer hover:underline text-purple-700"
+                            onClick={() => router.push(`/learning/viewer/${mat.id_materia}/${idModulo}`)}
+                          >
+                            {mod.title}
+                          </span>
+                          {mod.contenido && mod.contenido.length > 0 && (
+                            <ul className="ml-4 list-square text-xs text-gray-600">
+                              {mod.contenido.map((cont) => (
+                                <li key={cont._id || cont.id_contenido}>
+                                  <span
+                                    className="font-medium cursor-pointer hover:underline text-blue-700"
+                                    onClick={() => router.push(`/learning/viewer/${mat.id_materia}/${idModulo}/${cont.id_contenido}`)}
+                                    title="Ir al compilador de este contenido"
+                                  >
+                                    {cont.title}
+                                  </span> - {cont.type}
+                                  {cont.content?.description && (
+                                    <span className="ml-1 text-gray-700">: {cont.content.description}</span>
+                                  )}
+                                </li>
+                              ))}
+                            </ul>
+                          )}
+                        </li>
+                      );
+                    })}
                   </ul>
                 </div>
               )}

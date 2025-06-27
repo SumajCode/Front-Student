@@ -17,13 +17,14 @@ interface Module {
   // Para datos reales de la API:
   contenido?: any[];
   id_modulo?: string;
+  id_materia?: number; // <-- Agregado para evitar advertencias
 }
 
 interface CourseContextType {
-  currentModuleId: number;
+  currentModuleId: string; // Cambiado a string para id_modulo
   currentModule: Module | undefined;
   modules: Module[];
-  navigateToModule: (_moduleId: number) => void;
+  navigateToModule: (_moduleId: string) => void; // Cambiado a string
   courseName: string;
 }
 
@@ -92,20 +93,19 @@ interface CourseProviderProps {
 
 export function CourseProvider({ children, initialModuleId, modules, courseName }: CourseProviderProps) {
   const router = useRouter();
-  const [currentModuleId, setCurrentModuleId] = useState(initialModuleId);
+  const [currentModuleId, setCurrentModuleId] = useState(String(initialModuleId));
 
   // Usar módulos reales si existen, si no, usar los simulados
   const realModules = modules && modules.length > 0 ? modules : courseData.modules;
   const realCourseName = courseName || courseData.name;
 
-  const currentModule = realModules.find((m: any) => m.id === currentModuleId || m._id === currentModuleId);
+  const currentModule = realModules.find((m: any) => String(m.id_modulo || m.id) === String(currentModuleId));
 
   const navigateToModule = useCallback(
-    (_moduleId: number) => {
+    (_moduleId: string) => {
       setCurrentModuleId(_moduleId);
-      router.push(`/learning/viewer/${_moduleId}`, { scroll: false });
     },
-    [router]
+    []
   );
 
   const value = {

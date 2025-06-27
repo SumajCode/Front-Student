@@ -10,16 +10,17 @@ interface NavigationButtonProps {
 export function NavigationButton({ direction }: NavigationButtonProps) {
   const router = useRouter();
   const { currentModuleId } = useCourseNavigation();
-    const handleNavigation = () => {
-    const targetModuleId = direction === "next" 
-      ? currentModuleId + 1 
-      : currentModuleId - 1;
+  const numericModuleId = Number(currentModuleId);
+  const handleNavigation = () => {
+    const targetModuleId = direction === "next"
+      ? numericModuleId + 1
+      : numericModuleId - 1;
     router.push(`/learning/viewer/${targetModuleId}`);
   };
 
-  const isDisabled = direction === "previous" 
-    ? currentModuleId === 1 
-    : currentModuleId === 4;
+  const isDisabled = direction === "previous"
+    ? numericModuleId === 1
+    : numericModuleId === 4;
 
   return (
     <button

@@ -11,12 +11,18 @@ export default function ExplorePage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [page, setPage] = useState(1);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     setLoading(true);
+    setError(null);
     fetch("https://microservice-docente.onrender.com/apidocentes/v1/materia/listar")
-      .then((res) => res.json())
-      .then((data) => setMaterias(data.data || []))
+      .then((res) => {
+        if (!res.ok) throw new Error("Error al obtener los cursos");
+        return res.json();
+      })
+      .then((data) => setMaterias(Array.isArray(data.data) ? data.data : []))
+      .catch((err) => setError(err.message || "Error desconocido"))
       .finally(() => setLoading(false));
   }, []);
 
@@ -136,10 +142,12 @@ export default function ExplorePage() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
           {loading ? (
             <div className="col-span-full text-center py-12 text-lg text-gray-500">Cargando...</div>
+          ) : error ? (
+            <div className="col-span-full text-center py-12 text-lg text-red-500">{error}</div>
           ) : paginatedMaterias.length > 0 ? (
             paginatedMaterias.map((mat, index) => (
               <div 
-                key={mat.id} 
+                key={mat.id || mat._id || index} 
                 className="group transform transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl"
                 style={{
                   animationDelay: `${index * 100}ms`,
@@ -150,8 +158,8 @@ export default function ExplorePage() {
                   <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 via-transparent to-blue-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                   <div className="relative">
                     <CourseCard
-                      id={String(mat.id)}
-                      title={mat.nombre_materia || `Materia ${mat.id}`}
+                      id={String(mat.id || mat._id || index)}
+                      title={mat.nombre_materia || `Materia ${mat.id || mat._id || index}`}
                       description={mat.nivel_estudio || ""}
                       progress={0}
                       duration={""}

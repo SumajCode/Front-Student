@@ -31,7 +31,7 @@ Guardar o comparar versiones de su código, si se habilita.
 
 #Deploy
 ```bash
-https://trello.com/invite/b/681611d3e42ca4d38256bc70/ATTIee97f90887527b6624129cc054cccf5f75A69B1D/plataorm-for-pograming-gensoft](https://front-student-git-main-mortalwings-projects.vercel.app/
+https://front-student-git-main-mortalwings-projects.vercel.app/
 ```
 
 ---

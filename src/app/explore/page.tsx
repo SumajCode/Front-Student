@@ -16,7 +16,7 @@ export default function ExplorePage() {
   useEffect(() => {
     setLoading(true);
     setError(null);
-    fetch("https://microservice-docente.onrender.com/apidocentes/v1/materia/listar")
+    fetch(`${process.env.NEXT_PUBLIC_DOCENTE_API_URL}/apidocentes/v1/materia/listar`)
       .then((res) => {
         if (!res.ok) throw new Error("Error al obtener los cursos");
         return res.json();

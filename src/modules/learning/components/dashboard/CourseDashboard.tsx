@@ -61,7 +61,7 @@ export function CourseDashboard() {
 
     setLoading(true);
     fetch(
-      `https://microservice-docente.onrender.com/apidocentes/v1/matricula/listar/estudiante?id_estudiante=${idEst}`
+      `${process.env.NEXT_PUBLIC_DOCENTE_API_URL}/apidocentes/v1/matricula/listar/estudiante?id_estudiante=${idEst}`
     )
       .then((res) => res.json())
       .then((data) => setMatriculas(data.data || []))

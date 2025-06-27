@@ -134,3 +134,23 @@ npm run lint:fix
 - Utilizamos ESLint para mantener la consistencia y calidad del código
 - Las reglas principales están configuradas en `.eslintrc.js`
 - Para ejecutar las verificaciones manualmente: `npm run lint`
+
+---
+
+## Puerto de desarrollo fijo
+
+Por defecto, este proyecto usará siempre el puerto **3004** para el servidor de desarrollo.
+
+1. Crea (o edita) el archivo `.env.local` en la raíz del proyecto y agrega:
+
+```
+PORT=3004
+```
+
+2. Guarda el archivo y ejecuta:
+
+```bash
+npm run dev
+```
+
+El servidor Next.js arrancará siempre en http://localhost:3004 (si el puerto está libre).

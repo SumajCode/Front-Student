@@ -104,6 +104,85 @@ correr test
 
 ---
 
+# Estructura del proyecto
+
+descripcion de carpetas
+
+```bash
+Dashboard: Muestra cursos, módulos y contenidos del usuario. Navegación al viewer de cada contenido.
+
+Viewer: Panel lateral con módulos y contenidos, mostrando detalles técnicos (puntos, reglas, funciones requeridas, etc).
+
+UI: Componentes reutilizables para botones, tarjetas, diálogos, menús, inputs, iconos, etc.
+
+Layout global: Componentes de navegación, menús, footer, user menu, etc.
+
+Hooks personalizados: Para navegación, almacenamiento local, temas, etc.
+
+Servicios de API: Encapsulan llamadas a microservicios docentes. Testing: Configuración con Jest y Testing Library. Tests ubicados en src/app/_tests_/ y subcarpetas.
+```
+
+division de carpetas
+
+```bash
+Front-Student/
+├── src/
+│   ├── app/
+│   │   ├── learning/
+│   │   │   ├── dashboard/
+│   │   │   │   └── page.tsx
+│   │   │   └── viewer/
+│   │   │       └── layout.tsx, page.tsx, [moduleId]/
+│   ├── modules/
+│   │   └── learning/
+│   │       └── components/
+│   │           ├── dashboard/
+│   │           │   └── CourseDashboard.tsx
+│   │           └── viewer/
+│   │               ├── ModuleList.tsx
+│   │               └── NavigationButton.tsx
+│   ├── ui/
+│   │   ├── button.tsx
+│   │   ├── card.tsx
+│   │   ├── dialog.tsx
+│   │   ├── dropdown-menu.tsx
+│   │   ├── hover-card.tsx
+│   │   ├── icons.tsx
+│   │   ├── input.tsx
+│   │   ├── popover.tsx
+│   │   ├── progress.tsx
+│   │   └── theme-provider.tsx
+│   ├── globals/
+│   │   ├── hooks/
+│   │   └── layout/
+│   │       ├── Footer.tsx
+│   │       ├── Head.tsx
+│   │       ├── components/
+│   │       │   ├── AuthButtons.tsx
+│   │       │   ├── MobileMenu.tsx
+│   │       │   ├── MobileNavMenu.tsx
+│   │       │   ├── Navigation.tsx
+│   │       │   ├── NotificationsButton.tsx
+│   │       │   └── UserMenu.tsx
+│   │       ├── footer/
+│   │       │   ├── FooterCopyright.tsx
+│   │       │   └── FooterLogo.tsx
+│   │       └── head/
+│   │           ├── AuthButtons.tsx
+│   │           ├── MobileMenu.tsx
+│   │           ├── Navigation.tsx
+│   │           └── NotificationsButton.tsx
+│   └── lib/
+│       └── api-service.ts, gateway-service.ts, ...
+├── public/
+├── package.json
+├── jest.config.js
+├── tailwind.config.js
+└── ...
+```
+
+---
+
 ## Configuración de Desarrollo
 
 ### Importaciones de React en Archivos JSX/TSX

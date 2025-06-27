@@ -233,3 +233,15 @@ npm run dev
 ```
 
 El servidor Next.js arrancará siempre en http://localhost:3004 (si el puerto está libre).
+
+---
+
+## Variables de entorno
+
+Después de clonar el repositorio, copia el archivo `.env.example` a `.env.local`:
+
+```bash
+cp .env.example .env.local
+```
+
+Luego, ajusta los valores si es necesario (por ejemplo, el puerto o las URLs de las APIs).

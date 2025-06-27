@@ -26,8 +26,13 @@ Recibir resultados inmediatos y mensajes de error claros.
 Probar ejemplos presentados en las lecciones.
 
 Guardar o comparar versiones de su código, si se habilita.
-- **Simuladores visuales:**
-Para ciertas lecciones, se integra un simulador dinámico que ayuda a visualizar el comportamiento del código, como:
+
+---
+
+#Deploy
+```bash
+https://front-student-git-main-mortalwings-projects.vercel.app/
+```
 
 ---
 

@@ -26,8 +26,13 @@ Recibir resultados inmediatos y mensajes de error claros.
 Probar ejemplos presentados en las lecciones.
 
 Guardar o comparar versiones de su código, si se habilita.
-- **Simuladores visuales:**
-Para ciertas lecciones, se integra un simulador dinámico que ayuda a visualizar el comportamiento del código, como:
+
+---
+
+#Deploy
+```bash
+https://trello.com/invite/b/681611d3e42ca4d38256bc70/ATTIee97f90887527b6624129cc054cccf5f75A69B1D/plataorm-for-pograming-gensoft](https://front-student-git-main-mortalwings-projects.vercel.app/
+```
 
 ---
 
